@@ -1,0 +1,225 @@
+Assessment ID:  | Answers: 
+
+Assessment ID:  | Answers: 
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 433454
+    [49] => 35354
+    [467] => 35346
+)
+
+
+ERROR: Unknown column 'assessment_id' in 'field list'
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 355
+    [49] => 3553
+    [467] => 343
+)
+
+
+ERROR: Unknown column 'assessment_id' in 'field list'
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 355
+    [49] => 3553
+    [467] => 343
+)
+
+
+Questions Found in DB (4):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+QID: 49 | Correct: '8580'
+QID: 467 | Correct: '9801'
+
+MATCH! QID 47: '10022' === '10022'
+NO MATCH QID 48: '355' vs '8263'
+NO MATCH QID 49: '3553' vs '8580'
+NO MATCH QID 467: '343' vs '9801'
+FINAL SCORE: 1 / 4
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+    [49] => 8580
+    [467] => 9801
+)
+
+
+Questions Found in DB (4):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+QID: 49 | Correct: '8580'
+QID: 467 | Correct: '9801'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+MATCH! QID 49: '8580' === '8580'
+MATCH! QID 467: '9801' === '9801'
+FINAL SCORE: 4 / 4
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 3
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 89656
+    [49] => 8776
+    [467] => 7899
+)
+
+
+Questions Found in DB (4):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+QID: 49 | Correct: '8580'
+QID: 467 | Correct: '9801'
+
+MATCH! QID 47: '10022' === '10022'
+NO MATCH QID 48: '89656' vs '8263'
+NO MATCH QID 49: '8776' vs '8580'
+NO MATCH QID 467: '7899' vs '9801'
+FINAL SCORE: 1 / 4
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 1
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [75] => 5467
+    [76] => 
+    [77] => 
+    [78] => 621.22
+    [79] => 
+    [80] => 
+    [81] => 
+    [82] => 
+    [83] => 
+    [84] => 
+    [85] => 
+    [86] => 
+    [87] => 
+)
+
+
+Questions Found in DB (13):
+QID: 75 | Correct: '42.1'
+QID: 76 | Correct: '86.1'
+QID: 77 | Correct: '843.22'
+QID: 78 | Correct: '621.22'
+QID: 79 | Correct: '606.19'
+QID: 80 | Correct: '1,041.57'
+QID: 81 | Correct: '96.64'
+QID: 82 | Correct: '4.47'
+QID: 83 | Correct: '50.09'
+QID: 84 | Correct: '1.98'
+QID: 85 | Correct: '45.77'
+QID: 86 | Correct: '590.03'
+QID: 87 | Correct: '792.91'
+
+NO MATCH QID 75: '5467' vs '42.1'
+NO MATCH QID 76: '' vs '86.1'
+NO MATCH QID 77: '' vs '843.22'
+MATCH! QID 78: '621.22' === '621.22'
+NO MATCH QID 79: '' vs '606.19'
+NO MATCH QID 80: '' vs '1,041.57'
+NO MATCH QID 81: '' vs '96.64'
+NO MATCH QID 82: '' vs '4.47'
+NO MATCH QID 83: '' vs '50.09'
+NO MATCH QID 84: '' vs '1.98'
+NO MATCH QID 85: '' vs '45.77'
+NO MATCH QID 86: '' vs '590.03'
+NO MATCH QID 87: '' vs '792.91'
+FINAL SCORE: 1 / 13
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 1
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [75] => 566776
+    [76] => 86.1
+    [77] => 
+    [78] => 
+    [79] => 
+    [80] => 
+    [81] => 
+    [82] => 
+    [83] => 
+    [84] => 
+    [85] => 
+    [86] => 
+    [87] => 
+)
+
+
+Questions Found in DB (13):
+QID: 75 | Correct: '42.1'
+QID: 76 | Correct: '86.1'
+QID: 77 | Correct: '843.22'
+QID: 78 | Correct: '621.22'
+QID: 79 | Correct: '606.19'
+QID: 80 | Correct: '1,041.57'
+QID: 81 | Correct: '96.64'
+QID: 82 | Correct: '4.47'
+QID: 83 | Correct: '50.09'
+QID: 84 | Correct: '1.98'
+QID: 85 | Correct: '45.77'
+QID: 86 | Correct: '590.03'
+QID: 87 | Correct: '792.91'
+
+NO MATCH QID 75: '566776' vs '42.1'
+MATCH! QID 76: '86.1' === '86.1'
+NO MATCH QID 77: '' vs '843.22'
+NO MATCH QID 78: '' vs '621.22'
+NO MATCH QID 79: '' vs '606.19'
+NO MATCH QID 80: '' vs '1,041.57'
+NO MATCH QID 81: '' vs '96.64'
+NO MATCH QID 82: '' vs '4.47'
+NO MATCH QID 83: '' vs '50.09'
+NO MATCH QID 84: '' vs '1.98'
+NO MATCH QID 85: '' vs '45.77'
+NO MATCH QID 86: '' vs '590.03'
+NO MATCH QID 87: '' vs '792.91'
+FINAL SCORE: 1 / 13
+=== SUBMIT END ===
+

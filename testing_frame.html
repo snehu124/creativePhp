@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Camera Frame Capture</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 360px;
+      text-align: center;
+      position: relative;
+    }
+
+    #cameraView, #finalView {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1/1;
+      background: black;
+      margin-bottom: 10px;
+    }
+
+    #videoElement, #capturedImage {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0; left: 0;
+      z-index: 1;
+    }
+
+    #frameOverlay {
+    position: absolute;
+    top: 87px;
+    left: -37px;
+    height: 99%;
+    height: 83%;
+    object-fit: cover;
+    z-index: 2;
+    pointer-events: none;
+}
+
+    .form-step, .final-step {
+      display: none;
+    }
+
+    .btn {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .info {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      z-index: 3;
+      font-size: 14px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px 8px 8px 38px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+      background-repeat: no-repeat;
+      background-position: 10px center;
+      background-size: 20px;
+    }
+
+    #phone {
+      background-image: url('https://flagcdn.com/w40/in.png'); /* India flag PNG */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- STEP 1: CAMERA VIEW -->
+    <div class="step camera-step">
+      <div id="cameraView">
+        <video id="videoElement" autoplay playsinline></video>
+        <img src="frame.png" id="frameOverlay" />
+      </div>
+      <button class="btn" onclick="capturePhoto()">Capture Post</button>
+    </div>
+
+    <!-- STEP 2: FORM -->
+    <div class="step form-step">
+      <h3>Enter Details</h3>
+      <input type="text" id="name" placeholder="Name" />
+      <input type="text" id="phone" placeholder="Phone" />
+      <button class="btn" onclick="submitDetails()">Next</button>
+    </div>
+
+    <!-- STEP 3: FINAL IMAGE -->
+    <div class="step final-step">
+      <div id="finalView">
+        <img id="capturedImage" />
+        <img src="frame.png" id="frameOverlay" />
+        <div class="info" id="userInfo"></div>
+      </div>
+      <a id="whatsappShare" class="btn" href="#" target="_blank">ðŸ“¤ Share on WhatsApp</a>
+    </div>
+  </div>
+
+  <script>
+    const video = document.getElementById("videoElement");
+    const capturedImage = document.getElementById("capturedImage");
+    const userInfo = document.getElementById("userInfo");
+    const whatsappShare = document.getElementById("whatsappShare");
+    const steps = document.querySelectorAll(".step");
+    
+    let capturedDataURL = "";
+
+    function showStep(stepName) {
+      steps.forEach(step => step.style.display = "none");
+      document.querySelector(`.${stepName}`).style.display = "block";
+    }
+
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+      } catch (err) {
+        alert("Camera access denied or not supported.");
+        console.error(err);
+      }
+    }
+
+    function capturePhoto() {
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataURL = canvas.toDataURL("image/png");
+      capturedImage.src = dataURL;
+      capturedDataURL = dataURL;
+      showStep("form-step");
+    }
+
+    function submitDetails() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      if (!name || !phone) {
+        alert("Please enter name and phone.");
+        return;
+      }
+      
+//       const canvas = document.createElement("canvas");
+//   canvas.width = video.videoWidth;
+//   canvas.height = video.videoHeight;
+//   const ctx = canvas.getContext("2d");
+//   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+//   const imageData = canvas.toDataURL("image/png"); // base64 image
+
+
+
+  // Step 2: Draw overlay image (phone image)
+//   const phoneImage = document.getElementById("capturedImage");
+//   if (phoneImage.complete) {
+//     ctx.drawImage(phoneImage, 20, canvas.height - 250, 150, 200); // adjust position & size
+//   }
+
+
+
+const frameImage = document.getElementById("frameOverlay");
+const baseImage = new Image();
+baseImage.onload = function () {
+  const canvas = document.createElement("canvas");
+  canvas.width = baseImage.width;
+  canvas.height = baseImage.height;
+  
+    const ctx = canvas.getContext("2d");
+  ctx.drawImage(baseImage, 0, 0);
+
+
+
+
+  
+  const frameImage = document.getElementById("frameOverlay");
+  if (frameImage && frameImage.complete) {
+    ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+  }
+
+  ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+  ctx.fillRect(canvas.width - 300, 10, 280, 40);
+
+  ctx.font = "20px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText(`${name} | ${phone}`, canvas.width - 290, 38);
+
+  const finalImageData = canvas.toDataURL("image/png");
+
+
+  // Send data to PHP backend
+  fetch("upload_image.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name, phone, image: finalImageData })
+  })
+    .then((res) => res.text())
+    .then((data) => {
+      console.log("✅ Response from PHP:", data);
+
+      // Show next step
+      userInfo.textContent = `${name} | ${phone}`;
+      whatsappShare.href = `https://wa.me/?text=Hey! Check out my picture - ${encodeURIComponent(name)} (${phone})`;
+      showStep("final-step");
+    })
+    .catch((err) => {
+      console.error("❌ Error sending data:", err);
+      alert("Failed to submit data to server.");
+    });
+
+      userInfo.textContent = `${name} | ${phone}`;
+      whatsappShare.href = `https://wa.me/?text=Hey! Check out my picture - ${encodeURIComponent(name)} (${phone})`;
+
+      showStep("final-step");
+    };
+    
+    
+    baseImage.src = capturedDataURL;
+    }
+
+    startCamera();
+    showStep("camera-step");
+  </script>
+</body>
+</html>

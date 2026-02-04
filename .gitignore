@@ -1,0 +1,54 @@
+# Root .gitignore for creativetheka.in
+
+# --- OS generated files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# --- IDE / Editor ---
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.sln
+
+# --- Dependency directories ---
+/vendor/
+node_modules/
+
+# --- Composer / PHP ---
+composer.lock
+composer.phar
+
+# --- Environment / Secrets ---
+.env
+.env.*
+.env.local
+.env.php
+
+# --- Logs / cache / temp ---
+error_log
+*.log
+*.cache
+*.tmp
+*.swp
+*.bak
+
+# --- Uploads / runtime files ---
+/uploads/
+images/
+student_photos/
+invoices/
+
+# Ignore dompdf zip archives or other zip artifacts
+dompdf-*.zip
+*.zip
+
+# --- PHPUnit / CI ---
+.phpunit.result.cache
+coverage/
+
+# Keep .gitignore files in subfolders
+!.gitignore
