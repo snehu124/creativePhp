@@ -242,6 +242,144 @@ $result = $conn->query($sql);
         .early-btn     { background: linear-gradient(135deg, #22d3ee, #0891b2); }
         .elementary-btn{ background: linear-gradient(135deg, #fde047, #facc15); }
         .advanced-btn  { background: linear-gradient(135deg, #fb923c, #f97316); }
+/* ================= LARGE TABLETS (iPad Pro / Landscape) ================= */
+@media (max-width: 1200px) {
+
+    .section-title {
+        font-size: 2.6rem;
+    }
+
+    .class-img-container {
+        height: 220px;
+    }
+
+    .class-title {
+        font-size: 1.5rem;
+    }
+
+    .filter-btn {
+        padding: 12px 26px;
+        font-size: 1.05rem;
+    }
+}
+
+
+/* ================= TABLETS (iPad / Portrait) ================= */
+@media (max-width: 992px) {
+
+    .section-title {
+        font-size: 2.3rem;
+    }
+
+    .filter-group {
+        gap: 10px;
+        margin-bottom: 2.5rem;
+    }
+
+    .filter-btn {
+        padding: 10px 22px;
+        font-size: 1rem;
+    }
+
+    .class-img-container {
+        height: 200px;
+    }
+
+    .class-title {
+        font-size: 1.4rem;
+        min-height: auto;
+    }
+
+    .class-desc {
+        font-size: 1rem;
+    }
+
+    .price-badge {
+        font-size: 1.6rem;
+    }
+
+    .btn-explore {
+        padding: 12px 26px;
+        font-size: 1rem;
+    }
+}
+
+
+/* ================= MOBILE DEVICES ================= */
+@media (max-width: 768px) {
+
+    .section-title {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    .filter-group {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .filter-btn {
+        width: 100%;
+        max-width: 260px;
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+
+    .class-img-container {
+        height: 180px;
+    }
+
+    .class-content {
+        padding: 1.4rem;
+        text-align: center;
+    }
+
+    .card-footer {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .price-badge {
+        width: 100%;
+        text-align: center;
+    }
+
+    .btn-explore {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+
+/* ================= SMALL MOBILE (iPhone SE etc.) ================= */
+@media (max-width: 480px) {
+
+    .section-title {
+        font-size: 1.7rem;
+    }
+
+    .class-img-container {
+        height: 160px;
+    }
+
+    .class-title {
+        font-size: 1.25rem;
+    }
+
+    .class-desc {
+        font-size: 0.95rem;
+    }
+
+    .price-badge {
+        font-size: 1.4rem;
+        padding: 6px 14px;
+    }
+
+    .btn-explore {
+        font-size: 0.95rem;
+        padding: 10px 22px;
+    }
+}
 
         @media (max-width: 992px) {
             .section-title { font-size: 2.8rem; }
@@ -303,7 +441,7 @@ $result = $conn->query($sql);
                 Explore Our Fun Classes!
             </h2>
 
-                <div class="filter-group d-flex justify-content-center flex-wrap">
+               <div class="filter-group d-flex justify-content-center flex-wrap text-center">
                     <button class="filter-btn all active" data-filter="all"><i class="fas fa-star me-2"></i>All Classes</button>
                     <button class="filter-btn early"     data-filter="early"><i class="fas fa-baby me-2"></i>Early Learners</button>
                     <button class="filter-btn elementary" data-filter="elementary"><i class="fas fa-book-open me-2"></i>Elementary</button>
@@ -324,11 +462,17 @@ $result = $conn->query($sql);
                     $price = number_format($row['price'] ?? 0, 2);
                     $image = $row['image'] ?? '';
                 ?>
-                <div class="col-md-6 col-lg-4 class-item" data-level="<?= $level ?>">
+                <div class="col-12 col-sm-6 col-lg-4 class-item" data-level="<?= $level ?>">
                     <div class="class-card">
                         <div class="class-img-container">
                             <?php if (!empty($image)): ?>
-                                <img src="<?= htmlspecialchars($image) ?>" class="class-img" alt="<?= htmlspecialchars($row['title']) ?>" loading="lazy">
+                               <img 
+                                src="<?= htmlspecialchars($image) ?>" 
+                                class="class-img img-fluid"
+                                loading="lazy"
+                                alt="<?= htmlspecialchars($row['title']) ?>"
+                                >
+
                             <?php else: ?>
                                 <div class="placeholder-img">
                                     <i class="fas fa-<?= $level === 'early' ? 'baby' : ($level === 'elementary' ? 'book-open' : 'graduation-cap') ?>"></i>

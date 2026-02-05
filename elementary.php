@@ -23,96 +23,305 @@ $currencySymbol = '$';
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-    <style>
-      .breadcumb-wrapper{
-        min-height:220px !important;
-        padding:0 !important;
-        display:flex !important;
-        align-items:center !important;
-      }
-      .breadcumb-wrapper .container{
-        display:flex;
-        align-items:center;
-      }
-      .breadcumb-content{
-        padding:0 !important;
-        margin:0 !important;
-      }
-      .breadcumb-title{
-        margin:0 !important;
-        padding:0 !important;
-        font-size:48px;
-        font-weight:700;
-        line-height:1;
-      }
-      /* ================= ENROLL BUTTON ================= */
-      .enroll-btn{
-        display:inline-block;
-        margin-top:15px;
-        padding:10px 30px;
-        background:#ff5a7b;
-        color:#fff;
-        border-radius:30px;
-        font-weight:600;
-        text-decoration:none;
-        transition:.3s;
-      }
-      .enroll-btn:hover{
-        background:#ff8a00;
-        color:#fff;
-      }
+  <style>
+  /* ================= HERO IMAGE ================= */
+  .hero-img{
+    width:100%;
+    height:280px;
+    object-fit:cover;
+  }
 
-      /* ================= MODAL CLOSE FIX ================= */
-      .enroll-modal{
-        position:relative;
-        border-radius:20px;
-        overflow:hidden;
-      }
-      .custom-close{
-        position:absolute;
-        top:12px;
-        right:14px;
-        width:36px;
-        height:36px;
-        background:#fff;
-        border-radius:50%;
-        font-size:26px;
-        font-weight:bold;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        cursor:pointer;
-        z-index:9999;
-        box-shadow:0 5px 15px rgba(0,0,0,.25);
-      }
-      .custom-close:hover{
-        background:#ff5a7b;
-        color:#fff;
-      }
-        .grade-card {
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(255,90,123,0.12);
-            transition: all 0.4s ease;
-            background: #fff;
-        }
-        .grade-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 15px 30px rgba(255,90,123,0.2);
-        }
-        .subject-tag {
-            background: #fff0f5;
-            color: #ff5a7b;
-            padding: 6px 14px;
-            border-radius: 30px;
-            margin: 0 6px 8px 0;
-            display: inline-block;
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-        .section-title { color: #ff5a7b; font-weight: 700; }
-        .hero-img { height: 280px; object-fit: cover; filter: brightness(0.92); }
-    </style>
+  /* ================= ENROLL BUTTON ================= */
+  .enroll-btn{
+    display:inline-block;
+    margin-top:15px;
+    padding:10px 28px;
+    background:#ff5a7b;
+    color:#fff;
+    border-radius:30px;
+    font-weight:600;
+    text-decoration:none;
+    transition:.3s;
+    width:auto;
+  }
+
+  .enroll-btn:hover{
+    background:#ff8a00;
+    color:#fff;
+  }
+
+  /* ================= GRADE CARD ================= */
+  .grade-card{
+    border-radius:16px;
+    box-shadow:0 8px 20px rgba(255,90,123,0.12);
+    transition:.3s;
+  }
+
+  .grade-card:hover{
+    transform:translateY(-8px);
+  }
+
+  /* ================= MODAL ================= */
+  .enroll-modal{
+    border-radius:20px;
+    overflow:hidden;
+  }
+
+  #enrollFrame{
+    width:100%;
+    height:520px;
+    border:none;
+  }
+
+  /* ================= MODERN COURSE CARDS ================= */
+  .section-title {
+    font-family: 'Fredoka', sans-serif;
+    color: #2c3e50;
+    position: relative;
+    /* display: inline-block; */
+    font-weight: 700;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    width: 70px;
+    height: 5px;
+    background: #ff5a7b;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 3px;
+  }
+
+  .course-card-wrapper {
+    height: 100%;
+  }
+
+  .course-card {
+    height: 100%;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    border: 1px solid #f0f0f0;
+  }
+
+  .course-card:hover {
+    transform: translateY(-14px);
+    box-shadow: 0 25px 50px rgba(255, 90, 123, 0.22);
+    border-color: #ff5a7b;
+  }
+
+  .course-img-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .course-img-container img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+  }
+
+  .course-card:hover .course-img-container img {
+    transform: scale(1.1);
+  }
+
+  .course-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .course-card:hover .course-img-overlay {
+    opacity: 1;
+  }
+
+  .course-content {
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+  }
+
+  .course-title {
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    line-height: 1.3;
+    font-family: 'Fredoka', sans-serif;
+  }
+
+  .course-info {
+    font-size: 0.98rem;
+    color: #555;
+    margin: 4px 0;
+  }
+
+  .course-info strong {
+    color: #2c3e50;
+    font-weight: 600;
+  }
+
+  .course-price {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ff5a7b;
+    margin: 12px 0 8px;
+    line-height: 1;
+  }
+
+  .course-price small {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #888;
+  }
+
+  .seats-badge {
+    display: inline-block;
+    background: #fff0f5;
+    color: #e91e63;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 0.92rem;
+    margin-top: 6px;
+  }
+
+  .enroll-btn-modern {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #ff5a7b 0%, #ff8a9c 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 1.05rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(255, 90, 123, 0.25);
+    margin-top: auto;
+    border: none;
+  }
+
+  .enroll-btn-modern:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 90, 123, 0.4);
+    background: linear-gradient(135deg, #ff8a9c 0%, #ff5a7b 100%);
+  }
+
+    ul.list-unstyled.fs-5 {
+        margin-top: 20px;
+    }
+
+    p.lead.text-muted {
+    margin-top: 27px;
+    }
+    
+  /* Responsive adjustments for course cards */
+  @media (max-width: 992px) {
+    .course-img-container img {
+      height: 220px;
+    }
+    .course-title {
+      font-size: 1.45rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .course-img-container img {
+      height: 200px;
+    }
+    .course-title {
+      font-size: 1.38rem;
+    }
+    .course-price {
+      font-size: 2rem;
+    }
+    .enroll-btn-modern {
+      padding: 12px 28px;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .course-img-container img {
+      height: 180px;
+    }
+    .course-title {
+      font-size: 1.3rem;
+    }
+    .course-price {
+      font-size: 1.9rem;
+    }
+  }
+
+  /* ================= TABLET ================= */
+  @media (max-width:992px){
+    .breadcumb-wrapper{
+      min-height:220px;
+    }
+    .breadcumb-title{
+      font-size:36px;
+    }
+    .hero-img{
+      height:240px;
+    }
+  }
+
+  /* ================= MOBILE ================= */
+  @media (max-width:768px){
+    /* Breadcrumb */
+    .breadcumb-wrapper{
+      min-height:190px;
+      padding:30px 0;
+      text-align:center;
+    }
+    .breadcumb-title{
+      font-size:28px;
+      line-height:1.2;
+    }
+    .breadcumb-text{
+      font-size:14px;
+    }
+    /* Hero */
+    .hero-img{
+      height:200px;
+      margin-top:20px;
+    }
+    /* Buttons */
+    .enroll-btn{
+      width:100%;
+      text-align:center;
+    }
+    /* Modal */
+    #enrollFrame{
+      height:420px;
+    }
+  }
+
+  /* ================= SMALL MOBILE ================= */
+  @media (max-width:480px){
+    .breadcumb-title{
+      font-size:24px;
+    }
+    .hero-img{
+      height:170px;
+    }
+    #enrollFrame{
+      height:360px;
+    }
+  }
+
+  </style>
 </head>
 <body>
 
@@ -145,7 +354,7 @@ $currencySymbol = '$';
         <p class="fs-5 lh-lg mb-4">
           Our Elementary program builds strong academic foundations through engaging lessons in Math, Science, Reading & Writing — emphasizing conceptual understanding, logical reasoning and skill mastery.
         </p>
-        <h4 class="fw-bold mb-3 section-title">Key Focus Areas</h4>
+        <h4 class="fw-bold mb-3 section-title" style="display: inline-block;">Key Focus Areas</h4>
         <ul class="list-unstyled fs-5">
           <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle me-3 text-success"></i>Advanced Math & Logical Reasoning</li>
           <li class="mb-3 d-flex align-items-center"><i class="fas fa-check-circle me-3 text-success"></i>Scientific Concepts & Hands-on Experiments</li>
