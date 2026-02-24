@@ -1,149 +1,376 @@
-<!doctype html>
-<html class="no-js" lang="zxx">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Achiver's Castle</title>
-    <meta name="author" content="Vecuro">
-    <meta name="description" content="Achiver's Castle">
-    <meta name="keywords" content="Achiver's Castle">
-    <meta name="robots" content="INDEX,FOLLOW">
-
-    <!-- Mobile Specific Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Favicons - Place favicon.ico in the root directory -->
-    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
-
-    <!--==============================
-	  Google Fonts
-	============================== -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Jost:wght@400;500&display=swap"
-        rel="stylesheet">
+  <!-- FONT AWESOME (FOR ICONS) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 
-    <!--==============================
-	    All CSS File
-	============================== -->
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="assets/css/app.min.css"> -->
-    <!-- Fontawesome Icon -->
-    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
-    <!-- Layerslider -->
-    <link rel="stylesheet" href="assets/css/layerslider.min.css">
-    <!-- Magnific Popup -->
-    <link rel="stylesheet" href="assets/css/magnific-popup.min.css">
-    <!-- Slick Slider -->
-    <link rel="stylesheet" href="assets/css/slick.min.css">
-    <!-- Theme Custom CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
-
-</head>
-
-<body>
+  <!-- ================= FOOTER CSS ================= -->
+  <style>
 
 
-     <!--==============================
-			Footer Area
-	==============================-->
-    <footer class="footer-wrapper footer-layout1" data-bg-src="assets/img/bg/footer-bg-1-1.png">
-        <div class="footer-top">
-            <div class="container">
-                <div class="row gx-60 gy-4 text-center text-lg-start justify-content-between align-items-center">
-                    <div class="col-lg footer-logo"><a href="index.html"><img src="assets/img/logo-2.png" alt="logo"></a></div>
-                    <div class="col-lg-auto">
-                        <h3 class="h4 mb-0 text-white"><img src="assets/img/icon/check-list.svg" alt="icon"
-                                class="me-2"> Enrol your child in a Session now!</h3>
-                    </div>
-                    <div class="col-lg-auto"><a href="contact.html" class="vs-btn">Start Registration</a></div>
-                </div>
-            </div>
+  .footer-main *, .insta-strip *{
+    box-sizing:border-box;
+
+  }
+  html, body{
+    width:100%;
+    overflow-x:hidden;
+  }
+  /* ================= INSTAGRAM STRIP ================= */
+  .insta-strip{
+    background:#fff;
+    padding:80px 20px 210px;
+    text-align:center;
+    position:relative;
+    z-index:3;
+  }
+
+  .insta-link{
+    font-family:"Love Ya Like A Sister", cursive;
+    font-size:56px;
+    line-height:1.1;
+    color:#111;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:60px;
+  }
+
+  .insta-icon{
+    width:34px;
+    opacity:0;
+    transform:scale(.6);
+    transition:.3s ease;
+  }
+
+  .insta-link:hover .insta-icon{
+    opacity:1;
+    transform:scale(1);
+  }
+
+  /* ================= INSTAGRAM CARDS ================= */
+.insta-images{
+  position:absolute;
+  left:50%;
+  bottom:-90px;
+  transform:translateX(-50%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:16px;
+  max-width:1050px;
+  width:100%;
+  padding:0 10px;
+  z-index:5;
+}
+
+  .insta-images img{
+    width:210px;
+    height:260px;
+    object-fit:cover;
+    background:#fff;
+    border:3px solid #fff;
+    box-shadow:0 25px 40px rgba(0,0,0,.25);
+  }
+
+  /* ZIG ZAG ROTATION */
+  .insta-images img:nth-child(1){transform:rotate(-10deg) translateY(35px);}
+  .insta-images img:nth-child(2){transform:rotate(7deg) translateY(-20px);}
+  .insta-images img:nth-child(3){transform:rotate(-6deg) translateY(45px);}
+  .insta-images img:nth-child(4){transform:rotate(9deg) translateY(-30px);}
+  .insta-images img:nth-child(5){transform:rotate(-8deg) translateY(30px);}
+  .insta-images img:nth-child(6){transform:rotate(6deg) translateY(-25px);}
+
+  /* ================= FOOTER ================= */
+  .footer-main{
+    background:#0b3c74;
+    margin-top:-60px;
+    padding:220px 40px 70px;
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* ZIG ZAG TOP */
+  .footer-main::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:120px;
+    background:#0b3c74;
+    clip-path:polygon(
+      0 45%,10% 65%,20% 45%,30% 65%,40% 45%,
+      50% 65%,60% 45%,70% 65%,80% 45%,90% 65%,100% 45%,
+      100% 100%,0 100%
+    );
+    transform:translateY(-100%);
+  }
+
+  /* FOOTER CONTENT */
+  .footer-logo{
+    max-width:200px;
+    margin-bottom:18px;
+  }
+
+  .footer-box h4{
+    font-weight:700;
+    margin-bottom:15px;
+    color:#fff;
+  }
+
+  .footer-box p{
+    font-size:15px;
+    line-height:1.7;
+    color:#fff;
+  }
+
+  .footer-box ul{
+    list-style:none;
+    padding:0;
+  }
+
+  .footer-box ul li{margin-bottom:10px;}
+
+  .footer-box ul a{
+    color:#fff;
+    text-decoration:none;
+  }
+
+  .footer-box ul a:hover{
+    color:#d62828;
+    text-decoration:none;
+  }
+
+  .footer-social{
+    display:flex;
+    gap:14px;
+    margin-top:14px;
+  }
+
+  .footer-social a{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:18px;
+    transition:0.3s ease;
+    text-decoration:none;
+  }
+
+  .footer-social a:hover{
+    background:#d62828;
+    transform:translateY(-3px);
+  }
+
+
+  /* ================= BOTTOM BAR ================= */
+  .footer-bottom{
+    background:#d62828;
+    color:#fff;
+    padding:18px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    font-size:14px;
+  }
+
+  .payment-icons img{
+    height:26px;
+    margin-left:10px;
+  }
+
+  /* ================= MOBILE ================= */
+  @media(max-width:768px){
+
+    /* hide insta on mobile */
+    .insta-strip{display:none;}
+
+    .footer-main{
+      margin-top:0;
+      padding:30px 20px 60px;
+    }
+  /* ZIG ZAG TOP */
+  .footer-main::before{
+    display: none;
+  }
+    .footer-box{
+      text-align:center;
+      margin-bottom:35px;
+    }
+
+    .footer-social{
+      justify-content:center;
+    }
+
+    .footer-bottom{
+      flex-direction:column;
+      gap:10px;
+      text-align:center;
+    }
+  }
+
+  </style>
+
+
+
+  <!-- ================= FOOTER HTML ================= -->
+
+  <footer>
+
+
+  <!-- INSTAGRAM STRIP -->
+  <div class="insta-strip">
+
+    <a href="https://www.instagram.com/achievers.castle/"
+      target="_blank"
+      class="insta-link">
+
+      Follow Instagram @achievers.castle
+
+      <span class="insta-icon">
+        <img src="images/instagram.svg" alt="">
+      </span>
+
+    </a>
+
+
+    <div class="insta-images">
+
+      <img src="./assets/img/class/footer1.png" alt="">
+      <img src="./assets/img/class/footer2.png" alt="">
+      <img src="./assets/img/class/footer3.png" alt="">
+      <img src="./assets/img/class/footer4.png" alt="">
+      <img src="./assets/img/class/footer5.png" alt="">
+      <img src="./assets/img/class/footer6.png" alt="">
+
+    </div>
+
+  </div>
+
+
+
+  <!-- FOOTER MAIN -->
+  <div class="footer-main">
+
+    <div class="container">
+      <div class="row">
+
+
+        <!-- ABOUT -->
+        <div class="col-lg-3 col-md-6 footer-box">
+
+          <img src="images/logo-footer.png"
+              class="footer-logo"
+              alt="Achiever's Castle">
+
+          <p>Giving your child the best start in life</p>
+
+
+          <h4>Social Media</h4>
+
+          <div class="footer-social">
+
+            <a href="https://www.facebook.com/people/Achievers-Castle/61558107806939/"
+              aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+
+            <a href="https://www.instagram.com/achievers.castle/"
+              aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+
+            <a href="https://www.linkedin.com/company/achiever-s-castle/posts/?feedView=all"
+              aria-label="LinkedIn">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+
+          </div>
+
         </div>
-        <div class="widget-area">
-            <div class="container">
-                <div class="row justify-content-center gx-60">
-                    <div class="col-lg-4">
-                        <div class="widget footer-widget">
-                            <div class="widget-about">
-                                <h3 class="mt-n2">Giving your child the best start in life</h3>
-                                <p class="map-link"><img src="assets/img/icon/map.svg" alt="svg">First Floor, 10A
-                                    Chandos Street London New Town W1G 9LE</p>
-                                <div class="sidebar-gallery">
-                                    <div class="gallery-thumb">
-                                        <img src="assets/img/widget/gal-2-1-2.jpg" alt="Gallery Image" class="w-100">
-                                        <a href="assets/img/widget/gal-2-1-2.jpg" class="popup-image gal-btn"><i
-                                                class="fal fa-plus"></i></a>
-                                    </div>
-                                    <div class="gallery-thumb">
-                                        <img src="assets/img/widget/gal-2-1-2.jpg" alt="Gallery Image" class="w-100">
-                                        <a href="assets/img/widget/gal-2-1-2.jpg" class="popup-image gal-btn"><i
-                                                class="fal fa-plus"></i></a>
-                                    </div>
-                                    <div class="gallery-thumb">
-                                        <img src="assets/img/widget/gal-2-1-2.jpg" alt="Gallery Image" class="w-100">
-                                        <a href="assets/img/widget/gal-2-1-2.jpg" class="popup-image gal-btn"><i
-                                                class="fal fa-plus"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="widget footer-widget">
-                            <h3 class="widget_title">Get In Touch</h3>
-                            <div>
-                                <p class="footer-text">Monday to Friday: <span class="time">8.30am – 02.00pm</span></p>
-                                <p class="footer-text">Saturday, Sunday: <span class="time">Close</span></p>
-                                <p class="footer-info"><i class="fal fa-envelope"></i>Email: <a
-                                        href="mailto:user@domainname.com">user@domainname.com</a></p>
-                                <p class="footer-info"><i class="fas fa-mobile-alt"></i>Phone: <a
-                                        href="tel:+4402076897888">+44 (0) 207 689 7888</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="widget widget_nav_menu  footer-widget">
-                            <h3 class="widget_title">Useful Services</h3>
-                            <div class="menu-all-pages-container footer-menu">
-                                <ul class="menu">
-                                    <li><a href="#">Volunteer</a></li>
-                                    <li><a href="#">Join or Renew</a></li>
-                                    <li><a href="#">Advocate</a></li>
-                                    <li><a href="#">Membership Options</a></li>
-                                    <li><a href="#">Partner</a></li>
-                                    <li><a href="#">Families Membership</a></li>
-                                    <li><a href="#">Sponsor</a></li>
-                                    <li><a href="#">Contact Us</a></li>
-                                    <li><a href="#">Advertise</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+
+
+        <!-- CONTACT -->
+        <div class="col-lg-3 col-md-6 footer-box">
+
+          <h4>Get In Touch</h4>
+
+          <p>
+            <b>Address:</b><br>
+            11-102 Cope Crescent<br>
+            Saskatoon, SK
+          </p>
+
+          <p><b>Call:</b> (639) 384-2844</p>
+
+          <p><b>Email:</b> info@achieverscastle.com</p>
+
         </div>
-        <div class="copyright-wrap">
-            <div class="container">
-                <div class="row flex-row-reverse gy-3 justify-content-between align-items-center">
-                    <div class="col-lg-auto">
-                        <div class="footer-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#"><i class="fab fa-youtube"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-auto">
-                        <p class="copyright-text ">Copyright &copy; 2023 <a href="index.html">Achiever's Castle</a>. All Rights
-                            Reserved By <a href="hashtaggroup.co.in">Hashtag Media and Entertainment India</a></p>
-                    </div>
-                </div>
-            </div>
+
+
+
+        <!-- LINKS -->
+        <div class="col-lg-3 col-md-6 footer-box">
+
+          <h4>Useful Links</h4>
+
+          <ul>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="about.php">About</a></li>
+            <li><a href="blog.php">Blogs</a></li>
+            <li><a href="class.php">Programs</a></li>
+            <li><a href="contact.php">Contact Us</a></li>
+          </ul>
+
         </div>
-    </footer>
+
+
+
+        <!-- OTHER -->
+        <div class="col-lg-3 col-md-6 footer-box">
+
+          <h4>Other Links</h4>
+
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">Refund Policy</a></li>
+          </ul>
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+
+    <div>
+      © <?php echo date('Y'); ?> Achiever's Castle. All Rights Reserved.
+    </div>
+
+    <div class="payment-icons">
+
+      <img src="images/visa.png" alt="">
+      <img src="images/master.png" alt="">
+      <img src="images/paypal.png" alt="">
+      <img src="images/skrill.png" alt="">
+
+    </div>
+
+  </div>
+
+
+  </footer>

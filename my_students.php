@@ -11,11 +11,23 @@ if (!isset($_SESSION['teacher_id']) || !isset($_SESSION['teacher_subject'])) {
 
 $subject = $_SESSION['teacher_subject'];
 
-$sql = "SELECT first_name as name, email, phone, gender, dob FROM students WHERE subject = ?";
+$sql = "
+SELECT 
+    s.first_name AS name,
+    s.email,
+    s.phone,
+    s.gender,
+    s.dob
+FROM students s
+JOIN subjects sub ON s.grade = sub.grade
+WHERE sub.subject_name = ?
+";
+
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $subject);
 $stmt->execute();
 $result = $stmt->get_result();
+
 
 echo "<h2 class='mb-4'>👨‍🎓 My Students (Subject: <strong>$subject</strong>)</h2>";
 

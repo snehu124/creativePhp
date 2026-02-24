@@ -1,5 +1,4 @@
 <!doctype html>
-<?php include('header.php'); ?>
 <html class="no-js" lang="zxx">
 
 <head>
@@ -13,7 +12,7 @@
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Jost:wght@400;500&display=swap" rel="stylesheet">
 
@@ -34,7 +33,6 @@
         h1, h2, h3, .section-title {
             font-family: 'Fredoka', sans-serif;
         }
-
         /* Responsive - same as your other pages */
         @media (max-width: 992px) {
             .breadcumb-wrapper { min-height: 220px; }
@@ -105,7 +103,7 @@
             font-size: 1.65rem;
             margin-bottom: 16px;
             color: #222;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .contact-info-card a,
@@ -163,6 +161,27 @@
             background: linear-gradient(135deg, #ff8a9c 0%, var(--accent) 100%);
         }
 
+        .contact-row {
+            display: flex;
+            align-items: stretch;
+        }
+
+        .contact-image-box {
+            height: auto;
+            display: flex;
+        }
+
+        .contact-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 24px;
+        }
+
+        .contact-form-wrapper {
+            height: 100%;
+        }
+
         @media (max-width: 991px) {
             .contact-form-wrapper { padding: 50px 35px; }
         }
@@ -175,6 +194,8 @@
 </head>
 
 <body>
+    
+<?php include('header.php'); ?>
 <!-- Breadcrumb with your requested hero image -->
 <div class="breadcumb-wrapper" data-bg-src="assets/img/hero/hero-1-1.jpg">
     <div class="container z-index-common">
@@ -199,7 +220,7 @@
                     <i class="fas fa-phone-volume"></i>
                 </div>
                 <h3>Call Us Anytime</h3>
-                <a href="tel:+4402076897888">+44 (0) 207 689 7888</a>
+                <a href="tel:+4402076897888">(639) 384 - 2844</a>
             </div>
 
             <div class="contact-info-card" data-aos="fade-up" data-aos-delay="200">
@@ -215,7 +236,7 @@
                     <i class="fas fa-clock"></i>
                 </div>
                 <h3>We're Here</h3>
-                <p>Monday – Friday<br>8:30 am – 2:00 pm</p>
+                <p>Monday – Saturday<br>11:00 am – 8:30 pm</p>
             </div>
 
         </div>
@@ -227,11 +248,11 @@
             <div class="row gx-5 align-items-stretch">
 
                 <!-- Form -->
-                <div class="col-lg-7 mb-60 mb-lg-0" data-aos="fade-right">
+                <div class="col-lg-6 mb-60 mb-lg-0" data-aos="fade-right">
                     <div class="contact-form-wrapper">
                         <div class="form-title mb-50 text-center text-lg-start">
                             <span class="sec-subtitle text-muted">Have Questions?</span>
-                            <h2>Send Us a Message</h2>
+                            <h2 class = "blog-title">Send Us a Message</h2>
                             <p class="mt-3 text-muted">We'll get back to you as soon as possible!</p>
                         </div>
 
@@ -246,7 +267,7 @@
                                 <input name="email" type="email" placeholder="Email Address *" required class="form-control">
                             </div>
                             <div class="col-md-6">
-                                <input name="number" type="tel" placeholder="Phone Number *" required class="form-control">
+                            <input name="number" type="tel" placeholder="Phone Number *"required class="form-control" pattern="[0-9]{10}" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10);" title="Please enter a valid 10-digit mobile number">
                             </div>
                             <div class="col-12">
                                 <textarea name="message" rows="6" placeholder="Your Message *" required class="form-control"></textarea>
@@ -260,17 +281,30 @@
                     </div>
                 </div>
 
-                <!-- Map + Your same image -->
-                <div class="col-lg-5 d-flex flex-column gap-4" data-aos="fade-left">
-                    <div class="rounded-4 overflow-hidden shadow" style="flex:1;">
-                        <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="420" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
-                    <img src="assets/img/about/con-2-1.png" alt="happy children learning" class="rounded-4 shadow w-100">
-                </div>
-
+             <div class="col-lg-6 contact-image-box" data-aos="fade-left">
+                <img src="assets/img/about/con-2-1.png"
+                    alt="happy children learning">
+            </div>
             </div>
         </div>
     </section>
+
+ <!-- Google Map Section (Last Section) -->
+<section class="map-section" data-aos="fade-up">
+  <div class="container-fluid px-0">
+    <div class="map-wrapper">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2882.95478628633!2d-106.68788708450146!3d52.1330191797398!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x530506c134b5dfb7%3A0x7d27a3d761157402!2s11%2D102%20Cope%20Crescent%2C%20Saskatoon%2C%20SK%20S7J%205S4%2C%20Canada!5e0!3m2!1sen!2sin!4v1707669139475!5m2!1sen!2sin"
+        width="100%"
+        height="450"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+</section>
+
 
     <a href="#" class="scrollToTop scroll-btn"><i class="far fa-arrow-up"></i></a>
 

@@ -1,82 +1,3 @@
-/*
-Template Name: Kiddino
-Template URL: https://html.vecurosoft.com/kiddino
-Description: Kiddino - Children School & Kindergarten HTML Template
-Author: Vecuro
-Author URI: https://themeforest.net/user/vecuro_themes
-Version: 1.0.0
-*/
-/*=================================
-    CSS Index Here
-==================================*/
-/*
-01. Theme Base
-    1.1. Mixin
-    1.2. Function
-    1.3. Variable
-    1.4. Typography
-    1.5. Extend
-    1.7. Wordpress Default
-02. Reset
-    2.1. Container
-    2.2. Grid
-    2.3. Input
-    2.4. Slick Slider
-    2.5. Mobile Menu
-03. Utilities
-    3.1. Preloader
-    3.2. Buttons
-    3.3. Titles
-    3.4. Common
-    3.6. Font
-    3.7. Background
-    3.8. Text Color
-    3.9. Overlay
-    3.10. Animation
-04. Template Style
-    4.1. Widget
-    4.2. Header
-    4.3. Footer
-    4.4. Breadcumb
-    4.5. Pagination
-    4.6. Blog
-    4.7. Comments
-    4.8. Hero Area
-    4.9. Error    
-    4.10. About
-    4.11. Simple Sections
-    4.12. Popup Side Menu
-    4.13. Popup Side Menu
-    4.14. Serive Area
-    4.15. Category
-    4.16. Forms
-    4.17. Classes
-    4.18. Accordion
-    4.19. Testimonial
-    4.20. Package
-    4.21. Call To Active
-    4.22. Schedule Area
-    4.23. Gallery
-    4.24. Event Area
-    4.25. Feature
-    4.26. Team
-    4.27. Wocommerce
-    4.28. Products
-    4.29. Cart
-    4.30. Checkout
-    4.31. Wishlist
-05. Spacing
-
-*/
-/*=================================
-    CSS Index End
-==================================*/
-/*=================================
-   01. Theme Base
-==================================*/
-/*------------------- 1.1. Mixin -------------------*/
-/*------------------- 1.2. Function -------------------*/
-/*------------------- 1.3. Variable-------------------*/
 :root {
   --body-bg: #ffffff;
   --theme-color: #e8063c;
@@ -4923,6 +4844,8 @@ a.text-theme:hover,
   font-size: 70px;
   color: var(--title-color);
   margin: -0.21em 0 -0.4em 0;
+  font-family:"Love Ya Like A Sister", cursive;
+  font-weight:400;
 }
 
 .breadcumb-text {
@@ -5226,6 +5149,12 @@ blockquote.vs-quote p {
   background-color: var(--white-color);
   color: var(--body-color);
   border-color: var(--theme-color);
+}
+
+.blog-title{
+  font-family:"Love Ya Like A Sister", cursive;
+  font-weight:400;
+  text-align: left;
 }
 
 .blog-title a {

@@ -107,9 +107,9 @@ mysqli_query($conn, "UPDATE teachers SET last_activity = '$now' WHERE id = '$tea
         $('#content-area').html('<p>Loading...</p>');
 
         // ✅ Always load from correct root folder
-        const fullPath = '/' + page.replace(/^\/+/, '');
+        // const fullPath = '/' + page.replace(/^\/+/, '');
 
-        $.get(fullPath, function (data) {
+        $.get(page, function (data) {
           $('#content-area').html(data);
 
           // ✅ Re-init calendar if needed
