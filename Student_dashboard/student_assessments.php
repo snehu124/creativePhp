@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "../db_config.php";
+include "student_sidebar.php"; 
 
 // 🔐 Security check
 if (!isset($_SESSION['student_id'])) {
@@ -65,145 +66,281 @@ $currentpage = basename($_SERVER['PHP_SELF']);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>My Assessments</title>
+
+<link href="student.css" rel="stylesheet">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
+  
 <style>
-body{
-    background: linear-gradient(135deg,#f8f9ff,#e0e7ff);
-    margin:0;
-    font-family:'Segoe UI',system-ui,sans-serif;
-}
+
+/* ===== MAIN LAYOUT ===== */
+
 .main-layout{
-    display:flex;
-    min-height:100vh;
+display:flex;
+min-height:100vh;
 }
+
+/* ===== CONTENT AREA ===== */
+
 .content-area{
-    margin-left:260px;
-    padding:35px 45px;
-    flex:1;
+
+margin-left:260px;
+
+width:calc(100% - 260px);
+max-width:calc(100% - 260px);
+
+padding:30px;
+
 }
-@media(max-width:992px){
-    .content-area{
-        margin-left:0;
-        padding-top:80px;
-    }
+
+/* ===== TABLE CARD ===== */
+
+.card{
+
+border-radius:12px;
+
 }
+
+/* ===== TABLE SCROLL ===== */
+
+.table-responsive{
+
+overflow-x:auto;
+-webkit-overflow-scrolling:touch;
+
+}
+
+.table{
+
+white-space:nowrap;
+
+}
+
+/* ===== BADGES ===== */
+
 .badge{
-    font-size:12px;
+
+font-size:12px;
+padding:6px 10px;
+
 }
+
+.container-fluid h3{
+   font-size: 42px;
+   font-weight: 400;
+   margin-bottom: 6px !important;
+   background: linear-gradient(to right, #e02121, #2f55a4);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+   font-family: "Love Ya Like A Sister", cursive;
+   margin-left: 8px;
+}
+
+/* ===== MOBILE ===== */
+
+@media(max-width:992px){
+
+.content-area{
+
+margin-left:0;
+width:100%;
+max-width:100%;
+
+padding:80px 15px 20px;
+
+}
+
+/* sidebar mobile */
+
+#studentSidebar{
+
+position:fixed;
+left:-260px;
+top:0;
+width:260px;
+height:100%;
+z-index:1200;
+transition:.3s;
+
+}
+
+#studentSidebar.show{
+
+left:0;
+
+}
+
+}
+
+/* mobile text */
+
+@media(max-width:576px){
+
+h3{
+
+font-size:18px;
+
+}
+
+}
+
 </style>
+
 </head>
 
 <body>
 
 <div class="main-layout">
 
-    <!-- Sidebar -->
-    <?php include "student_sidebar.php"; ?>
 
-    <!-- Mobile toggle -->
-    <button class="btn btn-primary d-lg-none position-fixed"
-            id="sidebarToggle"
-            style="top:15px;left:15px;z-index:1100;border-radius:50%;width:48px;height:48px;">
-        <i class="bi bi-list fs-4"></i>
-    </button>
+<!-- MOBILE TOGGLE -->
+<button class="btn btn-primary d-lg-none position-fixed"
+id="sidebarToggle"
+style="top:15px;left:15px;z-index:1300;border-radius:50%;width:48px;height:48px;">
 
-    <!-- Content -->
-    <div class="content-area">
+<i class="bi bi-list"></i>
 
-        <h3 class="fw-bold text-primary mb-4">
-            <i class="bi bi-file-earmark-text-fill me-2"></i>
-            My Assessments
-        </h3>
+</button>
 
-        <div class="card shadow-sm">
-            <div class="card-body p-0">
 
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Title</th>
-                            <th>Due Date</th>
-                            <th>Status</th>
-                            <th>Score</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
+<!-- CONTENT -->
+<div class="content-area container-fluid">
 
-                    <tbody>
+<h3 class="mb-4">
+
+My Assessments
+
+</h3>
+
+
+<div class="card shadow-sm">
+
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead class="table-light">
+
+<tr>
+
+<th>Title</th>
+<th>Due Date</th>
+<th>Status</th>
+<th>Score</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
 
                     <?php if($total_assessments == 0): ?>
-                        <tr>
-                            <td colspan="5" class="text-center py-4 text-muted">
-                                No assessments assigned.
-                            </td>
-                        </tr>
-                    <?php endif; ?>
+<tr>
 
-                    <?php while($r=mysqli_fetch_assoc($res)): ?>
+<td colspan="5" class="text-center text-muted py-4">
 
-                        <?php
-                        $title = htmlspecialchars($r['title'] ?? 'Untitled');
+  No assessments assigned.
 
-                        if (!empty($r['due_date']) && $r['due_date'] !== '0000-00-00') {
-                            $ts = strtotime($r['due_date']);
-                            $due = $ts ? date('d M Y',$ts) : htmlspecialchars($r['due_date']);
-                        } else {
-                            $due = "No Due Date";
-                        }
+</td>
 
-                        if (!empty($r['submitted_at'])) {
-                            $status = "<span class='badge bg-success'>Submitted</span>";
-                        } elseif (!empty($r['started_at'])) {
-                            $status = "<span class='badge bg-warning text-dark'>In Progress</span>";
-                        } else {
-                            $status = "<span class='badge bg-secondary'>Not Started</span>";
-                        }
-                        ?>
+</tr>
 
-                        <tr>
-                            <td><?= $title ?></td>
-                            <td><?= $due ?></td>
-                            <td><?= $status ?></td>
-                            <td>
-                                <?php if(!empty($r['submitted_at'])): ?>
-                                    <strong><?= (int)$r['score'] ?> / <?= (int)$r['total_questions'] ?></strong>
-                                <?php else: ?>
-                                    —
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <a href="take_assessment.php?id=<?= (int)$r['id'] ?>"
-                                   class="btn btn-sm btn-primary">
-                                    Take / View
-                                </a>
-                            </td>
-                        </tr>
+<?php else: ?>
 
-                    <?php endwhile; ?>
+<?php while($r=mysqli_fetch_assoc($res)): ?>
 
-                    </tbody>
-                </table>
+<?php
 
-            </div>
-        </div>
+$title=htmlspecialchars($r['title']);
 
-    </div>
+$due_date = !empty($r['due_date']) 
+? date("d M Y",strtotime($r['due_date']))
+: "No Due Date";
+
+if($r['submitted_at'])
+$status="<span class='badge bg-success'>Submitted</span>";
+
+elseif($r['started_at'])
+$status="<span class='badge bg-warning text-dark'>In Progress</span>";
+
+else
+$status="<span class='badge bg-secondary'>Not Started</span>";
+
+$score=$r['submitted_at']
+? "<strong>{$r['score']} / {$r['total_questions']}</strong>"
+: "—";
+
+$id=(int)$r['id'];
+
+?>
+
+<tr>
+
+<td><?= $title ?></td>
+
+<td><?= $due_date ?></td>
+
+<td><?= $status ?></td>
+
+<td><?= $score ?></td>
+
+<td>
+
+<a href="take_assessment.php?id=<?= $id ?>"
+class="btn btn-sm btn-primary">
+
+Take / View
+
+</a>
+
+</td>
+
+</tr>
+
+<?php endwhile; ?>
+
+<?php endif; ?>
+
+</tbody>
+
+</table>
+
 </div>
 
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
 <script>
+
 const sidebar=document.getElementById('studentSidebar');
-document.getElementById('sidebarToggle')?.addEventListener('click',()=>{
-    sidebar.classList.toggle('show');
+
+document.getElementById('sidebarToggle')
+.addEventListener('click',()=>{
+
+sidebar.classList.toggle('show');
+
 });
+
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

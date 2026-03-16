@@ -1,6 +1,6 @@
 <?php
 session_start();
-date_default_timezone_set('Asia/Kolkata'); // ✅ Set timezone
+date_default_timezone_set('Asia/Kolkata');
 include 'db_config.php';
 
 if (!isset($_SESSION['teacher_id'])) {
@@ -13,115 +13,428 @@ $now = date("Y-m-d H:i:s");
 mysqli_query($conn, "UPDATE teachers SET last_activity = '$now' WHERE id = '$teacher_id'");
 ?>
 
-
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Teacher Dashboard</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teacher Dashboard</title>
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- FullCalendar CSS -->
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-  <style>
-    body {
-      display: flex;
-      min-height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
-    }
-    .sidebar {
-      width: 220px;
-      background: #2c3e50;
-      color: #fff;
-      padding: 20px 10px;
-    }
-    .sidebar h4 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .sidebar a {
-      display: block;
-      color: #fff;
-      padding: 10px 15px;
-      margin: 8px 0;
-      text-decoration: none;
-      border-radius: 4px;
-    }
-    .sidebar a:hover {
-      background: #34495e;
-    }
-    .main-content {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      background: #f7f7f7;
-    }
-  </style>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:#f4f7fb;
+display:flex;
+min-height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+width:260px;
+position:fixed;
+top:0;
+left:0;
+height:100vh;
+background:linear-gradient(180deg,#1e3c72,#2a5298);
+color:white;
+padding:0 15px;
+overflow-y:auto;
+overflow-x:hidden;
+scrollbar-width:none;
+transition:0.3s;
+z-index:1000;
+}
+
+.sidebar::-webkit-scrollbar{
+width:0;
+display:none;
+}
+
+.sidebar-logo{
+text-align:center;
+margin-top:-15px;
+margin-bottom:-20px;
+}
+
+.sidebar-logo img{
+width:150px;
+height:100px;
+}
+
+.sidebar a{
+display:flex;
+align-items:center;
+gap:10px;
+color:white;
+padding:12px 15px;
+margin:6px 0;
+text-decoration:none;
+border-radius:12px;
+transition:0.3s;
+font-size:15px;
+}
+
+.sidebar a:hover{
+background:rgba(255,255,255,0.15);
+transform:translateX(5px);
+}
+
+.sidebar a.active{
+background:white;
+color:#2a5298;
+font-weight:bold;
+}
+
+.sidebar i{
+font-size:18px;
+width:22px;
+}
+
+/* Wrapper */
+.main-wrapper{
+flex:1;
+display:flex;
+flex-direction:column;
+margin-left:260px;
+transition:0.3s;
+}
+
+/* Header */
+.header{
+background:white;
+padding:15px 25px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* Hamburger icon */
+.menu-toggle{
+font-size:24px;
+cursor:pointer;
+display:none;
+margin-right:15px;
+}
+
+.header-left{
+display:flex;
+align-items:center;
+}
+
+.header h5{
+margin:0;
+font-weight:600;
+}
+
+.teacher-info{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.teacher-avatar{
+width:40px;
+height:40px;
+border-radius:50%;
+background:#2a5298;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.teacher-avatar i{
+font-size:20px;
+}
+
+/* Content */
+.main-content{
+padding:25px;
+}
+
+.dashboard-card{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.05);
+min-height:400px;
+}
+
+/* Overlay */
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.4);
+display:none;
+z-index:999;
+}
+
+/* Close button */
+.sidebar-close{
+display:none;
+font-size:22px;
+cursor:pointer;
+text-align:right;
+padding:10px;
+}
+
+/* MOBILE */
+@media(max-width:992px){
+
+.sidebar{
+left:-260px;
+}
+
+.sidebar.show{
+left:0;
+}
+
+.main-wrapper{
+margin-left:0;
+}
+
+.menu-toggle{
+display:block;
+}
+
+.sidebar-close{
+display:block;
+color:white;
+}
+
+.overlay.show{
+display:block;
+}
+
+}
+
+@media(max-width:425px){
+  .teacher{
+  display:none;
+  }
+}
+
+</style>
+
 </head>
 <body>
 
-<div class="sidebar">
-  <h4>Teacher Panel</h4>
-  <a href="#" class="menu-link" data-page="calendar.php">📅 Calendar</a>
-  <a href="#" class="menu-link" data-page="my_students.php">👨‍🎓 My Students</a>
-  <a href="#" class="menu-link" data-page="attendance.php">📋 Attendance</a>
-  <a href="#" class="menu-link" data-page="assign_chapter.php">📚 Assign Chapters</a>
-  <a href="#" class="menu-link" data-page="suggest_course_changes.php">📝 Suggest Course Change</a>
-  <a href="#" class="menu-link" data-page="send_email_updates.php">📧 Send Email Updates</a>
+<div class="overlay" id="overlay"></div>
 
-  <!-- ✅ Fixed paths for question pages -->
-  <!--<a href="#" class="menu-link" data-page="teacher_question_pages/add_question.php">➕ Add Question</a>-->
- <a href="#" class="menu-link" data-page="teacher_question_pages/assign_assessment.php">
-   📑 Assign Assessment
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+
+<div class="sidebar-close">
+<i class="bi bi-x-lg" id="closeSidebar"></i>
+</div>
+
+<div class="sidebar-logo">
+<img src="images/logo3.png">
+</div>
+
+<a href="#" class="menu-link active" data-page="dashboard_home.php">
+<i class="bi bi-speedometer2"></i>
+Dashboard
 </a>
+
+<a href="#" class="menu-link" data-page="calendar.php">
+<i class="bi bi-calendar-event"></i>
+Calendar
+</a>
+
+<a href="#" class="menu-link" data-page="my_students.php">
+<i class="bi bi-people"></i>
+My Students
+</a>
+
+<a href="#" class="menu-link" data-page="attendance.php">
+<i class="bi bi-clipboard-check"></i>
+Attendance
+</a>
+
+<a href="#" class="menu-link" data-page="assign_chapter.php">
+<i class="bi bi-book"></i>
+Assign Chapters
+</a>
+
+<a href="#" class="menu-link" data-page="suggest_course_changes.php">
+<i class="bi bi-lightbulb"></i>
+Suggest Course Change
+</a>
+
+<a href="#" class="menu-link" data-page="send_email_updates.php">
+<i class="bi bi-envelope-paper"></i>
+Send Email Update
+</a>
+
+<a href="#" class="menu-link" data-page="teacher_question_pages/assign_assessment.php">
+<i class="bi bi-file-earmark-plus"></i>
+Assign Assessment
+</a>
+
 <a href="#" class="menu-link" data-page="teacher_question_pages/manage_assessments.php">
-    🗂️ Manage Student Assessments
+<i class="bi bi-folder-check"></i>
+Manage Assessments
 </a>
-  <a href="#" class="menu-link" data-page="teacher_question_pages/manage_questions.php">❓ Manage Questions</a>
 
-  <a href="teacher_logout.php">🚪 Logout</a>
+<a href="#" class="menu-link" data-page="teacher_question_pages/manage_questions.php">
+<i class="bi bi-patch-question"></i>
+Manage Questions
+</a>
+
+<a href="teacher_logout.php">
+<i class="bi bi-box-arrow-right"></i>
+Logout
+</a>
+
 </div>
 
-<div class="main-content" id="content-area">
-  <h5>Welcome to Teacher Dashboard</h5>
-  <p>Please select a menu option from the left.</p>
+
+<!-- Main -->
+<div class="main-wrapper">
+
+<div class="header">
+
+<div class="header-left">
+<i class="bi bi-list menu-toggle" id="openSidebar"></i>
+<h5>Teacher Dashboard</h5>
 </div>
 
-<!-- jQuery, Bootstrap JS, FullCalendar JS (only ONCE) -->
+<div class="teacher-info">
+
+<div class="teacher-avatar">
+<i class="bi bi-person-fill"></i>
+</div>
+
+<span class="teacher">Teacher</span>
+
+</div>
+
+</div>
+
+
+<div class="main-content">
+
+<div class="dashboard-card" id="content-area">
+Loading...
+</div>
+
+</div>
+
+</div>
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
 
+
 <script>
-  $(document).ready(function () {
-    $('.menu-link').on('click', function (e) {
-      e.preventDefault();
-      const page = $(this).data('page');
 
-      if (page) {
-        $('#content-area').html('<p>Loading...</p>');
+$(document).ready(function () {
 
-        // ✅ Always load from correct root folder
-        // const fullPath = '/' + page.replace(/^\/+/, '');
+/* Sidebar toggle */
+$("#openSidebar").click(function(){
+$("#sidebar").addClass("show");
+$("#overlay").addClass("show");
+});
 
-        $.get(page, function (data) {
-          $('#content-area').html(data);
+$("#closeSidebar, #overlay").click(function(){
+$("#sidebar").removeClass("show");
+$("#overlay").removeClass("show");
+});
 
-          // ✅ Re-init calendar if needed
-          if (page.includes('calendar.php') && typeof initCalendar === 'function') {
-            setTimeout(initCalendar, 100);
-          }
-        }).fail(function () {
-          $('#content-area').html('<p class="text-danger">❌ Error loading page: ' + fullPath + '</p>');
-        });
-      }
-    });
-  });
+
+function loadPage(page, addToHistory=true){
+
+if(!page)return;
+
+$("#content-area").html("<p>Loading...</p>");
+
+$.ajax({
+
+url: page + window.location.search,
+type:"GET",
+
+success:function(data){
+
+$("#content-area").html(data);
+
+$(".menu-link").removeClass("active");
+
+$('.menu-link[data-page="'+page+'"]').addClass("active");
+
+if(addToHistory){
+history.pushState({page:page},"","?page="+page+window.location.search);
+}
+
+if(typeof initCalendar==="function"){
+setTimeout(function(){
+initCalendar();
+},100);
+}
+
+/* auto close mobile */
+if(window.innerWidth < 992){
+$("#sidebar").removeClass("show");
+$("#overlay").removeClass("show");
+}
+
+},
+
+error:function(){
+$("#content-area").html("<p class='text-danger'>❌ Failed to load page</p>");
+}
+
+});
+
+}
+
+
+// click menu
+$(".menu-link").click(function(e){
+e.preventDefault();
+let page=$(this).data("page");
+loadPage(page,true);
+});
+
+
+// browser back
+window.onpopstate=function(event){
+if(event.state && event.state.page){
+loadPage(event.state.page,false);
+}
+};
+
+
+// initial load
+let params=new URLSearchParams(window.location.search);
+
+let page=params.get("page");
+
+if(!page){
+page="dashboard_home.php";
+history.replaceState({page:page},"","?page="+page);
+}
+
+loadPage(page,false);
+
+});
+
 </script>
 
 </body>

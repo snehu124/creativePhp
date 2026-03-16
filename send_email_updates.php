@@ -1,106 +1,206 @@
 <?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
+
 include 'db_config.php';
 
-$teacher_id = $_SESSION['teacher_id'] ?? null;
 
-// Step 1: Fetch teacher's subject
-$sub_q = mysqli_query($conn, "SELECT subject FROM teachers WHERE id = '$teacher_id'");
-$sub_row = mysqli_fetch_assoc($sub_q);
-$teacher_subject = $sub_row['subject'] ?? '';
+/*
+|--------------------------------------------------------------------------
+| AUTH CHECK
+|--------------------------------------------------------------------------
+*/
 
-// Step 2: Fetch students whose subject matches & parent_email is set
-$students_q = mysqli_query($conn, "
-    SELECT id, first_name, parent_email 
-    FROM students 
-    WHERE subject = '$teacher_subject' AND parent_email IS NOT NULL
-");
+if (
+    !isset($_SESSION['teacher_id']) ||
+    !isset($_SESSION['teacher_subject'])
+) {
+
+    echo "
+        <div class='alert alert-danger'>
+            Unauthorized access.
+        </div>
+    ";
+
+    exit;
+
+}
+
+$teacher_id = $_SESSION['teacher_id'];
+$subject    = $_SESSION['teacher_subject'];
+
+
+/*
+|--------------------------------------------------------------------------
+| FETCH STUDENTS
+|--------------------------------------------------------------------------
+*/
+
+$sql = "
+    SELECT
+        s.id,
+        s.first_name,
+        s.parent_email
+    FROM students s
+    INNER JOIN subjects sub
+        ON s.grade = sub.grade
+    WHERE
+        sub.subject_name = ?
+        AND s.parent_email IS NOT NULL
+";
+
+$stmt = $conn->prepare($sql);
+
+$stmt->bind_param("s", $subject);
+
+$stmt->execute();
+
+$students_q = $stmt->get_result();
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Send Email Updates</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #dee2e6 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .email-form-wrapper {
-            max-width: 620px;
-            margin: 60px auto;
-        }
-        .form-card {
-            background: #ffffff;
-            border-radius: 15px;
-            padding: 40px 30px;
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e0e0e0;
-        }
-        .form-title {
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: #c0392b;
-        }
-        label i {
-            margin-right: 8px;
-            color: #c0392b;
-        }
-        .form-control, .form-select {
-            border-radius: 10px;
-        }
-        button.btn {
-            font-weight: 600;
-            padding: 12px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #c0392b, #2980b9);
-            border: none;
-            color: white;
-        }
-        button.btn:hover {
-            background: linear-gradient(135deg, #a93226, #21618c);
-        }
-    </style>
-</head>
-<body>
 
-<div class="email-form-wrapper">
-    <div class="form-card">
-        <h3 class="form-title text-center"><i class="bi bi-envelope-paper"></i> Send Email Updates</h3>
 
-        <form method="POST" action="send_email_action.php" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label><i class="bi bi-person-lines-fill"></i>Select Student</label>
-                <select name="student_email" class="form-select" required>
-                    <option value="">-- Select Student --</option>
-                    <?php while ($row = mysqli_fetch_assoc($students_q)) {
-                        $email = $row['parent_email'];
-                        $name = $row['name'];
-                        echo "<option value='{$email}'>{$name} ({$email})</option>";
-                    } ?>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label><i class="bi bi-file-earmark-text"></i>Subject</label>
-                <input type="text" name="subject" class="form-control" placeholder="Enter email subject..." required>
-            </div>
-            <div class="mb-3">
-                <label><i class="bi bi-chat-left-dots"></i>Message</label>
-                <textarea name="message" class="form-control" rows="6" placeholder="Type your message here..." required></textarea>
-            </div>
-            <div class="mb-3">
-                <label><i class="bi bi-paperclip"></i>Attach File (PDF/Image)</label>
-                <input type="file" name="attachment" class="form-control" accept=".pdf,image/*">
-            </div>
-            <button type="submit" class="btn w-100">
-                <i class="bi bi-send-fill"></i> Send Email
-            </button>
-        </form>
+<style>
+
+.email-container
+{
+    width: 100%;
+    margin: 0;
+}
+
+
+.email-title
+{
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+</style>
+
+
+
+<div class="email-container">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+
+        <h4 class="email-title">
+            <i class="bi bi-envelope-fill"></i>
+            Send Email Updates
+        </h4>
+
     </div>
-</div>
 
-</body>
-</html>
+
+    <form
+        method="POST"
+        action="send_email_action.php"
+        enctype="multipart/form-data"
+    >
+
+
+        <!-- STUDENT -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Select Student
+            </label>
+
+            <select
+                name="student_email"
+                class="form-select"
+                required
+            >
+
+                <option value="">
+                    Select Student
+                </option>
+
+                <?php while ($row = $students_q->fetch_assoc()): ?>
+
+                    <option value="<?= htmlspecialchars($row['parent_email']) ?>">
+
+                        <?= htmlspecialchars($row['first_name']) ?>
+                        (<?= htmlspecialchars($row['parent_email']) ?>)
+
+                    </option>
+
+                <?php endwhile; ?>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- SUBJECT -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Email Subject
+            </label>
+
+            <input
+                type="text"
+                name="subject"
+                class="form-control"
+                required
+            >
+
+        </div>
+
+
+
+        <!-- MESSAGE -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Message
+            </label>
+
+            <textarea
+                name="message"
+                class="form-control"
+                rows="5"
+                required
+            ></textarea>
+
+        </div>
+
+
+
+        <!-- ATTACHMENT -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Attachment
+            </label>
+
+            <input
+                type="file"
+                name="attachment"
+                class="form-control"
+            >
+
+        </div>
+
+
+
+        <!-- BUTTON -->
+        <button
+            type="submit"
+            class="btn btn-primary w-100"
+        >
+
+            <i class="bi bi-send"></i>
+            Send Email
+
+        </button>
+
+
+    </form>
+
+</div>

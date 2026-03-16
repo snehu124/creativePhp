@@ -42,140 +42,295 @@ $result = $stmt->get_result();
 <html>
 
 <head>
-    <title>My Enrolled Courses</title>
-    <link href="student.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #f8f9ff, #e0e7ff);
-            margin: 0;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
 
-        .main-layout {
-            display: flex;
-            min-height: 100vh;
-        }
+<title>My Enrolled Courses</title>
 
-        .content-area {
-            margin-left: 260px;
-            padding: 35px 45px;
-            flex: 1;
-        }
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-        .course-img {
-            width: 130px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
+<link href="student.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
+  
+<style>
 
-        @media (max-width: 992px) {
-            .content-area {
-                margin-left: 0;
-                padding-top: 80px;
-            }
-        }
-    </style>
+/* BODY */
+body {
+    background: linear-gradient(135deg, #f8f9ff, #e0e7ff);
+    margin: 0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+
+/* MAIN LAYOUT */
+.main-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* CONTENT AREA FULL WIDTH FIX */
+.content-area {
+
+    margin-left: 260px;
+    padding: 30px;
+
+    width: calc(100% - 260px);
+    max-width: calc(100% - 260px);
+
+}
+
+
+/* CARD */
+.card {
+
+    border-radius: 12px;
+    border: none;
+
+}
+
+
+/* IMAGE */
+.course-img {
+
+    width: 130px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+
+}
+
+
+/* TABLE RESPONSIVE */
+.table-responsive {
+
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+}
+
+
+/* TABLE DEFAULT */
+.table {
+
+    width: 100%;
+    white-space: nowrap;
+
+}
+
+.container-fluid h3{
+   font-size: 42px;
+   font-weight: 400;
+   margin-bottom: 6px !important;
+   background: linear-gradient(to right, #e02121, #2f55a4);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+   font-family: "Love Ya Like A Sister", cursive;
+   margin-left: 8px;
+}
+
+/* SCROLL ONLY BELOW 1280px */
+@media (max-width:1280px) {
+
+    .table {
+
+        min-width: 900px;
+
+    }
+
+}
+
+
+/* TABLET */
+@media (max-width:992px) {
+
+    .content-area {
+
+        margin-left: 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 20px;
+        padding-top: 80px;
+
+    }
+
+}
+
+
+/* MOBILE */
+@media (max-width:576px) {
+
+    .content-area {
+
+        padding: 15px;
+        padding-top: 75px;
+
+    }
+
+    .course-img {
+
+        width: 100px;
+        height: 65px;
+
+    }
+
+}
+
+
+/* SIDEBAR TOGGLE */
+#sidebarToggle {
+
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+
+}
+
+</style>
+
 </head>
 
 <body>
 
-    <div class="main-layout">
+<div class="main-layout">
 
-        <!-- Sidebar -->
-        <?php include 'student_sidebar.php'; ?>
+    <!-- SIDEBAR -->
+    <?php include 'student_sidebar.php'; ?>
 
-        <!-- Mobile Toggle -->
-        <button class="btn btn-primary d-lg-none position-fixed" id="sidebarToggle"
-            style="top:15px; left:15px; z-index:1100; border-radius:50%; width:48px; height:48px;">
-            <i class="bi bi-list fs-4"></i>
-        </button>
 
-        <!-- Content -->
-        <div class="content-area">
+    <!-- MOBILE BUTTON -->
+    <button class="btn btn-primary d-lg-none position-fixed"
+        id="sidebarToggle">
 
-            <h3 class="mb-4 fw-bold text-primary">
-                <i class="bi bi-journal-bookmark-fill me-2"></i>
-                My Enrolled Courses
-            </h3>
+        <i class="bi bi-list fs-4"></i>
 
-            <?php if(mysqli_num_rows($result) > 0): ?>
+    </button>
 
-            <div class="card shadow-sm">
-                <div class="card-body p-0">
 
-                    <table class="table table-hover mb-0 align-middle">
+    <!-- CONTENT -->
+    <div class="content-area container-fluid">
+
+        <h3 class="mb-4">
+            My Enrolled Courses
+        </h3>
+
+
+        <?php if(mysqli_num_rows($result) > 0): ?>
+
+        <div class="card shadow-sm">
+
+            <div class="card-body">
+
+                <!-- TABLE SCROLL WRAPPER -->
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
 
                         <thead class="table-light">
+
                             <tr>
+
                                 <th>Image</th>
                                 <th>Subject</th>
                                 <th>Grade</th>
                                 <th>Action</th>
+
                             </tr>
+
                         </thead>
 
                         <tbody>
 
-                            <?php while($row = mysqli_fetch_assoc($result)): ?>
+                        <?php while($row = mysqli_fetch_assoc($result)): ?>
 
-                            <tr>
+                        <tr>
 
-                                <td>
-                                    <?php
+                            <td>
+
+                                <?php
                                 $imgPath = !empty($row['course_image']) 
-                                           ? $row['course_image'] 
+                                           ? '../' . $row['course_image']
                                            : '../images/default-course.jpg';
                                 ?>
-                                    <img src="<?= htmlspecialchars($imgPath); ?>" class="course-img">
-                                </td>
 
-                                <td>
-                                    <?= htmlspecialchars($row['subject_name']); ?>
-                                </td>
+                                <img src="<?= htmlspecialchars($imgPath); ?>" 
+                                     class="course-img">
 
-                                <td>
-                                    <?= htmlspecialchars($row['grade']); ?>
-                                </td>
+                            </td>
 
-                                <td>
-                                    <a href="course_sidebar.php?id=<?= urlencode($row['subject_id']); ?>"
-                                        class="btn btn-sm btn-primary">
-                                        View
-                                    </a>
-                                </td>
 
-                            </tr>
+                            <td>
 
-                            <?php endwhile; ?>
+                                <?= htmlspecialchars($row['subject_name']); ?>
+
+                            </td>
+
+
+                            <td>
+
+                                <?= htmlspecialchars($row['grade']); ?>
+
+                            </td>
+
+
+                            <td>
+
+                                <a href="course_sidebar.php?id=<?= urlencode($row['subject_id']); ?>"
+                                   class="btn btn-sm btn-primary">
+
+                                   View
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        <?php endwhile; ?>
 
                         </tbody>
+
                     </table>
 
                 </div>
+
             </div>
-
-            <?php else: ?>
-
-            <div class="alert alert-info">
-                You have not enrolled in any courses yet.
-            </div>
-
-            <?php endif; ?>
 
         </div>
+
+        <?php else: ?>
+
+        <div class="alert alert-info">
+
+            You have not enrolled in any courses yet.
+
+        </div>
+
+        <?php endif; ?>
+
+
     </div>
 
-    <script>
-        // Mobile Sidebar Toggle
-        const sidebar = document.getElementById('studentSidebar');
+</div>
 
-        document.getElementById('sidebarToggle')?.addEventListener('click', () => {
-            sidebar.classList.toggle('show');
-        });
-    </script>
+
+<script>
+
+/* SIDEBAR TOGGLE */
+const sidebar = document.getElementById('studentSidebar');
+
+document.getElementById('sidebarToggle')
+.addEventListener('click', function(){
+
+    sidebar.classList.toggle('show');
+
+});
+
+</script>
 
 </body>
 

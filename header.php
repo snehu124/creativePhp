@@ -373,13 +373,38 @@
       <li><a href="blog.php">Blogs</a></li>
       <li><a href="contact.php">Contact</a></li>
     </ul>
+   
     <a href="#" class="login-btn" id="openLoginModal">Login</a>
+     <a href="./enroll_query.php" style="
+    background-color: #d6b125;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 30px;
+    display: inline-block;
+    font-size: 16px;
+}
+">
+Enroll Now
+</a>
   </nav>
 
   <div class="mobile-top-bar">
     <div class="mobile-logo">
       <img src="images/logo1.png">
     </div>
+     <a href="https://www.achieverscastle.com/enroll_query.php" style="
+    background-color: #e60023;
+    color: white;
+    padding: 8px 19px;
+    text-decoration: none;
+    border-radius: 30px;
+    display: inline-block;
+    font-size: 12px;
+}
+">
+Enroll Query
+</a>
     <div class="mobile-icons">
       <span class="hamburger" id="openMenu">☰</span>
     </div>

@@ -125,12 +125,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php if (isset($success)): ?>
     <div class="card">
         <div class="header header-success">
-            <div class="success-check">Checkmark</div>
+            <div class="success-check text-white">
+            <i class="bi bi-check-circle-fill"></i>
+            </div>
             <h2>Deleted Successfully!</h2>
         </div>
         <div class="body">
             <p class="lead mb-4">"<?= htmlspecialchars($title) ?>" has been permanently removed.</p>
-            <a href="manage_assessments.php" class="btn btn-success btn-custom">
+            <a href="../teacher_dashboard.php?page=teacher_question_pages/manage_assessments.php" class="btn btn-success btn-custom">
                 Checkmark Back to Assessments
             </a>
         </div>
@@ -169,9 +171,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <form method="post" class="mt-4">
                 <button type="submit" class="btn btn-danger btn-custom me-3">
-                    Trash Delete Forever
+                    <i class="bi bi-trash3"></i> Delete Forever
                 </button>
-                <a href="manage_assessments.php" class="btn btn-secondary btn-custom">
+                <a href="../teacher_dashboard.php?page=teacher_question_pages/manage_assessments.php" class="btn btn-secondary btn-custom">
                     Cancel
                 </a>
             </form>

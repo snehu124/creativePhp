@@ -223,3 +223,1473 @@ NO MATCH QID 87: '' vs '792.91'
 FINAL SCORE: 1 / 13
 === SUBMIT END ===
 
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+
+=== NEW SUBMIT START ===
+Assessment ID: 2
+Student ID: 39
+
+Student Answers Received:
+Array
+(
+    [47] => 10022
+    [48] => 8263
+)
+
+
+Questions Found in DB (2):
+QID: 47 | Correct: '10022'
+QID: 48 | Correct: '8263'
+
+MATCH! QID 47: '10022' === '10022'
+MATCH! QID 48: '8263' === '8263'
+FINAL SCORE: 2 / 2
+=== SUBMIT END ===
+

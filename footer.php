@@ -232,10 +232,10 @@
       class="insta-link">
 
       Follow Instagram @achievers.castle
-
+<!-- 
       <span class="insta-icon">
         <img src="images/instagram.svg" alt="">
-      </span>
+      </span> -->
 
     </a>
 
@@ -361,14 +361,14 @@
       © <?php echo date('Y'); ?> Achiever's Castle. All Rights Reserved.
     </div>
 
-    <div class="payment-icons">
+    <!-- <div class="payment-icons">
 
       <img src="images/visa.png" alt="">
       <img src="images/master.png" alt="">
       <img src="images/paypal.png" alt="">
       <img src="images/skrill.png" alt="">
 
-    </div>
+    </div> -->
 
   </div>
 

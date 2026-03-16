@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "../db_config.php";
+include "student_sidebar.php";
 
 if (!isset($_SESSION['student_id'])) {
     die("Unauthorized");
@@ -145,29 +146,102 @@ $conn->autocommit(true);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background: linear-gradient(135deg, #56ab2f, #a8e6cf); min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Segoe UI', sans-serif; }
-        .card { max-width: 550px; border-radius: 30px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.3); }
-        .header { background: linear-gradient(45deg, #11998e, #38ef7d); padding: 80px 20px; text-align: center; color: white; }
-        .header i { font-size: 6rem; animation: bounce 2s infinite; }
-        .score { font-size: 4.5rem; font-weight: bold; color: #fff; text-shadow: 0 4px 15px rgba(0,0,0,0.4); }
-        @keyframes bounce { 0%,100% {transform:translateY(0)} 50% {transform:translateY(-30px)} }
-        .body { background: white; padding: 50px; text-align: center; }
-        .btn-home { background: linear-gradient(45deg, #667eea, #764ba2); color: white; padding: 18px 60px; border-radius: 50px; font-size: 1.4rem; text-decoration: none; }
-        .btn-home:hover { transform: translateY(-7px); box-shadow: 0 20px 40px rgba(102,126,234,0.5); }
+      html,body{
+        overflow-x:hidden;
+        margin:0;
+    }
+
+body{
+    background:linear-gradient(160deg, #1e3a8a, #2563eb);
+    font-family:'Segoe UI',sans-serif;
+}
+
+.main-content{
+    margin-left:260px;
+    padding:40px;
+    max-width:calc(100% - 260px);
+}
+
+.card{
+    max-width:500px;
+    margin:auto;
+    border-radius:30px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+
+.header{
+    background: linear-gradient(45deg,#11998e,#38ef7d);
+    padding:40px 0;
+    text-align:center;
+    color:white;
+}
+
+.header i{
+    font-size:5.5rem;
+    animation: beat 1.5s infinite;
+}
+
+.score{
+    font-size:2rem;
+    font-weight:bold;
+    color:#fff;
+}
+
+@keyframes bounce{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-20px)}
+}
+
+.body{
+    background:white;
+    padding:40px;
+    text-align:center;
+}
+
+.btn-home{
+    background:linear-gradient(45deg,#667eea,#764ba2);
+    color:white;
+    padding:15px 40px;
+    font-size:1.2rem;
+    border-radius:50px;
+    text-decoration:none;
+}
+
+.btn-home:hover{
+    transform:translateY(-5px);
+    box-shadow:0 15px 30px rgba(102,126,234,0.4);
+    color:white;
+}
+
+@media(max-width:768px){
+    .main-content{
+        margin-left:0;
+        max-width:100%;
+    }
+}
     </style>
 </head>
 <body>
-    <div class="card">
+<div class="container main-content">
+    <div class="card mt-4">
+
         <div class="header">
             <i class="fas fa-check-circle"></i>
-            <h1 class="mt-4">Submitted Successfully!</h1>
+            <h1 class="mt-3">Submitted Successfully!</h1>
             <div class="score">Your Score: <?= $score ?> / <?= $total_questions ?></div>
         </div>
+
         <div class="body">
             <h3>Well Done!</h3>
             <p>Your assessment has been graded instantly.</p>
-            <a href="student_dashboard.php" class="btn-home">Back to Dashboard</a>
+
+            <a href="student_dashboard.php" class="btn-home">
+                <i class="fas fa-home"></i> Back to Dashboard
+            </a>
         </div>
+
     </div>
+</div>
 </body>
 </html>

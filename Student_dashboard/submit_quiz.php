@@ -52,14 +52,38 @@ $answers = [];
 foreach ($raw_answers as $qid => $value) {
     $question_id = intval($qid);
 
-    if (is_array($value)) {
-        // Multi-field question (e.g., shaded + unshaded)
-        // Remove empty fields and save as JSON string
-        $cleaned = array_filter($value, function($v) {
-            return trim($v) !== '';
-        });
-        $answers[$question_id] = !empty($cleaned) ? json_encode($cleaned) : '';
-    } else {
+if (is_array($value)) {
+
+    $clean = function($arr) use (&$clean) {
+
+        $result = [];
+
+        foreach ($arr as $k => $v) {
+
+            if (is_array($v)) {
+                $nested = $clean($v);
+                if (!empty($nested)) {
+                    $result[$k] = $nested;
+                }
+
+            } else {
+
+                $v = trim((string)$v);
+
+                if ($v !== '') {
+                    $result[$k] = $v;
+                }
+
+            }
+        }
+
+        return $result;
+    };
+
+    $cleaned = $clean($value);
+
+    $answers[$question_id] = !empty($cleaned) ? json_encode($cleaned) : '';
+} else {
         // Single-field answer (all your old templates)
         $answers[$question_id] = trim((string)$value);
     }
@@ -96,7 +120,7 @@ foreach ($answers as $question_id => $student_answer) {
     $res_corr = $stmt_corr->get_result();
     $row_corr = $res_corr->fetch_assoc();
     $correct_answer_raw = $row_corr['correct_answer'] ?? '';
-    $correct_answer = trim($correct_answer_raw);
+    $correct_answer = is_string($correct_answer_raw) ? trim($correct_answer_raw) : '';
 
     // Smart comparison: supports both plain text and JSON correct answers
     $is_correct = 0;
@@ -106,10 +130,52 @@ foreach ($answers as $question_id => $student_answer) {
         $expected_json = json_decode($correct_answer, true);
         $submitted_json = json_decode($student_answer, true);
 
-        if (is_array($expected_json) && is_array($submitted_json)) {
-            // Both are JSON → compare structured
-            $is_correct = (json_encode($submitted_json) === json_encode($expected_json)) ? 1 : 0;
-        } elseif (is_array($submitted_json)) {
+  if (is_array($expected_json) && is_array($submitted_json)) {
+
+    // If nested structure (LCM, multi-step answers)
+    if (isset($expected_json['m1']) || isset($expected_json['m2']) || isset($expected_json['common'])) {
+
+        $is_correct = 1;
+
+        foreach ($expected_json as $key => $correct_part) {
+
+            $student_part = $submitted_json[$key] ?? null;
+
+            if (is_array($correct_part)) {
+
+                $correct_part  = array_map('strval', $correct_part);
+                $student_part  = is_array($student_part) ? array_map('strval', $student_part) : [];
+
+                sort($correct_part, SORT_NUMERIC);
+                sort($student_part, SORT_NUMERIC);
+
+                if ($correct_part !== $student_part) {
+                    $is_correct = 0;
+                    break;
+                }
+
+            } else {
+
+                if ((string)$correct_part !== (string)$student_part) {
+                    $is_correct = 0;
+                    break;
+                }
+
+            }
+        }
+
+    } else {
+
+        // Old flat JSON behaviour
+        $expected_json  = array_map('strval', $expected_json);
+        $submitted_json = array_map('strval', $submitted_json);
+
+        sort($expected_json, SORT_NUMERIC);
+        sort($submitted_json, SORT_NUMERIC);
+
+        $is_correct = ($submitted_json === $expected_json) ? 1 : 0;
+    }
+    } elseif (is_array($submitted_json)) {
             // Student submitted JSON, but correct is plain → fallback to string compare
             $is_correct = (strcasecmp($student_answer, $correct_answer) === 0) ? 1 : 0;
         } else {
