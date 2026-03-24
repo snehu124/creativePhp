@@ -308,11 +308,18 @@ svg, table, canvas {
                             case 'number_pattern_complete' :
                             case 'pattern_rule_mcq' :
                             case 'pattern_extend_rule' :
-                            case 'pattern_match_rule' :   include 'templates/Probability/number_pattern_complete.php'; break;
+                            case 'pattern_match_rule' :  include 'templates/Probability/number_pattern_complete.php'; break;
                             case 'problem_solving':
                         include 'templates/problem_solving.php';
                       break;
-                            case 'factor':               include 'templates/Factor/factor.php'; break;
+                            case 'factor': include 'templates/Factor/factor.php'; break;
+                            case 'decimal_percent_steps': include 'templates/percents/decimal_percent_steps.php'; break;
+                            case 'percent_to_decimal_table': include 'templates/percents/percent_to_decimal_table.php'; break;
+                            case 'fraction_to_percent': include 'templates/percents/fraction_to_percent.php'; break;
+                            case 'percent_to_fraction_table': include 'templates/percents/percent_to_fraction_table.php'; break;
+                            case 'find_whole_percent': include 'templates/percents/find_whole_percent.php'; break;
+                            case 'percent_of_number': include 'templates/percents/percent_of_number.php'; break;
+                            case 'percent_diagram': include 'templates/percents/percent_diagram.php'; break;
                             case 'fill_outcomes_with_images': include 'templates/Probability/probability_fill_with_images.php'; break;
                             default:
                                 echo '<div class="p-4 text-muted fst-italic">Question type: ' . htmlspecialchars($q['question_type']) . '</div>';

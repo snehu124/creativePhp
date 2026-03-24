@@ -257,11 +257,87 @@ rel="stylesheet"
 .btn-edit   { background:#f59e0b; }
 .btn-delete { background:#ef4444; }
 
+.truncate-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.truncate-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* NEW FIXED TOOLTIP */
+.custom-tooltip {
+   position: fixed;
+    background: #111827;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    z-index: 9999;
+    display: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+
+    width: fit-content;
+    max-width: 500px; /* optional limit */
+    white-space: normal;
+}
+
+/* SR (increase a bit) */
+.custom-table th:nth-child(1),
+.custom-table td:nth-child(1) {
+    width: 70px;
+    text-align: center;
+}
+
+/* SUBJECT (more space) */
+.custom-table th:nth-child(2),
+.custom-table td:nth-child(2) {
+    width: 220px;
+}
+
+/* CHAPTER (slightly more) */
+.custom-table th:nth-child(3),
+.custom-table td:nth-child(3) {
+    width: 200px;
+}
+
+/* TOPIC */
+.custom-table th:nth-child(4),
+.custom-table td:nth-child(4) {
+    width: 170px;
+}
+
+/* INSTRUCTION */
+.custom-table th:nth-child(5),
+.custom-table td:nth-child(5) {
+    width: 200px;
+}
+
+/* TYPE (reduce space) */
+.custom-table th:nth-child(6),
+.custom-table td:nth-child(6) {
+    width: 130px;
+    text-align: center;
+}
+
+/* UNIT (small) */
+.custom-table th:nth-child(7),
+.custom-table td:nth-child(7) {
+    width: 80px;
+    text-align: center;
+}
 </style>
 
 
 
-<div class="page-container">
+ <div class="page-container">
 
 
 
@@ -331,18 +407,21 @@ Grade <?= $g ?>
 
 <option value="">All Subjects</option>
 
-<?php foreach ($subjects as $s): ?>
+<?php
+if (!empty($_GET['grade'])) {
 
-<option
-    value="<?= $s['id'] ?>"
-    <?= isset($_GET['subject_id']) && $_GET['subject_id'] == $s['id'] ? "selected" : "" ?>
->
+    $gid = (int)$_GET['grade'];
 
-<?= htmlspecialchars($s['subject_name']) ?>
+    $sub = mysqli_query($conn,"SELECT id, subject_name FROM subjects WHERE grade=$gid ORDER BY subject_name");
 
-</option>
+    while ($s = mysqli_fetch_assoc($sub)) {
 
-<?php endforeach; ?>
+        $sel = (!empty($_GET['subject_id']) && $_GET['subject_id']==$s['id']) ? "selected" : "";
+
+        echo "<option value='{$s['id']}' $sel>{$s['subject_name']}</option>";
+    }
+}
+?>
 
 </select>
 
@@ -444,7 +523,7 @@ Clear
 
 </div>
 
-
+<div id="tooltipBox" class="custom-tooltip"></div>
 
 </div>
 
@@ -520,9 +599,17 @@ while ($row = $result->fetch_assoc())
 
 <td><?= htmlspecialchars($row['chapter_name']) ?></td>
 
-<td><?= htmlspecialchars($row['topic']) ?></td>
+<td class="position-relative">
+    <div class="truncate-text" data-full="<?= htmlspecialchars($row['topic']) ?>">
+        <?= htmlspecialchars($row['topic']) ?>
+    </div>
+</td>
 
-<td><?= htmlspecialchars($row['instruction']) ?></td>
+<td class="position-relative">
+    <div class="truncate-text" data-full="<?= htmlspecialchars($row['instruction']) ?>">
+        <?= htmlspecialchars($row['instruction']) ?>
+    </div>
+</td>
 
 
 <td>
@@ -705,5 +792,38 @@ $(document).ready(function() {
     });
 
 });
+// ✅ TOOLTIP FIX
+const tooltip = $('#tooltipBox');
 
+$('.truncate-text').on('mouseenter', function(e){
+
+    const text = $(this).attr('data-full');
+
+    if(!text) return;
+
+    tooltip.text(text).fadeIn(150);
+
+}).on('mousemove', function(e){
+
+    let x = e.clientX + 15;
+    let y = e.clientY + 15;
+
+    const tooltipHeight = tooltip.outerHeight();
+    const windowHeight = $(window).height();
+
+    // prevent bottom cut
+    if (y + tooltipHeight > windowHeight) {
+        y = e.clientY - tooltipHeight - 15;
+    }
+
+    tooltip.css({
+        top: y + 'px',
+        left: x + 'px'
+    });
+
+}).on('mouseleave', function(){
+
+    tooltip.hide();
+
+});
 </script>

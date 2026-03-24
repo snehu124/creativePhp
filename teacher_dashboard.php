@@ -269,6 +269,26 @@ Attendance
 Assign Chapters
 </a>
 
+<a href="#" class="menu-link" data-page="invoice_system/dashboard/invoice_dashboard.php">
+<i class="bi bi-receipt"></i>
+Invoice Dashboard
+</a>
+
+<a href="#" class="menu-link" data-page="invoice_system/enroll/admin_enroll_student.php">
+<i class="bi bi-person-plus"></i>
+Enroll Student
+</a>
+
+<!-- <a href="#" class="menu-link" data-page="invoice_system/invoice/invoice_list.php">
+<i class="bi bi-file-earmark-text"></i>
+Invoices
+</a> -->
+
+<a href="#" class="menu-link" data-page="invoice_system/payments/payment_list.php">
+<i class="bi bi-cash-coin"></i>
+Payments
+</a>
+
 <a href="#" class="menu-link" data-page="suggest_course_changes.php">
 <i class="bi bi-lightbulb"></i>
 Suggest Course Change

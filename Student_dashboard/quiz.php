@@ -438,6 +438,27 @@ if ($topic_id) {
                 case 'factor':
                       include 'templates/Factor/factor.php';
                       break; 
+                case 'decimal_percent_steps':
+                      include 'templates/percents/decimal_percent_steps.php';
+                      break; 
+                case 'percent_to_decimal_table':
+                      include 'templates/percents/percent_to_decimal_table.php';
+                      break; 
+                case 'fraction_to_percent':
+                      include 'templates/percents/fraction_to_percent.php';
+                      break; 
+                case 'percent_to_fraction_table':
+                      include 'templates/percents/percent_to_fraction_table.php';
+                      break; 
+                case 'percent_of_number':
+                      include 'templates/percents/percent_of_number.php';
+                      break; 
+                case 'find_whole_percent':
+                      include 'templates/percents/find_whole_percent.php';
+                      break; 
+                case 'percent_diagram':
+                      include 'templates/percents/percent_diagram.php';
+                      break; 
                 case 'fill_outcomes_with_images':
                       include 'templates/Probability/probability_fill_with_images.php';
                       break; 
