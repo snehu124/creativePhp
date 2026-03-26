@@ -1,3 +1,6 @@
+<!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
+
 <?php
 session_start();
 include 'db_config.php';
@@ -118,12 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$attendance_already_done) {
     exit;
 }
 
-
-/*
-------------------------------------
-STEP 4: Fetch students
-------------------------------------
-*/
+/*STEP 4: Fetch students*/
 
 $student_query = mysqli_query($conn, "
     SELECT DISTINCT s.id, s.first_name, s.last_name, ss.subject_id
@@ -134,8 +132,6 @@ $student_query = mysqli_query($conn, "
 ");
 
 ?>
-
-
 
 <div class="container mt-4">
 
@@ -165,11 +161,11 @@ Back to Dashboard
 
 <table class="table table-bordered">
 
-<thead class="table-dark">
+<thead class="table-head">
 
 <tr>
-<th>#</th>
-<th>Student Name</th>
+<th>Id</th>
+<th>Students</th>
 <th>Present</th>
 <th>Absent</th>
 <th>Late</th>
@@ -259,9 +255,30 @@ Cancel
 </a>
 
 </form>
-
-
 <?php endif; ?>
-
-
 </div>
+<style>.table-head{
+  background:#e8063c !important;
+  color:#fff;
+}
+
+.table-head th{
+  background:#e8063c !important;
+  color:#fff;
+  border:none !important; 
+}
+h3{
+    font-size: 30px;
+color: #05364d;
+margin-bottom: 25px;
+font-family: "Love Ya Like A Sister", cursive;
+}
+@media (max-width:768px){
+    .table-head th{
+        font-size: 14px;
+    }
+    h3{
+        font-size: 22px;
+    }
+}
+</style>

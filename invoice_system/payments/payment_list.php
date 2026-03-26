@@ -9,7 +9,7 @@ LEFT JOIN enrollment_inquiries ON invoices.student_id=enrollment_inquiries.id
 ORDER BY payments.id DESC
 ");
 ?>
-
+<link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
 <div class="payment-page">
 
 <div class="page-header">
@@ -103,17 +103,15 @@ Receipt
 
 <style>
 
-.payment-page{
-padding:10px;
-}
-
 .page-header{
 margin-bottom:20px;
 }
 
 .page-header h2{
-font-weight:600;
+font-family:"Love Ya Like A Sister", cursive;
+font-size:30px;
 color:#05364d;
+margin-bottom:30px;
 }
 
 .payment-card{
@@ -122,5 +120,43 @@ padding:20px;
 border-radius:15px;
 box-shadow:0 5px 15px rgba(0,0,0,0.05);
 }
+/* ================= MOBILE RESPONSIVE ================= */
 
+@media (max-width:768px){
+
+  /* 🔥 table scrollable banao */
+  .payment-card{
+    overflow-x:auto;
+  }
+
+  table{
+    min-width:650px; /* horizontal scroll enable */
+  }
+
+  /* header font */
+  .page-header h2{
+    font-size:30px;
+  }
+
+  /* table compact */
+  .table th,
+  .table td{
+    padding:10px 8px;
+    font-size:13px;
+    white-space:nowrap;
+  }
+
+  /* badge compact */
+  .badge{
+    font-size:11px;
+    padding:5px 8px;
+  }
+
+  /* button compact */
+  .btn{
+    font-size:12px;
+    padding:5px 10px;
+  }
+
+}
 </style>

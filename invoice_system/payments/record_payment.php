@@ -31,7 +31,7 @@ window.location='teacher_dashboard.php?page=invoice_system/invoice/invoice_list.
 exit;
 }
 ?>
-
+<link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
 <div class="payment-page">
 
 <div class="payment-header">
@@ -131,8 +131,10 @@ margin-bottom:20px;
 }
 
 .payment-header h3{
-font-weight:600;
+font-family:"Love Ya Like A Sister", cursive;
+font-size:30px;
 color:#05364d;
+margin-bottom:30px;
 }
 
 .payment-card{

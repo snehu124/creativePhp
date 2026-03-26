@@ -1,127 +1,170 @@
-<!-- dashboard_home.php -->
-<style>
-  .dashboard-header h2 {
-    font-weight: 600;
-    color: #333;
-  }
+<?php session_start(); ?>
 
-  .btn-outline-primary {
-    border-color: #333;
-    color: #333;
-  }
-
-  .btn-outline-primary:hover {
-    background-color: #333;
-    color: #fff;
-  }
-
-  .card {
-    border: 1px solid #dee2e6;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    background-color: #f8f9fa !important;
-    color: #212529;
-    min-height: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .card:hover {
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-  }
-
-  .card-title {
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-
-  .card-text {
-    font-weight: bold;
-  }
-
-  .loading-spinner {
-    display: inline-block;
-    width: 1.2rem;
-    height: 1.2rem;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-top: 2px solid #333;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-  }
-
-  .d-none {
-    display: none;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
+<script>
+  const teacherName = "<?php echo $_SESSION['teacher_name'] ?? 'Teacher'; ?>";
+</script>
+  <style>
+    :root {
+      --primary: #1e3c72;
+      --accent: #2a5298;
     }
-  }
-</style>
 
-<div class="dashboard-header d-flex justify-content-between align-items-center mb-4">
-  <h2 class="mb-0">Dashboard Overview</h2>
-  <button id="refresh-btn" class="btn btn-sm btn-outline-primary">
-    <span id="refresh-text">Refresh</span>
-    <span id="refresh-spinner" class="loading-spinner d-none"></span>
-  </button>
-</div>
+    .dashboard-header {
+      margin-bottom: 2rem;
+    }
+    .greeting {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1e3c72;
+      margin: 0;
+    }
 
-<div class="row g-4 mb-4">
-  <div class="col-md-3">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">Total Teachers</h5>
-        <p class="card-text fs-4" id="total-teachers"><span class="loading-spinner"></span></p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">Total Students</h5>
-        <p class="card-text fs-4" id="total-students"><span class="loading-spinner"></span></p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">Course Sales</h5>
-        <p class="card-text fs-4" id="course-sales"><span class="loading-spinner"></span></p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">Online Teachers</h5>
-        <p class="card-text fs-4" id="online-teachers"><span class="loading-spinner"></span></p>
-      </div>
-    </div>
-  </div>
-</div>
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      height: 100%;
+      padding: 1.5rem;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .stat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    }
+    .stat-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+    .stat-number {
+      font-size: 25px;
+      font-weight: 700;
+      margin: 0 0 0.3rem 0;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 16px;
+      color: #555;
+      font-weight: 500;
+    }
+    .trend {
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
 
-<div class="row g-4">
-  <div class="col-md-6">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">Teacher Login Status</h5>
-        <p class="card-text fs-6" id="login-status"><span class="loading-spinner"></span></p>
-      </div>
-    </div>
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e3c72;
+      margin-bottom: 1rem;
+      padding-left: 0.5rem;
+      border-left: 4px solid var(--accent);
+    }
+
+    .activity-list .list-group-item {
+      border: none;
+      padding: 1rem 1.25rem;
+      margin-bottom: 8px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .loading-spinner {
+      width: 1.4rem;
+      height: 1.4rem;
+      border: 3px solid rgba(30,60,114,0.15);
+      border-top-color: #1e3c72;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+  <div class="dashboard-header d-flex justify-content-between align-items-center mb-4">
+    <h1 class="greeting" id="greeting">Dashboard Overview</h1>
+    <button id="refresh-btn" class="btn btn-outline-primary btn-sm px-4">
+      <span id="refresh-text">Refresh</span>
+      <span id="refresh-spinner" class="loading-spinner d-none ms-2"></span>
+    </button>
   </div>
-  <div class="col-md-6">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">Recent Activity</h5>
-        <div id="recent-activity" class="pt-2">
-          <div class="text-center py-3"><span class="loading-spinner"></span></div>
+
+  <div class="row g-4 mb-5">
+    <!-- My Students -->
+    <div class="col-md-3 col-6">
+      <div class="stat-card text-center">
+        <div>
+        <div class="stat-icon text-primary"><i class="bi bi-people-fill"></i></div>
+        <p class="stat-number text-primary" id="my-students">0</p>
+        <p class="stat-label">My Students</p>
         </div>
+        <small class="trend text-success" id="students-trend"></small>
+      </div>
+    </div>
+
+    <!-- Pending Assignments -->
+    <div class="col-md-3 col-6">
+      <div class="stat-card text-center">
+        <div>
+        <div class="stat-icon text-warning"><i class="bi bi-clipboard-check-fill"></i></div>
+        <p class="stat-number text-warning" id="pending-assignments">0</p>
+        <p class="stat-label">Pending Assignments</p>
+        </div>
+        <small class="trend text-muted" id="pending-trend"></small>
+      </div>
+    </div>
+
+    <!-- Today's Classes -->
+    <div class="col-md-3 col-6">
+      <div class="stat-card text-center">
+        <div>
+        <div class="stat-icon text-info"><i class="bi bi-calendar-event-fill"></i></div>
+        <p class="stat-number text-info" id="today-classes">0</p>
+        <p class="stat-label">Today's Classes</p>
+        </div>
+        <small class="trend text-info" id="classes-trend"></small>
+      </div>
+    </div>
+
+    <!-- Avg Score -->
+    <div class="col-md-3 col-6">
+      <div class="stat-card text-center">
+        <div>
+        <div class="stat-icon text-success"><i class="bi bi-graph-up-arrow"></i></div>
+        <p class="stat-number text-success" id="avg-score">—</p>
+        <p class="stat-label">Active Students</p>
+        </div>
+        <small class="trend text-success" id="score-trend"></small>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- My Subjects -->
+    <div class="col-lg-6">
+      <h5 class="section-title">My Subjects</h5>
+      <div class="card" style="border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,0.08);">
+        <div class="card-body p-4" id="at-risk-students">
+          <div class="text-center py-5"><span class="loading-spinner"></span></div>
+        </div>
+      </div>
+    </div>
+
+ 
+  <!-- My Recent Activity -->
+  <div class="col-lg-6">
+    <h5 class="section-title">My Recent Activity</h5>
+    <div class="card" style="border-radius:16px; box-shadow:0 8px 25px rgba(0,0,0,0.08);">
+      <div class="card-body p-4" id="recent-activity">
+        <div class="text-center py-5"><span class="loading-spinner"></span></div>
+      </div>
+      <div class="card-footer bg-transparent border-0 text-center pb-3" id="activity-footer" style="display:none;">
+        <button id="read-more-btn" class="btn btn-outline-primary btn-sm px-4 me-2">View All Activity</button>
+        <button id="show-less-btn" class="btn btn-outline-secondary btn-sm px-4" style="display:none;">Show Less</button>
       </div>
     </div>
   </div>
@@ -129,116 +172,137 @@
 
 <script>
 $(document).ready(function() {
+function setGreeting() {
+  const hour = new Date().getHours();
+  let greetingText = "Hello 👋";
+
+  if (hour >= 5 && hour < 12) {
+    greetingText = "Good Morning ☀️";
+  } else if (hour >= 12 && hour < 17) {
+    greetingText = "Good Afternoon 🌤️";
+  } else if (hour >= 17 && hour < 21) {
+    greetingText = "Good Evening 🌇";
+  } else {
+    greetingText = "Good Night 🌙";
+  }
+
+  elements.greeting.text(`${greetingText}, ${teacherName} 👋`);
+}
+  const BASE_API = './api/';
+
   const API_ENDPOINTS = {
-    teachers: '/api/Get_teacher_count.php',
-    students: '/api/Get_student_count.php',
-    sales: '/api/Get_cource_sell.php',
-    online: '/api/online_teachers.php',
-    logins: '/api/teacher_logins.php',
-    activity: '/api/recent_activity.php'
+    greeting: BASE_API + 'teacher_greeting.php',
+    myStudents: BASE_API + 'get_my_students_count.php',
+    pendingAssignments: BASE_API + 'get_pending_assignments.php',
+    todayClasses: BASE_API + 'get_today_classes.php',
+    activeStudents: BASE_API + 'get_active_students.php',
+    teacherSubjects: BASE_API + 'get_teacher_subjects.php',
+    recentActivity: BASE_API + 'get_teacher_recent_activity.php'
   };
 
   const elements = {
-    teachers: $('#total-teachers'),
-    students: $('#total-students'),
-    sales: $('#course-sales'),
-    online: $('#online-teachers'),
-    logins: $('#login-status'),
+    greeting: $('#greeting'),
+    students: $('#my-students'), studentsTrend: $('#students-trend'),
+    pending: $('#pending-assignments'), pendingTrend: $('#pending-trend'),
+    classes: $('#today-classes'), classesTrend: $('#classes-trend'),
+    score: $('#avg-score'), scoreTrend: $('#score-trend'),
+    atRisk: $('#at-risk-students'),
     activity: $('#recent-activity'),
+    footer: $('#activity-footer'),
+    readMoreBtn: $('#read-more-btn'),
+    showLessBtn: $('#show-less-btn'),
     refreshBtn: $('#refresh-btn'),
     refreshText: $('#refresh-text'),
     refreshSpinner: $('#refresh-spinner')
   };
 
-  function formatNumber(num) {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  function showLoading(el) {
+    el.html('<div class="text-center py-5"><span class="loading-spinner"></span></div>');
   }
 
-  function formatCurrency(amount) {
-    return '₹' + formatNumber(amount);
+  function handleError(el) {
+    el.html('<div class="text-center py-5 text-danger small">Failed to load</div>');
   }
 
-  function showLoading(element) {
-    element.html('<span class="loading-spinner"></span>');
-  }
-
-  function handleError(element, error) {
-    console.error('API Error:', error);
-    element.html('<span class="text-danger">Failed to load</span>');
-  }
-
-  async function fetchData(endpoint, element, formatter = null) {
+  async function fetchData(endpoint, element, successCallback) {
     showLoading(element);
     try {
-      const response = await $.ajax({
-        url: endpoint,
-        dataType: 'json',
-        timeout: 5000
-      });
-
-      if (response && response.success) {
-        element.html(formatter ? formatter(response.data) : response.data);
+      const res = await $.ajax({ url: endpoint, dataType: 'json', timeout: 10000 });
+      if (res && res.success) {
+        successCallback(res);
       } else {
-        handleError(element, response?.message || 'Invalid response');
+        handleError(element);
       }
-    } catch (error) {
-      handleError(element, error);
-    }
-  }
-
-  async function fetchRecentActivity() {
-    showLoading(elements.activity);
-    try {
-      const response = await $.ajax({
-        url: API_ENDPOINTS.activity,
-        dataType: 'json',
-        timeout: 5000
-      });
-
-      if (response && response.success) {
-        let html = '';
-        if (response.data.length > 0) {
-          html = '<div class="list-group">';
-          response.data.forEach(item => {
-            html += `
-              <div class="list-group-item">
-                <div class="d-flex justify-content-between">
-                  <span>${item.description}</span>
-                  <small class="text-muted">${new Date(item.timestamp).toLocaleString()}</small>
-                </div>
-              </div>
-            `;
-          });
-          html += '</div>';
-        } else {
-          html = '<p class="text-muted">No recent activity</p>';
-        }
-        elements.activity.html(html);
-      } else {
-        handleError(elements.activity, response?.message || 'Invalid response');
-      }
-    } catch (error) {
-      handleError(elements.activity, error);
+    } catch (e) {
+      handleError(element);
     }
   }
 
   async function loadDashboard() {
+    setGreeting();
     elements.refreshText.text('Refreshing...');
     elements.refreshSpinner.removeClass('d-none');
 
     try {
       await Promise.all([
-        fetchData(API_ENDPOINTS.teachers, elements.teachers, formatNumber),
-        fetchData(API_ENDPOINTS.students, elements.students, formatNumber),
-        fetchData(API_ENDPOINTS.sales, elements.sales, data => {
-          return `${formatNumber(data.count)} (${formatCurrency(data.revenue)})`;
+        
+        fetchData(API_ENDPOINTS.myStudents, elements.students, res => {
+          elements.students.text(res.data.count || 0);
+          elements.studentsTrend.html(res.data.trend || '');
         }),
-        fetchData(API_ENDPOINTS.online, elements.online, formatNumber),
-        fetchData(API_ENDPOINTS.logins, elements.logins, data => {
-          return `On Time: <strong>${formatNumber(data.on_time)}</strong> | 
-                  Late: <strong>${formatNumber(data.late)}</strong>`;
+        fetchData(API_ENDPOINTS.pendingAssignments, elements.pending, res => {
+          elements.pending.text(res.data.count || 0);
+          elements.pendingTrend.html(res.data.trend || 'No assignments');
         }),
-        fetchRecentActivity()
+        fetchData(API_ENDPOINTS.todayClasses, elements.classes, res => {
+          elements.classes.text(res.data.count || 0);
+          elements.classesTrend.html(res.data.next || 'No class today');
+        }),
+        fetchData(API_ENDPOINTS.activeStudents, elements.score, res => {
+         elements.score.text(res.data.count || 0);
+          elements.scoreTrend.html(res.data.trend || ' ');
+        }),
+      fetchData(API_ENDPOINTS.teacherSubjects, elements.atRisk, res => {
+        let html = '';
+
+        if (!res.data || res.data.length === 0) {
+          html = `<div class="text-center py-5 text-muted">No subjects assigned</div>`;
+        } else {
+          html = '<div class="list-group activity-list">';
+          res.data.forEach(s => {
+           html += `<div class="list-group-item">
+          ${s.subject_name}
+        </div>`;
+          });
+          html += '</div>';
+        }
+
+        elements.atRisk.html(html);
+        }),
+        fetchData(API_ENDPOINTS.recentActivity, elements.activity, res => {
+          let html = '<div class="list-group activity-list">';
+          if (!res.data || res.data.length === 0) {
+            html += '<div class="list-group-item text-muted text-center py-4">No recent activity</div>';
+          } else {
+            res.data.forEach(item => {
+              html += `<div class="list-group-item">
+                         <div class="d-flex justify-content-between">
+                           <span>${item.description}</span>
+                           <small class="text-muted">${item.time_ago}</small>
+                         </div>
+                       </div>`;
+            });
+          }
+          html += '</div>';
+          elements.activity.html(html);
+
+          // Show footer only if there are activities
+          if (res.data && res.data.length > 0) {
+            elements.footer.show();
+            elements.readMoreBtn.show();
+            elements.showLessBtn.hide();
+          }
+        })
       ]);
     } finally {
       elements.refreshText.text('Refresh');
@@ -246,10 +310,43 @@ $(document).ready(function() {
     }
   }
 
-  // Initial load
-  loadDashboard();
+  // View All Activity
+  elements.readMoreBtn.on('click', function() {
+    $(this).prop('disabled', true).html('Loading...');
 
-  // Refresh on click
+    $.ajax({
+      url: API_ENDPOINTS.recentActivity + '?limit=all',
+      dataType: 'json',
+      success: function(res) {
+        if (res.success && res.data) {
+          let html = '<div class="list-group activity-list">';
+          res.data.forEach(item => {
+            html += `<div class="list-group-item">
+                       <div class="d-flex justify-content-between">
+                         <span>${item.description}</span>
+                         <small class="text-muted">${item.time_ago}</small>
+                       </div>
+                     </div>`;
+          });
+          html += '</div>';
+          elements.activity.html(html);
+
+          elements.readMoreBtn.hide();
+          elements.showLessBtn.show();
+        }
+      },
+      complete: function() {
+        elements.readMoreBtn.prop('disabled', false).html('View All Activity');
+      }
+    });
+  });
+
+  // Show Less Button
+  elements.showLessBtn.on('click', function() {
+    loadDashboard();   // Reload default 3 activities
+  });
+
+  loadDashboard();
   elements.refreshBtn.on('click', loadDashboard);
 });
 </script>

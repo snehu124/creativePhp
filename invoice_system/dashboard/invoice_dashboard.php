@@ -1,3 +1,6 @@
+<!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
+
 <?php
 include "../../db_config.php";
 
@@ -5,14 +8,24 @@ $total=mysqli_fetch_assoc(mysqli_query($conn,"SELECT COUNT(*) c FROM invoices"))
 $paid=mysqli_fetch_assoc(mysqli_query($conn,"SELECT COUNT(*) c FROM invoices WHERE status='Paid'"))['c'];
 $pending=mysqli_fetch_assoc(mysqli_query($conn,"SELECT COUNT(*) c FROM invoices WHERE status='Pending'"))['c'];
 
+/* ✅ PAGINATION */
+$limit = 7;
+$page = isset($_GET['p']) ? (int)$_GET['p'] : 1;
+if($page < 1) $page = 1;
+
+$offset = ($page - 1) * $limit;
+
 $recent=mysqli_query($conn,"
 SELECT invoices.*, enrollment_inquiries.first_name
 FROM invoices
 LEFT JOIN enrollment_inquiries
 ON invoices.student_id=enrollment_inquiries.id
 ORDER BY invoices.id DESC
-LIMIT 5
+LIMIT $limit OFFSET $offset
 ");
+
+$total_rows = mysqli_fetch_assoc(mysqli_query($conn,"SELECT COUNT(*) c FROM invoices"))['c'];
+$total_pages = ceil($total_rows / $limit);
 ?>
 
 <div class="invoice-dashboard">
@@ -21,39 +34,26 @@ LIMIT 5
 <i class="bi bi-receipt"></i> Invoice Dashboard
 </h2>
 
-<!-- Stats Cards -->
-
 <div class="stats-grid">
 
 <div class="stat-card total">
-<div class="stat-icon">
-<i class="bi bi-file-earmark-text"></i>
-</div>
-
+<div class="stat-icon"><i class="bi bi-file-earmark-text"></i></div>
 <div>
 <h3>Total Invoices</h3>
 <h1><?php echo $total ?></h1>
 </div>
 </div>
 
-
 <div class="stat-card paid">
-<div class="stat-icon">
-<i class="bi bi-check-circle"></i>
-</div>
-
+<div class="stat-icon"><i class="bi bi-check-circle"></i></div>
 <div>
 <h3>Paid</h3>
 <h1><?php echo $paid ?></h1>
 </div>
 </div>
 
-
 <div class="stat-card pending">
-<div class="stat-icon">
-<i class="bi bi-hourglass-split"></i>
-</div>
-
+<div class="stat-icon"><i class="bi bi-hourglass-split"></i></div>
 <div>
 <h3>Pending</h3>
 <h1><?php echo $pending ?></h1>
@@ -62,17 +62,15 @@ LIMIT 5
 
 </div>
 
-
-<!-- Recent invoices -->
-
 <div class="invoice-table">
 
-<h4>Recent Invoices</h4>
+<!-- <h4>Recent Invoices</h4> -->
+
+<div class="table-scroll">
 
 <table class="table table-hover">
 
 <thead>
-
 <tr>
 <th>Invoice</th>
 <th>Student</th>
@@ -80,7 +78,6 @@ LIMIT 5
 <th>Status</th>
 <th>Action</th>
 </tr>
-
 </thead>
 
 <tbody>
@@ -90,37 +87,26 @@ LIMIT 5
 <tr>
 
 <td><?php echo $row['invoice_number']?></td>
-
 <td><?php echo $row['first_name']?></td>
-
-<td>$<?php echo $row['total']?></td>
+<td>$<?php echo number_format($row['total'],2)?></td>
 
 <td>
-
 <?php if($row['status']=="Paid"){ ?>
-
 <span class="badge bg-success">Paid</span>
-
 <?php } else { ?>
-
 <span class="badge bg-warning text-dark">Pending</span>
-
 <?php } ?>
-
 </td>
 
-<td>
+<td class="action-btns">
 
-<a class="btn btn-sm btn-primary"
+<a class="btn btn-view"
 href="teacher_dashboard.php?page=invoice_system/invoice/invoice_view.php&id=<?php echo $row['id']; ?>">
-
-View
-
+<i class="bi bi-eye"></i> View
 </a>
 
-<a class="menu-link btn btn-sm btn-success" style = "margin-left:20px"
+<a class="btn btn-pay"
 href="teacher_dashboard.php?page=invoice_system/payments/record_payment.php&invoice_id=<?php echo $row['id']; ?>">
-
 <i class="bi bi-cash"></i> Pay
 </a>
 
@@ -136,85 +122,224 @@ href="teacher_dashboard.php?page=invoice_system/payments/record_payment.php&invo
 
 </div>
 
+<?php if($total_pages > 1){ ?>
+<div class="pagination-box">
+
+<a href="?page=invoice_system/dashboard/invoice_dashboard.php&p=<?php echo $page-1; ?>" 
+class="pg-btn <?php if($page<=1) echo 'disabled'; ?>">← Prev</a>
+
+<span class="pg-info"><?php echo $page; ?> / <?php echo $total_pages; ?></span>
+
+<a href="?page=invoice_system/dashboard/invoice_dashboard.php&p=<?php echo $page+1; ?>" 
+class="pg-btn <?php if($page>=$total_pages) echo 'disabled'; ?>">Next →</a>
+
+</div>
+<?php } ?>
+
+</div>
+
 </div>
 
 
 <style>
 
+/* ===== GLOBAL ===== */
+*{box-sizing:border-box;}
+
 .invoice-dashboard{
-padding:10px;
+  width:100%;
 }
 
 .dashboard-title{
-font-weight:600;
-margin-bottom:25px;
-color:#05364d;
+font-size: 30px;
+color: #05364d;
+margin-bottom: 25px;
+font-family: "Love Ya Like A Sister", cursive;
 }
 
-/* Stats grid */
-
+/* ===== CARDS ===== */
 .stats-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-margin-bottom:30px;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:15px;
+}
+
+@media(min-width:768px){
+  .stats-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
 }
 
 .stat-card{
-display:flex;
-align-items:center;
-gap:15px;
-padding:20px;
-border-radius:15px;
-color:white;
-box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:15px; /* original padding */
+  border-radius:15px;
+  color:white;
 }
 
-.stat-card h3{
-font-size:16px;
-margin:0;
-}
-
-.stat-card h1{
-font-size:28px;
-margin:0;
-}
-
-/* Card colors */
-
-.total{
-background:linear-gradient(180deg, #1e3c72, #2a5298);
-}
-
-.paid{
-background:linear-gradient(135deg,#11998e,#38ef7d);
-}
-
-.pending{
-background:linear-gradient(135deg,#ff9966,#ff5e62);
-}
-
-/* Icons */
+.total{background:linear-gradient(180deg,#1e3c72,#2a5298);}
+.paid{background:linear-gradient(135deg,#11998e,#38ef7d);}
+.pending{background:linear-gradient(135deg,#ff9966,#ff5e62);}
 
 .stat-icon{
-font-size:30px;
-background:rgba(255,255,255,0.2);
-padding:12px;
-border-radius:10px;
+  font-size:22px;
+  padding:10px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.2);
 }
 
-/* Table */
-
-.invoice-table{
-background:white;
-padding:20px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,0.05);
+/* ===== TABLE ===== */
+.invoice-table {
+    background: white;
+    padding: 20px 26px;
+    border-radius: 15px;
+    margin-top:30px;
+}
+.table-scroll{
+  overflow-x:auto;
+}
+.table{
+  width:100%;
+  min-width:650px;
+}
+/* remove hover */
+.table tbody tr:hover{
+  background:transparent !important;
 }
 
-.invoice-table h4{
-margin-bottom:15px;
-font-weight:600;
+/* header grey */
+.table thead{
+  background:#f1f3f6;
+}
+
+.table th,
+.table td{
+  padding:12px 10px;
+  vertical-align:middle;
+}
+
+/* fix column spacing */
+.table th:nth-child(4),
+.table td:nth-child(4){
+  width:120px;
+}
+
+.table th:last-child,
+.table td:last-child{
+  width:180px;
+  padding-right:8px;
+}
+.table thead th:last-child{
+  text-align:center; 
+}
+/* ===== BUTTONS ===== */
+.btn-view:hover,
+.btn-pay:hover{
+  background: white;
+  transform: none !important;
+  box-shadow: none !important;
+  color:black !important;
+}
+.action-btns{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:8px;
+}
+
+.btn-view{
+  background:#2d6cdf;
+  color:#fff;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.btn-pay{
+  background:#198754;
+  color:#fff;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+/* ===== PAGINATION ===== */
+
+.pagination-box{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:12px;
+  margin-top:18px;
+}
+
+.pg-btn{
+  padding:6px 14px;
+  background:#e60023;
+  color:#fff;
+  border-radius:6px;
+  text-decoration:none;
+}
+
+.pg-btn.disabled{
+  pointer-events:none;
+  background:#ccc;
+}
+
+.pg-info{
+  font-weight:600;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width:768px){
+
+.invoice-dashboard{
+        padding: 0px;
+    }
+.invoice-table {
+    padding: 20px 0px; 
+}
+  .stat-card{
+    padding:12px;
+  }
+
+  .stat-card h1{
+    font-size:22px;
+  }
+
+  .stat-icon{
+    font-size:20px;
+  }
+
+  /* keep buttons in row */
+  .action-btns{
+    flex-direction:row;
+    justify-content:flex-end;
+  }
+
+  .btn-view,
+  .btn-pay{
+    width:auto;
+    padding:5px 10px;
+    font-size:12px;
+  }
+  .main-content {
+    padding: 30px 20px;
+}
+.dashboard-card{padding:0px;}
+.pagination-box {
+    justify-content: center;
+   
+}
 }
 
 </style>

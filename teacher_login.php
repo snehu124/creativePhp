@@ -18,9 +18,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $teacher['password'] === $password || 
             password_verify($password, $teacher['password'])
         ) {
-            $_SESSION['teacher_id'] = $teacher['id'];
-            $_SESSION['teacher_subject'] = $teacher['subject'];
+          $_SESSION['teacher_id'] = $teacher['id'];
 
+            // 🔥 auto detect name column
+            if (!empty($teacher['name'])) {
+                $_SESSION['teacher_name'] = $teacher['name'];
+            } elseif (!empty($teacher['teacher_name'])) {
+                $_SESSION['teacher_name'] = $teacher['teacher_name'];
+            } elseif (!empty($teacher['full_name'])) {
+                $_SESSION['teacher_name'] = $teacher['full_name'];
+            } else {
+                $_SESSION['teacher_name'] = 'Teacher';
+            }
+
+            $_SESSION['teacher_subject'] = $teacher['subject'];
             $teacher_id = $teacher['id'];
             $login_time = date("Y-m-d H:i:s");
 

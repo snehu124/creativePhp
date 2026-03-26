@@ -1,11 +1,14 @@
 <?php 
 include "../../db_config.php";
 ?>
-
 <style>
 
+.dashboard-card
+ {
+    min-height: 400px;
+}
 .enroll-section{
-padding:10px 10px;
+padding:32px 10px;
 background:#f7f9fc;
 }
 
@@ -103,8 +106,63 @@ margin-top:10px;
 .form-check input{
 margin-right:6px;
 }
+/* ================= MOBILE RESPONSIVE ================= */
 
+@media (max-width:768px){
+
+  .enroll-form{
+    padding:20px 15px;
+  }
+
+  .enroll-title{
+    font-size:30px;
+  }
+.enroll-section {
+    background: #f7f9fc;
+    padding: 20px 0px;
+}
+ 
+  .form-row{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .form-group{
+    width:100%;
+  }
+
+  /* input size optimize */
+  .form-group input,
+  .form-group select,
+  .form-group textarea{
+    font-size:13px;
+    padding:10px 12px;
+  }
+
+  .form-group textarea{
+    height:90px;
+  }
+
+  /* section titles */
+  .section-title{
+    font-size:16px;
+  }
+
+  /* terms box compact */
+  .terms-box{
+    padding:15px;
+    font-size:12px;
+  }
+
+  /* button full width */
+  .submit-btn{
+    width:100%;
+    padding:12px;
+  }
+
+}
 </style>
+
 
 <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
 
@@ -375,7 +433,7 @@ margin-right:6px;
 
 <p><strong>Terms & Conditions:</strong></p>
 
-<ul style="margin-left:18px">
+<ul>
 
 <li>A non-refundable Registration fee is required at time of registration.</li>
 
@@ -431,3 +489,30 @@ Enroll Student
 </form>
 
 </div>
+
+<script>
+document.querySelector(".enroll-form").addEventListener("submit", function(e){
+
+    let paymentBy = document.querySelector("[name='payment_by']").value;
+
+    let guardianEmail = document.querySelector("[name='guardian_email']").value.trim();
+    let motherEmail = document.querySelector("[name='mother_email']").value.trim();
+    let fatherEmail = document.querySelector("[name='father_email']").value.trim();
+
+    if(paymentBy === "Guardian" && guardianEmail === ""){
+        alert("Guardian email is required!");
+        e.preventDefault();
+    }
+
+    if(paymentBy === "Mother" && motherEmail === ""){
+        alert("Mother email is required!");
+        e.preventDefault();
+    }
+
+    if(paymentBy === "Father" && fatherEmail === ""){
+        alert("Father email is required!");
+        e.preventDefault();
+    }
+
+});
+</script>

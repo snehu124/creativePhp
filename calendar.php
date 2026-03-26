@@ -12,7 +12,12 @@ $teacher_id = $_SESSION['teacher_id'];
 /* ========================= */
 /* CONTAINER */
 /* ========================= */
-
+h5{
+    font-size: 30px;
+color: #05364d;
+margin-bottom: 35px;
+font-family: "Love Ya Like A Sister", cursive;
+}
 .calendar-container{
 padding:15px;
 max-width:100%;
@@ -95,7 +100,11 @@ font-size:13px;
 .calendar-container{
 padding:10px;
 }
+h5{
+    font-size: 20px;
+margin-bottom: 25px;
 
+}
 .calendar-card{
 padding:14px;
 }
@@ -221,15 +230,14 @@ padding:6px;
 
 </style>
 
-
+<!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
 
 <div class="calendar-container">
-
-<div class="calendar-card">
-
-<h5 class="text-center mb-3">
+<h5 class="text">
 📅 Schedule Your Classes
 </h5>
+<div class="calendar-card">
 
 <div id="calendar"></div>
 

@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 include "../db_config.php";
 ini_set('display_errors', 1);
@@ -166,15 +167,27 @@ foreach ($answers as $question_id => $student_answer) {
 
     } else {
 
-        // Old flat JSON behaviour
-        $expected_json  = array_map('strval', $expected_json);
-        $submitted_json = array_map('strval', $submitted_json);
+    $is_correct = 1;
 
-        sort($expected_json, SORT_NUMERIC);
-        sort($submitted_json, SORT_NUMERIC);
+    foreach ($expected_json as $key => $correct_values) {
 
-        $is_correct = ($submitted_json === $expected_json) ? 1 : 0;
+        $student_values = $submitted_json[$key] ?? [];
+
+        if (!is_array($correct_values) || !is_array($student_values)) {
+            $is_correct = 0;
+            break;
+        }
+
+        // normalize
+        $correct_values = array_map('strval', $correct_values);
+        $student_values = array_map('strval', $student_values);
+
+        if ($correct_values !== $student_values) {
+            $is_correct = 0;
+            break;
+        }
     }
+}
     } elseif (is_array($submitted_json)) {
             // Student submitted JSON, but correct is plain → fallback to string compare
             $is_correct = (strcasecmp($student_answer, $correct_answer) === 0) ? 1 : 0;
@@ -188,7 +201,10 @@ foreach ($answers as $question_id => $student_answer) {
             }
         }
     }
-
+        // 🔥 FIX: ensure string before DB insert
+        if (is_array($student_answer)) {
+            $student_answer = json_encode($student_answer);
+}
     // Insert the answer
     $stmt_insert->bind_param("iiisis", $student_id, $quiz_id, $question_id, $student_answer, $is_correct, $created_at);
     $stmt_insert->execute();
@@ -200,4 +216,5 @@ unset($_SESSION[$sess_key]);
 // Redirect to results
 header("Location: check_answer.php?topic_id=" . $quiz_id);
 exit;
+ob_end_flush();
 ?>

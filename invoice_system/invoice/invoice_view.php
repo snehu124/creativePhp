@@ -11,7 +11,7 @@ ON invoices.student_id=enrollment_inquiries.id
 WHERE invoices.id='$id'
 "));
 ?>
-
+<link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
 <div class="invoice-view-page">
 
 <div class="invoice-header">
@@ -79,17 +79,18 @@ href="teacher_dashboard.php?page=invoice_system/payments/record_payment.php?invo
 
 <style>
 
-.invoice-view-page{
-padding:10px;
+.invoice-actions .btn{
+  border-radius:25px;
 }
-
 .invoice-header{
 margin-bottom:20px;
 }
 
 .invoice-header h3{
-font-weight:600;
+font-family:"Love Ya Like A Sister", cursive;
+font-size:30px;
 color:#05364d;
+margin-bottom:30px;
 }
 
 .invoice-card{
@@ -122,5 +123,41 @@ margin-top:5px;
 display:flex;
 gap:10px;
 }
+/* ================= MOBILE RESPONSIVE ================= */
 
+@media (max-width:768px){
+
+  .invoice-card{
+    padding:18px;
+  }
+
+  /* 🔥 grid ko single column */
+  .invoice-grid{
+    grid-template-columns:1fr;
+    gap:15px;
+  }
+
+  .info-box p{
+    font-size:15px;
+  }
+
+  /* 🔥 buttons stack */
+  .invoice-actions{
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .invoice-actions .btn{
+    width:100%;
+    justify-content:center;
+    font-size:14px;
+    padding:10px;
+  }
+
+  /* header size */
+  .invoice-header h3{
+    font-size:20px;
+  }
+
+}
 </style>
