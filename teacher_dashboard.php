@@ -271,6 +271,11 @@ display:block;
   Enroll Student
   </a>
 
+  <a href="#" class="menu-link" data-page="invoice_system/enroll/manage_enrollment.php">
+  <i class="bi bi-pencil-square"></i>
+  Manage Enrollment
+  </a>
+  
   <!-- <a href="#" class="menu-link" data-page="invoice_system/invoice/invoice_list.php">
   <i class="bi bi-file-earmark-text"></i>
   Invoices
