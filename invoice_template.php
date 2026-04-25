@@ -1,12 +1,9 @@
 <?php
-// Safety check (debug ke liye – production me hata sakte ho)
-if (!isset($logoBase64)) {
-    die("Logo base64 variable missing.");
-}
-
 $fullName = $student['first_name'] . ' ' . $student['last_name'];
-$date     = date('F d, Y', strtotime($student['created_at']));
-$course   = $student['course_title'];
+$date = !empty($student['invoice_date']) 
+    ? date('F d, Y', strtotime($student['invoice_date'])) 
+    : date('F d, Y');
+$course   = $student['course_title'] ?? 'All Programs';
 $programName = $student['program'] ?? 'Program';
 $subjectsArray = array_map('trim', explode(",", $course));
 $subjectCount  = count($subjectsArray);
@@ -38,9 +35,24 @@ else{
     $courseDisplay = "All Programs";
 }
 
-$price    = $price;
-$gst      = $gst;
-$total    = $total;
+$discount_type   = $invoice['discount_type'] ?? '';
+$discount_amount = $invoice['discount_amount'] ?? 0;
+
+
+// GST INCLUDED → reverse calculation
+$original_price = $total + $discount_amount;
+
+// base (without GST)
+$base_price = $original_price / 1.05;
+
+// after discount
+$price_after_discount = $total;
+
+// taxable base after discount
+$taxable_after_discount = $price_after_discount / 1.05;
+
+// GST part
+$gst = $price_after_discount - $taxable_after_discount;
 ?>
 <!DOCTYPE html>
 <html>
@@ -214,7 +226,7 @@ body {
         C/O <?php echo $payer; ?><br>
     <?php endif; ?>
 
-    <?php echo $student['email']; ?>
+    <?php echo $student['email'] ?? ''; ?>
 </td>
     <td class="invoice-meta">
         <table>
@@ -256,8 +268,8 @@ body {
     <?php echo $courseDisplay; ?>
     </td>
     <td>1</td>
-    <td>$<?php echo number_format($price, 2); ?></td>
-    <td>$<?php echo number_format($price, 2); ?></td>
+  <td>$<?php echo number_format($base_price, 2); ?></td>
+<td>$<?php echo number_format($base_price, 2); ?></td>
 </tr>
 </tbody>
 </table>
@@ -266,19 +278,36 @@ body {
 <table class="totals-table">
 <tr>
     <td class="totals-label">Subtotal:</td>
-    <td>$<?php echo number_format($price, 2); ?></td>
+    <td>$<?php echo number_format($base_price, 2); ?></td>
 </tr>
+
+<?php if(in_array($discount_type, ['one_time','sibling']) && $discount_amount > 0): ?>
+<tr>
+    <td class="totals-label">
+        Discount (<?php echo ucfirst(str_replace("_"," ",$discount_type)); ?>):
+    </td>
+    <td>- $<?php echo number_format($discount_amount, 2); ?></td>
+</tr>
+
+<tr>
+    <td class="totals-label"><strong>Taxable Amount:</strong></td>
+    <td>$<?php echo number_format($taxable_after_discount, 2); ?></td>
+</tr>
+<?php endif; ?>
+
+
 <tr>
     <td class="totals-label">GST 5% (713080158RT0001):</td>
     <td>$<?php echo number_format($gst, 2); ?></td>
 </tr>
+
 <tr class="total-amount">
     <td class="totals-label">Total:</td>
     <td>$<?php echo number_format($total, 2); ?></td>
 </tr>
 <tr>
     <td class="totals-label">
-        Payment on <?php echo $date; ?> using <?php echo strtolower($payment_type ?? 'cash'); ?>:
+        Payment on <?php echo $date; ?> :
     </td>
     <td>$<?php echo number_format($total, 2); ?></td>
 </tr>
@@ -291,7 +320,7 @@ body {
 <!-- NOTES -->
 <div class="notes">
 <strong>Notes / Terms</strong><br>
-Make all cheques payable to Achievers Castle Learning Centre Ltd.<br>
+Make all cheques payable to Achiever's Castle Learning Centre Ltd.<br>
 Total due in 15 days. Overdue accounts subject to a service charge of 1% per month.
 </div>
 

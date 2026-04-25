@@ -3,6 +3,7 @@ session_start();
 include "../db_config.php";
 
 $error = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = $_POST['password'];
@@ -11,18 +12,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) === 1) {
-        $student = mysqli_fetch_assoc($result);
-        $dbPassword = $student['password'];
 
-        if (password_verify($password, $dbPassword) || $password === $dbPassword) {
-            $_SESSION['student_id'] = $student['id'];
-            $_SESSION['student_email'] = $student['email'];
-            $_SESSION['student_name'] = $student['name'];
-            header("Location: student_dashboard.php");
-            exit();
-        } else {
+        $student = mysqli_fetch_assoc($result);
+
+        // ❌ WRONG PASSWORD
+        if (!(password_verify($password, $student['password']) || $password === $student['password'])) {
             $error = "Invalid Email or Password!";
         }
+
+        // ❌ INACTIVE ACCOUNT
+        elseif ($student['status'] == 0) {
+            $error = "Account is disabled. Contact admin.";
+        }
+
+        // ✅ SUCCESS LOGIN
+        else {
+            $_SESSION['student_id'] = $student['id'];
+            $_SESSION['student_email'] = $student['email'];
+            $_SESSION['student_name'] = $student['first_name']; // 👈 fix name
+
+            header("Location: student_dashboard.php");
+            exit();
+        }
+
     } else {
         $error = "Invalid Email or Password!";
     }
