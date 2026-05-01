@@ -438,7 +438,7 @@ Enroll Query
   <h2>Welcome to Achiever's Castle</h2>
   <p>Login as a</p>
 
-  <a href="student_login.php" class="btn student">Student</a>
+  <a href="Student_dashboard/student_login.php" class="btn student">Student</a>
   <a href="teacher_login.php" class="btn teacher">Teacher</a>
 </div>
   </div>

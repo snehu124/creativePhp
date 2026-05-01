@@ -4,134 +4,221 @@ session_start();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Forgot Password</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Forgot Password</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-  <style>
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Poppins', sans-serif;
-      padding: 20px;
-    }
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#0d47a1,#1565c0,#ef5350);
+    padding:15px;
+}
 
-    .card-box {
-      max-width: 420px;
-      width: 100%;
-      background: #fff;
-      border-radius: 20px;
-      padding: 40px 30px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-      animation: fadeIn 0.6s ease;
-    }
+/* main box */
+.login-box{
+    width:500px;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 18px 45px rgba(0,0,0,.18);
+}
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+/* top area */
+.top{
+    padding:35px 32px 22px;
+    text-align:center;
+    position:relative;
+    z-index:5;
+}
 
-    .card-box h3 {
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #333;
-    }
+.icon-circle{
+    width:90px;
+    height:90px;
+    margin:0 auto 15px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:38px;
+    color:#fff;
+    background:linear-gradient(135deg,#0d47a1,#1565c0,#ef5350);
+    box-shadow:0 12px 24px rgba(0,0,0,.18);
+}
 
-    .card-box p {
-      color: #666;
-      font-size: 14px;
-      margin-bottom: 25px;
-    }
+.title{
+  font-weight:400;
+  font-size:36px;
+  margin-bottom:10px;
+  background: linear-gradient(to right, #e02121, #2f55a4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family:"Love Ya Like A Sister", cursive;
+}
 
-    .form-control {
-      border-radius: 14px;
-      padding: 12px 15px;
-      font-size: 15px;
-    }
+.sub{
+    font-size:14px;
+    color:#666;
+    line-height:1.5;
+    margin-bottom:26px;
+}
 
-    .btn-primary {
-      background: linear-gradient(to right, #667eea, #764ba2);
-      border: none;
-      border-radius: 14px;
-      padding: 12px;
-      font-weight: 600;
-      font-size: 15px;
-    }
+/* input */
+.form-group{
+    position:relative;
+    margin-bottom:18px;
+}
 
-    .back-link {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 14px;
-    }
+.form-control{
+    height:52px;
+    border:1px solid #dbe2ef;
+    border-radius:10px;
+    padding-left:42px;
+    font-size:15px;
+    background:#f8fbff;
+}
 
-    .back-link a {
-      text-decoration: none;
-      font-weight: 600;
-      color: #667eea;
-    }
+.form-control:focus{
+    border-color:#1565c0;
+    box-shadow:0 0 0 4px rgba(21,101,192,.08);
+}
 
-    .icon-circle {
-      width: 70px;
-      height: 70px;
-      background: linear-gradient(to right, #667eea, #764ba2);
-      color: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-      margin: 0 auto 20px;
-    }
-  </style>
+.left-icon{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#1565c0;
+    font-size:17px;
+}
+
+/* button */
+.login-btn{
+    width:51%;
+    height:48px;
+    border:none;
+    border-radius:28px;
+    font-size:17px;
+    font-weight:700;
+    color:#fff;
+    background:linear-gradient(135deg,#0d47a1,#1565c0,#ef5350);
+    box-shadow:0 8px 18px rgba(0,0,0,.18);
+    transition:.25s;
+}
+
+.login-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(0,0,0,.18);
+}
+
+/* back */
+.back-link{
+    margin-top:18px;
+    font-size:14px;
+}
+
+.back-link a{
+    text-decoration:none;
+    color:#ef5350;
+    font-weight:700;
+}
+
+/* wave area */
+.bottom{
+    height:165px;
+    margin-top:-78px;
+    overflow:hidden;
+    background:transparent;
+    position:relative;
+    z-index:1;
+}
+
+.bottom svg{
+    width:100%;
+    height:100%;
+    display:block;
+}
+</style>
 </head>
 
 <body>
 
-<div class="card-box">
-  <div class="icon-circle">
-    🔐
-  </div>
+<div class="login-box">
 
-  <h3 class="text-center">Forgot Password?</h3>
-  <p class="text-center">
-     Enter your registered email address.  
-  We’ll send you a password reset link.
-  </p>
+    <div class="top">
 
-  <form action="admin_send_reset_link.php" method="POST">
-    <div class="mb-3">
-      <input 
-        type="email" 
-        name="email" 
-        class="form-control" 
-        placeholder="Email Address" 
-        required
-      >
+        <div class="icon-circle">
+            <i class="bi bi-shield-lock-fill"></i>
+        </div>
+
+        <div class="title">RESET PASSWORD</div>
+
+        <div class="sub">
+            Enter your registered email address.<br>
+            We’ll send you a reset link.
+        </div>
+
+        <form action="admin_send_reset_link.php" method="POST">
+
+            <div class="form-group">
+                <i class="bi bi-envelope-fill left-icon"></i>
+                <input type="email" name="email" class="form-control" placeholder="Enter Email Address" required>
+            </div>
+
+            <button type="submit" class="login-btn">
+                Send Reset Link
+            </button>
+
+        </form>
+
+        <div class="back-link">
+            <a href="login.php">← Back to Login</a>
+        </div>
+
     </div>
 
-    <button type="submit" class="btn btn-primary w-100">
-      Send Reset Link
-    </button>
-  </form>
+    <!-- waves -->
+    <div class="bottom">
 
-  <div class="back-link">
-    <a href="login.php">← Back to Login</a>
-  </div>
+<svg viewBox="0 0 390 170" preserveAspectRatio="none">
+
+    <path d="M0 60 
+             C60 20,130 95,220 55
+             C300 20,340 78,390 42
+             L390 170 L0 170 Z"
+          fill="rgba(255,75,75,0.55)"/>
+
+    <path d="M0 95
+             C70 150,150 40,240 92
+             C315 138,345 58,390 95
+             L390 170 L0 170 Z"
+          fill="rgba(242,5,27,0.72)"/>
+
+    <path d="M0 130
+             C90 175,180 78,270 132
+             C330 170,355 102,390 138
+             L390 170 L0 170 Z"
+          fill="#c40000"/>
+
+</svg>
+
+    </div>
+
 </div>
 
 </body>

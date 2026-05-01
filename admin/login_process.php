@@ -60,7 +60,7 @@ if ($result && $result->num_rows === 1) {
             header("Location: dashboard.php");
         } 
         elseif ($user['role'] === 'branch_admin') {
-            header("Location: branch_admin/branch_dashboard.php");
+            header("Location: ../branch_admin/branch_dashboard.php");
         } 
         else {
             session_destroy();

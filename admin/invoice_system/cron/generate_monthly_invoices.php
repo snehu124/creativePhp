@@ -1,35 +1,39 @@
-<?php
+    <?php
 
-include "../../../db_config.php";
+    include "../../../db_config.php";
 
-/* RUN ONLY ON 1ST */
-if (date('d') != '01') {
-    exit;
-}
+    set_time_limit(0);
+    ini_set('max_execution_time', 0);
+    ini_set('memory_limit', '1024M');
 
-/* MAIL */
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+    /* RUN ONLY ON 1ST */
+    if (date('d') != '0222') {
+        exit;
+    }
 
-require "../../../PHPMailer/PHPMailer.php";
-require "../../../PHPMailer/SMTP.php";
-require "../../../PHPMailer/Exception.php";
+    /* MAIL */
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
 
-/* PDF */
-require "../../../dompdf/autoload.inc.php";
-use Dompdf\Dompdf;
+    require "../../../PHPMailer/PHPMailer.php";
+    require "../../../PHPMailer/SMTP.php";
+    require "../../../PHPMailer/Exception.php";
 
-/* FETCH STUDENTS */
-$result = mysqli_query($conn, "
-SELECT student_id, first_name, last_name, guardian_email, guardian_name, 
-mother_email, mother_name, father_email, father_name, payment_by, grade, 
-specific_subject, program, program_count,
-discount_type, discount_amount
-FROM enrollment_inquiries 
-WHERE status='Active'
-");
+    /* PDF */
+    require "../../../dompdf/autoload.inc.php";
+    use Dompdf\Dompdf;
 
-while ($row = mysqli_fetch_assoc($result)) {
+    /* FETCH STUDENTS */
+    $result = mysqli_query($conn, "
+    SELECT student_id, first_name, last_name, guardian_email, guardian_name, 
+    mother_email, mother_name, father_email, father_name, payment_by, grade, 
+    specific_subject, program, program_count,
+    discount_type, discount_amount
+    FROM enrollment_inquiries 
+    WHERE status='Active'
+    ");
+
+    while ($row = mysqli_fetch_assoc($result)) {
 
     $student_id = $row['student_id'];
 
@@ -63,44 +67,52 @@ while ($row = mysqli_fetch_assoc($result)) {
     /* PRICE LOGIC (GST INCLUDED SYSTEM) */
 
     $program_count = $row['program_count'];
-    $grade = $row['grade'];
+    $grade_raw = trim($row['grade']);  
+
+    if(strtolower($grade_raw) == "pre-school"){
+        $grade = "Pre-School";
+    }else{
+        $grade = (int) filter_var($grade_raw, FILTER_SANITIZE_NUMBER_INT);
+    }
     $discount_type   = $row['discount_type'] ?? '';
     $discount_amount = floatval($row['discount_amount'] ?? 0);
 
-if($grade == "Pre-School" || $grade == "Grade 1" || $grade == "Grade 2"){
-    $total = 150;
-}
-elseif(in_array($grade, ["Grade 3","Grade 4","Grade 5","Grade 6","Grade 7","Grade 8"])){
+    if($grade == "Pre-School" || $grade == 1 || $grade == 2){
 
-    if($program_count == 1){
-        $total = 140;
+        $total = 150;
+
     }
-    elseif($program_count == 2){
-        $total = 270;
+    elseif(in_array($grade, [3,4,5,6,7,8])){
+
+        if($program_count == 1){
+            $total = 140;
+        }
+        elseif($program_count == 2){
+            $total = 270;
+        }
+        else{
+            $total = 400;
+        }
+
+    }
+    elseif(in_array($grade, [9,10,11,12])){
+
+        if($program_count == 1){
+            $total = 160;
+        }
+        elseif($program_count == 2){
+            $total = 310;
+        }
+        else{
+            $total = 460;
+        }
+
     }
     else{
-        $total = 400;
+        $total = 150;
     }
 
-}
-elseif(in_array($grade, ["Grade 9","Grade 10","Grade 11","Grade 12"])){
-
-    if($program_count == 1){
-        $total = 160;
-    }
-    elseif($program_count == 2){
-        $total = 310;
-    }
-    else{
-        $total = 460;
-    }
-}
-if(!isset($total)){
-    $total = 150;
-}
-    /* APPLY DISCOUNT */
-
-    // only sibling discount monthly apply hoga
+    // only sibling discount monthly apply
     if($discount_type === "sibling"){
         $total -= $discount_amount;
     }
@@ -114,21 +126,21 @@ if(!isset($total)){
     $subtotal = $total - $gst;
   
     $final_discount_type = '';
-$final_discount_amount = 0;
+    $final_discount_amount = 0;
 
-// only sibling store hoga monthly
-if($discount_type === "sibling"){
-    $final_discount_type = $discount_type;
-    $final_discount_amount = $discount_amount;
-}
+    // only sibling store hoga monthly
+    if($discount_type === "sibling"){
+        $final_discount_type = $discount_type;
+        $final_discount_amount = $discount_amount;
+    }
 
-mysqli_query($conn, "
-INSERT INTO invoices
-(student_id,invoice_date,due_date,price,gst,total,status,discount_type,discount_amount)
-VALUES
-('$student_id',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 15 DAY),
-'$subtotal','$gst','$total','Pending','$final_discount_type','$final_discount_amount')
-");
+    mysqli_query($conn, "
+    INSERT INTO invoices
+    (student_id,invoice_date,due_date,price,gst,total,status,discount_type,discount_amount)
+    VALUES
+    ('$student_id',CURDATE(),DATE_ADD(CURDATE(),INTERVAL 15 DAY),
+    '$subtotal','$gst','$total','Pending','$final_discount_type','$final_discount_amount')
+    ");
 
         $invoice_id = mysqli_insert_id($conn);
 

@@ -37,30 +37,30 @@
     <input type="hidden" name="discount_removed" id="discount_removed" value="0">
     <input type="hidden" name="student_id" value="<?php echo $student_id; ?>">
 
-<div class="form-row">
-<div class="form-group">
-<label>Grade</label>
-<select name="grade" id="grade" required>
+    <div class="form-row">
+    <div class="form-group">
+    <label>Grade</label>
+    <select name="grade" id="grade" required>
 
-<option value="Pre-School" <?php if($data['grade']=="Pre-School") echo "selected"; ?>>Pre-School</option>
-<option value="Kindergarten" <?php if($data['grade']=="Kindergarten") echo "selected"; ?>>Kindergarten</option>
+    <option value="Pre-School" <?php if($data['grade']=="Pre-School") echo "selected"; ?>>Pre-School</option>
+    <option value="Kindergarten" <?php if($data['grade']=="Kindergarten") echo "selected"; ?>>Kindergarten</option>
 
-<option value="Grade 1" <?php if($data['grade']=="Grade 1") echo "selected"; ?>>Grade 1</option>
-<option value="Grade 2" <?php if($data['grade']=="Grade 2") echo "selected"; ?>>Grade 2</option>
-<option value="Grade 3" <?php if($data['grade']=="Grade 3") echo "selected"; ?>>Grade 3</option>
-<option value="Grade 4" <?php if($data['grade']=="Grade 4") echo "selected"; ?>>Grade 4</option>
-<option value="Grade 5" <?php if($data['grade']=="Grade 5") echo "selected"; ?>>Grade 5</option>
-<option value="Grade 6" <?php if($data['grade']=="Grade 6") echo "selected"; ?>>Grade 6</option>
-<option value="Grade 7" <?php if($data['grade']=="Grade 7") echo "selected"; ?>>Grade 7</option>
-<option value="Grade 8" <?php if($data['grade']=="Grade 8") echo "selected"; ?>>Grade 8</option>
+    <option value="Grade 1" <?php if($data['grade']=="1" || $data['grade']=="Grade 1") echo "selected"; ?>>Grade 1</option>
+    <option value="Grade 2" <?php if($data['grade']=="2" || $data['grade']=="Grade 2") echo "selected"; ?>>Grade 2</option>
+    <option value="Grade 3" <?php if($data['grade']=="3" || $data['grade']=="Grade 3") echo "selected"; ?>>Grade 3</option>
+    <option value="Grade 4" <?php if($data['grade']=="4" || $data['grade']=="Grade 4") echo "selected"; ?>>Grade 4</option>
+    <option value="Grade 5" <?php if($data['grade']=="5" || $data['grade']=="Grade 5") echo "selected"; ?>>Grade 5</option>
+    <option value="Grade 6" <?php if($data['grade']=="6" || $data['grade']=="Grade 6") echo "selected"; ?>>Grade 6</option>
+    <option value="Grade 7" <?php if($data['grade']=="7" || $data['grade']=="Grade 7") echo "selected"; ?>>Grade 7</option>
+    <option value="Grade 8" <?php if($data['grade']=="8" || $data['grade']=="Grade 8") echo "selected"; ?>>Grade 8</option>
 
-<option value="Grade 9" <?php if($data['grade']=="Grade 9") echo "selected"; ?>>Grade 9</option>
-<option value="Grade 10" <?php if($data['grade']=="Grade 10") echo "selected"; ?>>Grade 10</option>
-<option value="Grade 11" <?php if($data['grade']=="Grade 11") echo "selected"; ?>>Grade 11</option>
-<option value="Grade 12" <?php if($data['grade']=="Grade 12") echo "selected"; ?>>Grade 12</option>
+    <option value="Grade 9" <?php if($data['grade']=="9" || $data['grade']=="Grade 9") echo "selected"; ?>>Grade 9</option>
+    <option value="Grade 10" <?php if($data['grade']=="10" || $data['grade']=="Grade 10") echo "selected"; ?>>Grade 10</option>
+    <option value="Grade 11" <?php if($data['grade']=="11" || $data['grade']=="Grade 11") echo "selected"; ?>>Grade 11</option>
+    <option value="Grade 12" <?php if($data['grade']=="12" || $data['grade']=="Grade 12") echo "selected"; ?>>Grade 12</option>
 
-</select>
-</div>
+    </select>
+    </div>
 
     <div class="form-group">
     <label>Program</label>
@@ -72,8 +72,8 @@
     <option value="Advanced Learners" <?php if($data['program']=="Advanced Learners") echo "selected"; ?>>Advanced Learners</option>
     </select>
     </div>
-</div>
-<div class="form-row">
+    </div>
+    <div class="form-row">
     <div class="form-group">
     <label>Program Count</label>
     <select name="program_count" id="program_count" required>
@@ -316,12 +316,16 @@ var subjectContainer = document.getElementById("subject_container");
 var subjectSection = document.getElementById("subject_section");
 
 var savedProgram = "<?php echo $data['program']; ?>";
-var savedProgramCount = "<?php echo $data['program_count']; ?>";
+var savedProgramCount = "<?php echo strtolower(trim($data['program_count'])); ?>";
 var rawSubjects = "<?php echo $data['specific_subject']; ?>";
 
 var selectedSubjects = [];
+var isAllPrograms = false;
 
-if(rawSubjects !== "All Programs"){
+if(rawSubjects.toLowerCase().trim() === "all programs"){
+    isAllPrograms = true;
+}
+else{
     selectedSubjects = rawSubjects.split(",").map(s => s.trim());
 }
 document.getElementById("grade").addEventListener("change", function(){
@@ -349,10 +353,19 @@ function setProgramCount(program){
     programCountSelect.innerHTML = html;
 
     if(savedProgramCount){
-        programCountSelect.value = savedProgramCount;
+     if(savedProgramCount === "3" || savedProgramCount === "all"){
+            programCountSelect.value = "all";
+        }
+        else{
+            for(let opt of programCountSelect.options){
+                if(opt.value.toLowerCase().trim() === savedProgramCount){
+                    programCountSelect.value = opt.value;
+                    break;
+                }
+            }
+        }
     }
 }
-
 function loadSubjects(){
     let program = programSelect.value;
     let programCount = programCountSelect.value;
@@ -370,9 +383,16 @@ function loadSubjects(){
 
         data.forEach(sub => {
 
-            let checked = selectedSubjects.some(s => 
+            let checked = "";
+
+        if(isAllPrograms){
+            checked = "checked";
+        }
+        else{
+            checked = selectedSubjects.some(s =>
                 s.toLowerCase() === sub.subject_name.toLowerCase()
             ) ? "checked" : "";
+        }
 
             subjectContainer.innerHTML += `
                 <label class="subject-box">

@@ -522,8 +522,11 @@ if ($topic_id) {
                 case 'pattern_rule_mcq' :
                 case 'pattern_extend_rule' :
                 case 'pattern_match_rule' :    
-            include 'templates/Probability/number_pattern_complete.php';
+             include 'templates/Probability/number_pattern_complete.php';
             break;
+        case 'exponent_notation':
+            include 'templates/exponent/exponent_notation.php';
+            break; 
       }
     }
     ?>
