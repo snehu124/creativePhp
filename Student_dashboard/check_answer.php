@@ -321,6 +321,30 @@ svg, table, canvas {
                             case 'percent_of_number': include 'templates/percents/percent_of_number.php'; break;
                             case 'percent_diagram': include 'templates/percents/percent_diagram.php'; break;
                             case 'fill_outcomes_with_images': include 'templates/Probability/probability_fill_with_images.php'; break;
+                            case 'primary_secondary':
+                                include 'templates/DataHandling/primary_secondary.php'; 
+                                break;
+                            case 'histogram_table':
+                                include 'templates/DataHandling/histogram_table.php';
+                                break;
+                            case 'pie_chart_table':
+                            include 'templates/DataHandling/pie_chart_table.php';
+                            break; 
+                             case 'statistics_question_mcq':
+                            include 'templates/statistics/statical-que.php';
+                            break;
+                             case 'statistics_data_single':
+                            include 'templates/statistics/statistics_data_single.php';
+                            break;
+                            case 'statistics_universal':
+                            include 'templates/statistics/statistics_universal.php';
+                            break;
+                            case 'statistics_central_tendency':
+                            include 'templates/statistics/statistics_central_tendency.php';
+                            break;
+                            case 'surface_area_rectangular_solid':
+                            include 'templates/volumn&surface/surface_area_rectangular_solid.php';
+                            break;   
                             default:
                                 echo '<div class="p-4 text-muted fst-italic">Question type: ' . htmlspecialchars($q['question_type']) . '</div>';
                         }

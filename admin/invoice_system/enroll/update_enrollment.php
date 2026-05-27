@@ -62,42 +62,55 @@ WHERE student_id='$student_id' AND status='Active'
 /* GET GRADE */
 $grade = $_POST['grade'];
 
-// ✅ GET LAST INVOICE
-$lastInvoice = mysqli_fetch_assoc(mysqli_query($conn,"
-    SELECT total, discount_amount 
-    FROM invoices 
-    WHERE student_id='$student_id'
-    ORDER BY id DESC 
-    LIMIT 1
-"));
+/* -----------------------------
+CALCULATE PRICE AGAIN
+-----------------------------*/
 
-$last_total = $lastInvoice['total'] ?? 0;
-$last_discount = $lastInvoice['discount_amount'] ?? 0;
+if($grade == "Pre-School" || $grade == "Grade 1" || $grade == "Grade 2"){
+    $price = 150;
+}
+elseif(in_array($grade, ["Grade 3","Grade 4","Grade 5","Grade 6","Grade 7","Grade 8"])){
 
-// ✅ ORIGINAL PRICE (without discount)
-$original_price = $last_total + $last_discount;
+    if($program_count == 1){
+        $price = 140;
+    }
+    elseif($program_count == 2){
+        $price = 270;
+    }
+    else{
+        $price = 400;
+    }
 
+}
+elseif(in_array($grade, ["Grade 9","Grade 10","Grade 11","Grade 12"])){
+
+    if($program_count == 1){
+        $price = 160;
+    }
+    elseif($program_count == 2){
+        $price = 310;
+    }
+    else{
+        $price = 460;
+    }
+
+}
+
+if(!isset($price)){
+    $price = 150;
+}
 
 /* -----------------------------
 APPLY DISCOUNT
 -----------------------------*/
 
-/* -----------------------------
-APPLY DISCOUNT (FINAL LOGIC)
------------------------------*/
-
-if(empty($discount_type)){
-    // ✅ NO DISCOUNT → original amount
-    $price = $original_price;
-}else{
-    // ✅ APPLY DISCOUNT
-    $price = $original_price - $discount_amount;
+if(!empty($discount_type)){
+    $price -= $discount_amount;
 }
 
 if($price < 0){
     $price = 0;
 }
-
 
 /* INSERT NEW PLAN */
 mysqli_query($conn,"

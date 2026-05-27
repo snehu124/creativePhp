@@ -163,6 +163,51 @@ foreach ($answers as $question_id => $student_answer) {
 
  if (is_array($expected_json) && is_array($submitted_json)) {
 
+ // ==========================
+// 🔥 HISTOGRAM TABLE SUPPORT
+// ==========================
+if (
+    isset($expected_json['freq']) &&
+    isset($expected_json['cum']) &&
+    isset($submitted_json['freq']) &&
+    isset($submitted_json['cum'])
+) {
+
+    $is_correct = 1;
+
+    // ✅ Frequency check
+    foreach ($expected_json['freq'] as $i => $val) {
+        $student_val = $submitted_json['freq'][$i] ?? null;
+
+        if (trim((string)$student_val) !== trim((string)$val)) {
+            $is_correct = 0;
+            break;
+        }
+    }
+
+    // ✅ Cumulative check
+    if ($is_correct) {
+        foreach ($expected_json['cum'] as $i => $val) {
+            $student_val = $submitted_json['cum'][$i] ?? null;
+
+            if (trim((string)$student_val) !== trim((string)$val)) {
+                $is_correct = 0;
+                break;
+            }
+        }
+    }
+
+    // ✅ Max interval check
+    if ($is_correct && isset($expected_json['max_interval'])) {
+        $student_max = trim((string)($submitted_json['max_interval'] ?? ''));
+
+        if ($student_max !== trim((string)$expected_json['max_interval'])) {
+            $is_correct = 0;
+        }
+    }
+
+}
+
     // 🔥 CASE 1: ASSOCIATIVE ARRAY (like step1, step2)
     if (array_keys($expected_json) !== range(0, count($expected_json) - 1)) {
 

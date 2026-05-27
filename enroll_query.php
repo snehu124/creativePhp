@@ -806,7 +806,7 @@ programCountSelect.addEventListener("change", function(){
     subjectSection.style.display = "block"; 
     subjectContainer.innerHTML = "Loading...";
 
-    fetch("invoice_system/enroll/get_subjects.php?program=" + program)
+    fetch("admin/invoice_system/enroll/get_subjects.php?program=" + program)
     .then(res => res.json())
     .then(data => {
 

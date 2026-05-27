@@ -212,7 +212,6 @@ $imgUrl = $makeUrl($questionImage);
         </script>
 
     <!-- 3. pattern_extend_rule (UPDATED & FIXED) -->
-       <!-- 3. FIXED pattern_extend_rule (Scoped to current question) -->
     <?php elseif ($renderType === 'pattern_extend_rule'): ?>
         <input type="hidden" name="answer[<?= $real_question_id ?>]" value="{}" id="extend-hidden-<?= $real_question_id ?>">
         

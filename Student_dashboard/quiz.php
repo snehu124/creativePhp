@@ -314,7 +314,7 @@ if ($topic_id) {
 
   <div class="row">
   <?php
-  $char = 'a';
+  $char = '1';
 
   if (!empty($current_instruction)):
   ?>
@@ -434,7 +434,6 @@ if ($topic_id) {
 
         case 'angles_classification':
             include 'templates/Angles/angles_classification.php';
-            $char++;
             break;  
 
         case 'types_angles':
@@ -447,12 +446,10 @@ if ($topic_id) {
 
         case 'draw_angle_protractor_single':
             include 'templates/Angles/draw_angle_protractor_single.php';
-            $char++;
             break;
 
         case 'draw_angle_protractor_range':
             include 'templates/Angles/draw_angle_protractor_range.php';
-            $char++;
             break;
 
         case 'color_prisms_pyramids':
@@ -527,6 +524,30 @@ if ($topic_id) {
         case 'exponent_notation':
             include 'templates/exponent/exponent_notation.php';
             break; 
+            case 'primary_secondary':
+            include 'templates/DataHandling/primary_secondary.php'; 
+            break;
+            case 'histogram_table':
+            include 'templates/DataHandling/histogram_table.php';
+            break;
+            case 'pie_chart_table':
+            include 'templates/DataHandling/pie_chart_table.php';
+            break;
+            case 'statistics_question_mcqc':
+            include 'templates/statistics/statistics_question_mcq.php';
+            break;
+             case 'statistics_data_single':
+            include 'templates/statistics/statistics_data_single.php';
+            break;
+            case 'statistics_universal':
+            include 'templates/statistics/statistics_universal.php';
+            break;
+            case 'statistics_central_tendency':
+            include 'templates/statistics/statistics_central_tendency.php';
+            break;
+            case 'surface_area_rectangular_solid':
+            include 'templates/volumn&surface/surface_area_rectangular_solid.php';
+            break;
       }
     }
     ?>
