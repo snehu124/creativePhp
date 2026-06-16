@@ -16,7 +16,7 @@ if ($subject_id == 0) {
 $student_id = $_SESSION['student_id'] ?? 1; // testing ke liye
 
 $selected_topic = null;
-$instructions = []; // ✅ CHANGE (old $quiz_questions removed)
+$instructions = []; // 
 
 if ($topic_id) {
 
@@ -41,7 +41,7 @@ if ($topic_id) {
     $stmt4->execute();
     $result4 = $stmt4->get_result();
 
-    // ✅ GROUP BY instruction
+    // âœ… GROUP BY instruction
     while ($row = $result4->fetch_assoc()) {
         $instructions[$row['instruction_id']]['instruction'] = $row['instruction'];
         $instructions[$row['instruction_id']]['questions'][] = $row;
@@ -285,7 +285,7 @@ if ($topic_id) {
 <!-- Quiz Form -->
     <form method="post" action="submit_quiz.php" class="mt-4">
       <?php
-    // 🔥 Inject previous answers as hidden inputs (NO TEMPLATE CHANGE NEEDED)
+    // ðŸ”¥ Inject previous answers as hidden inputs (NO TEMPLATE CHANGE NEEDED)
     if (!empty($_SESSION['quiz_answers'])) {
         foreach ($_SESSION['quiz_answers'] as $qid => $ans) {
 
@@ -430,7 +430,10 @@ if ($topic_id) {
 
         case 'display_angles':
             include 'templates/Angles/display_angles.php';
-            break;  
+            break;
+        case 'verify_triangle_angles':
+            include 'templates/Angles/verify_triangle_angles.php';
+            break; 
 
         case 'angles_classification':
             include 'templates/Angles/angles_classification.php';
@@ -519,24 +522,24 @@ if ($topic_id) {
                 case 'pattern_rule_mcq' :
                 case 'pattern_extend_rule' :
                 case 'pattern_match_rule' :    
-             include 'templates/Probability/number_pattern_complete.php';
+            include 'templates/Probability/number_pattern_complete.php';
             break;
         case 'exponent_notation':
             include 'templates/exponent/exponent_notation.php';
-            break; 
-            case 'primary_secondary':
+            break;   
+             case 'primary_secondary':
             include 'templates/DataHandling/primary_secondary.php'; 
             break;
-            case 'histogram_table':
+             case 'histogram_table':
             include 'templates/DataHandling/histogram_table.php';
             break;
             case 'pie_chart_table':
             include 'templates/DataHandling/pie_chart_table.php';
             break;
-            case 'statistics_question_mcqc':
-            include 'templates/statistics/statistics_question_mcq.php';
+            case 'statistics_question_mcq':
+            include 'templates/statistics/statical-que.php';
             break;
-             case 'statistics_data_single':
+            case 'statistics_data_single':
             include 'templates/statistics/statistics_data_single.php';
             break;
             case 'statistics_universal':
@@ -547,6 +550,57 @@ if ($topic_id) {
             break;
             case 'surface_area_rectangular_solid':
             include 'templates/volumn&surface/surface_area_rectangular_solid.php';
+            break;
+            case 'square_complete':
+            case 'square_missing_digit':
+            case 'square_match':
+            case 'perfect_square_root':
+            include 'templates/square/square_numbers.php';
+            break;
+            case 'math_expression':
+            include 'templates/square/math_expression.php';
+            break;
+            case 'number_line_square_root':
+            include 'templates/square/number_line_square_root.php';
+            break;
+            case 'square_side_length':
+            include 'templates/square/square_side_length.php';
+            break;
+            case 'identify_lines':
+            include 'templates/lineAngles/identifylines.php';
+            break;
+            case 'angle_bisector_check':
+            include 'templates/lineAngles/angle_bisector_check.php';  
+            break; 
+            case 'draw_perpendicular_bisector_midpoint':
+            include 'templates/lineAngles/draw_perpendicular_bisector_midpoint.php';
+             break;
+             case 'draw_angle_bisector_canvas':
+            include 'templates/lineAngles/draw_angle_bisector_canvas.php';
+             break;
+             case 'geometry_multi_blank':
+            include 'templates/lineAngles/geometry_multi_blank.php';
+             break;
+             case 'geometry_congruence_rule':
+            include 'templates/TrianglesCongruence/geometry_congruence_rule.php';
+            break;
+            case 'geometry_congruence_prove':
+            include 'templates/TrianglesCongruence/geometry_congruence_prove.php';  
+            break;
+            case 'rectangle_perimeter':
+            include 'templates/AreaPerimeter/rectangle_perimeter.php';
+            break;
+            case 'algebra_expression':
+            include 'templates/Algebra/algebra_expression.php';
+            break;
+            case 'expression_equation_table':
+            include 'templates/Algebra/expression_equation_table.php';  
+            break;
+            case 'exponent_universal':
+            include 'templates/Algebra/exponent_universal.php'; 
+            break;
+            case 'algebra_universal':
+            include 'templates/Algebra/algebra_universal.php';  
             break;
       }
     }
@@ -579,7 +633,7 @@ if ($topic_id) {
 
 </form>
 
-      <!-- ðŸŒŸ Bottom Explanation Section -->
+      <!-- Ã°Å¸Å’Å¸ Bottom Explanation Section -->
       <div class="bottom-explain-box">
           <div class="text">
               <strong>See Explanation:</strong> <span class="small-text">Click below to review answers and explanations.</span>

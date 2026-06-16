@@ -75,46 +75,52 @@ $final_image_path = $image_path !== ''
 /* Main row */
 .question-row{
     display:flex;
-    align-items:center;
-    gap:14px;
+    align-items:flex-start;
+    gap:25px;
+    margin-bottom:30px;
 }
 
 /* Image box */
 .image-container{
-    width:120px;
-    height:120px;
-    border:1px solid #ddd;
-    border-radius:6px;
-    background:#fff;
+    width:300px;
+    min-width:300px;
+    background:transparent;
+    border:none;
+    border-radius:0;
+    padding:0;
     display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
+    justify-content:flex-start;
+    align-items:flex-start;
 }
 
 .image-container img{
-    max-width:100%;
-    max-height:100%;
+    width:100%;
+    height:auto;
     object-fit:contain;
+    display:block;
+    background:transparent;
+    image-rendering:auto;
 }
 
 /* Answer area */
 .answer-group{
     flex:1;
     display:flex;
-    align-items:flex-end;
+    align-items:center;
+    min-height:220px;
 }
 
 /* Answer line */
 .inline-answer{
     width:100%;
-    max-width:260px;
+    max-width:350px;
     border:none;
     border-bottom:2px solid #1F669C;
-    font-size:15px;
-    padding:2px 4px;
+    font-size:18px;
+    padding:4px;
     outline:none;
     background:transparent;
+    text-align:center;
 }
 
 .inline-answer:focus{
@@ -144,14 +150,20 @@ $final_image_path = $image_path !== ''
 
 /* -------- MOBILE -------- */
 @media (max-width:600px){
+
     .question-row{
         flex-direction:column;
         align-items:flex-start;
     }
 
     .image-container{
-        width:100px;
-        height:100px;
+        width:220px;
+        min-width:auto;
+    }
+
+    .answer-group{
+        min-height:auto;
+        width:100%;
     }
 
     .inline-answer{
@@ -194,7 +206,11 @@ $final_image_path = $image_path !== ''
  <div class="question-row <?= ($final_image_path === '' && $degree_hint !== '') ? 'degree-only-line-fix' : '' ?>">
     <?php if ($final_image_path !== ''): ?>
       <div class="image-container">
-        <img src="<?= $h($final_image_path) ?>" alt="Angle Image">
+        <img
+    src="<?= $h($final_image_path) ?>"
+    alt="Angle Image"
+    loading="lazy"
+>
       </div>
     <?php endif; ?>
 

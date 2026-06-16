@@ -85,22 +85,23 @@
         die("Terms & Conditions must be accepted.");
         }
 
-        if(empty($_POST['payment_type'])){
-        die("Payment type is required");
-        }
+        // if(empty($_POST['payment_type'])){
+        // die("Payment type is required");
+        // }
         $email = $guardian_email;
 
         /* CHECK EMAIL EXISTS */
         $check = mysqli_query($conn,"SELECT id FROM students WHERE email='$email'");
 
-        if(mysqli_num_rows($check) > 0){
+        // if(mysqli_num_rows($check) > 0){
 
-           echo "<script>
-            alert('⚠️ This email is already registered. Please use another email.');
-            window.location.href=document.referrer;
-            </script>";
-            exit;
-        }else{
+        //    echo "<script>
+        //     alert('⚠️ This email is already registered. Please use another email.');
+        //     window.location.href=document.referrer;
+        //     </script>";
+        //     exit;
+        // }
+        // else{
 
     // ✅ NEW STUDENT → CREATE LOGIN
     $plain_password = rand(100000,999999); // send later after payment
@@ -117,7 +118,7 @@
 
     $student_login_id = mysqli_insert_id($conn);
 
-}
+// }
 
     /* -----------------------------
     SAVE STUDENT

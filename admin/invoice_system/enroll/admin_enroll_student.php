@@ -474,9 +474,9 @@ margin-right:6px;
 <div class="form-row">
 
 <div class="form-group">
-<label>Payment Type <span class="required">*</span></label>
+<label>Payment Type </label>
 
-<select name="payment_type" required>
+<select name="payment_type">
 
 <option value="">Select Payment Type</option>
 

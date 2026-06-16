@@ -1,15 +1,14 @@
 <?php
 ob_start();
 session_start();
-// 🔥 HANDLE PAGINATION SAVE
+
 if (isset($_POST['save_page'])) {
 
-  // 🔥 EMPTY ANSWERS REMOVE KARO (IMPORTANT FIX)
 $filtered = array_filter($_POST['answer'] ?? [], function($v){
     return $v !== '' && $v !== null;
 });
 
-// ✅ merge without overwrite
+
 $_SESSION['quiz_answers'] = ($_SESSION['quiz_answers'] ?? []) + $filtered;
 
     $next_page = (int)$_POST['save_page'];
@@ -46,10 +45,10 @@ $quiz_id = intval($_POST['quiz_id'] ?? 0);
 $filtered_post = array_filter($_POST['answer'] ?? [], function($v){
     return $v !== '' && $v !== null;
 });
-// 🧠 FINAL SUBMIT PE BHI SESSION UPDATE KARO
+
 $_SESSION['quiz_answers'] = ($_SESSION['quiz_answers'] ?? []) + $filtered_post;
 
-// ✅ combine safely
+
 $raw_answers = ($_SESSION['quiz_answers'] ?? []) + $filtered_post;
 if ($quiz_id == 0) {
     echo "ERROR: quiz_id is missing";
@@ -61,7 +60,7 @@ if (empty($raw_answers)) {
     exit;
 }
 
-// Determine attempt_time
+
 $sess_key = 'attempt_time_for_topic_' . $quiz_id;
 if (!empty($_SESSION[$sess_key])) {
     $created_at = $_SESSION[$sess_key];
@@ -74,6 +73,7 @@ if (!empty($_SESSION[$sess_key])) {
 // ==========================
 // PROCESS ANSWERS: Support both single and multi-field (shaded/unshaded)
 // ==========================
+
 $answers = [];
 
 foreach ($raw_answers as $qid => $value) {
@@ -156,7 +156,7 @@ foreach ($answers as $question_id => $student_answer) {
         // Try to decode both as JSON
         $expected_json = json_decode($correct_answer, true);
         $submitted_json = json_decode($student_answer, true);
-        // 🔥 NORMALIZE student JSON (IMPORTANT FIX)
+        // 🔥 NORMALIZE student JSON 
         if (is_array($submitted_json) && isset($submitted_json['values'])) {
             $submitted_json = $submitted_json['values'];
         }
@@ -166,6 +166,7 @@ foreach ($answers as $question_id => $student_answer) {
  // ==========================
 // 🔥 HISTOGRAM TABLE SUPPORT
 // ==========================
+
 if (
     isset($expected_json['freq']) &&
     isset($expected_json['cum']) &&
@@ -208,7 +209,6 @@ if (
 
 }
 
-    // 🔥 CASE 1: ASSOCIATIVE ARRAY (like step1, step2)
     if (array_keys($expected_json) !== range(0, count($expected_json) - 1)) {
 
         $is_correct = 1;
@@ -241,7 +241,13 @@ if (
                 break 2;
             }
         } else {
-            if (trim((string)$student_val) !== trim((string)$correct_val)) {
+
+            if (
+                strcasecmp(
+                    trim((string)$student_val),
+                    trim((string)$correct_val)
+                ) !== 0
+            ) {
                 $is_correct = 0;
                 break 2;
             }
@@ -251,16 +257,21 @@ if (
 } else {
 
     // ✅ STRING SAFE COMPARISON
-    if (trim((string)$correct_array) !== trim((string)$student_array)) {
-        $is_correct = 0;
-        break;
-    }
+   if (
+    strcasecmp(
+        trim((string)$correct_array),
+        trim((string)$student_array)
+    ) !== 0
+) {
+    $is_correct = 0;
+    break;
+}
 
 }
         }
 
     } 
-    // 🔥 CASE 2: NORMAL ARRAY (old templates)
+
     else {
 
         $correct_values = array_map(function($v){
@@ -277,7 +288,7 @@ if (
         $is_correct = ($correct_values === $student_values) ? 1 : 0;
     }
 } elseif (is_array($submitted_json)) {
-            // Student submitted JSON, but correct is plain → fallback to string compare
+
             $is_correct = (strcasecmp($student_answer, $correct_answer) === 0) ? 1 : 0;
         } else {
             // Normal string comparison (old behavior)

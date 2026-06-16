@@ -81,7 +81,41 @@ $score   = $correct * 10;
 $percent = $total > 0 ? round(($correct / $total) * 100) : 0;
 $retake_url = "quiz.php?id=1&topic_id=$topic_id"; // Change subject id if needed
 $is_result_page = true;
+function displayAnswer($value)
+{
+    $decoded = json_decode($value, true);
 
+    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+
+        array_walk_recursive($decoded, function (&$item) {
+
+            if (is_string($item)) {
+                $item = preg_replace_callback(
+                    '/\\\\u([0-9a-fA-F]{4})/',
+                    function ($m) {
+                        return mb_convert_encoding(
+                            pack('H*', $m[1]),
+                            'UTF-8',
+                            'UTF-16BE'
+                        );
+                    },
+                    $item
+                );
+            }
+        });
+
+        return htmlspecialchars(
+            json_encode(
+                $decoded,
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            ),
+            ENT_QUOTES,
+            'UTF-8'
+        );
+    }
+
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}
 ?>
 
 <!DOCTYPE html>
@@ -99,6 +133,56 @@ $is_result_page = true;
         .score-circle { width:220px; height:220px; background:linear-gradient(45deg,#56ab2f,#a8e6cf); color:white; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:6rem; font-weight:bold; margin:auto; box-shadow:0 25px 60px rgba(0,0,0,0.5); }
         .question-badge { width:65px; height:65px; font-size:1.8rem; display:flex; align-items:center; justify-content:center; }
         .template-output { background:white; padding:30px; border-radius:20px; box-shadow:0 8px 25px rgba(0,0,0,0.1); margin:20px 0; }
+        .card{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+}
+
+.template-output{
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding:20px !important;
+}
+
+.template-output img{
+    max-width:100%;
+    height:auto;
+}
+
+.template-output table{
+    width:100%;
+    display:block;
+    overflow-x:auto;
+}
+
+.template-output svg,
+.template-output canvas{
+    max-width:100%;
+    height:auto;
+}
+
+.question-badge{
+    width:50px;
+    height:50px;
+    font-size:1rem;
+}
+
+.template-output{
+    padding:0 !important;
+    border:none !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    overflow:visible !important;
+}
+
+.template-output *{
+    max-width:100%;
+}
+
+.ps-5{
+    padding-left:0 !important;
+}
         /* ================= RESPONSIVE FIXES ================= */
 
 /* Prevent horizontal overflow everywhere */
@@ -134,11 +218,146 @@ body {
     height: 50px;
     font-size: 1.4rem;
 }
+/* Tablet */
+
+@media (max-width:992px){
+
+    .card-body{
+        padding:20px !important;
+    }
+
+    .ps-5{
+        padding-left:0 !important;
+    }
+
+    .template-output{
+        padding:15px !important;
+    }
+
+    .score-circle{
+        width:140px;
+        height:140px;
+        font-size:3rem;
+    }
+
+    .score-circle small{
+        font-size:1.2rem !important;
+    }
+
+    .alert{
+        font-size:14px !important;
+    }
+
+    .alert .badge{
+        float:none !important;
+        display:block;
+        margin-top:10px;
+        width:fit-content;
+    }
+}
 
 /* Remove excessive left padding on small screens */
 @media (max-width: 768px) {
     .ps-5 {
         padding-left: 0 !important;
+    }
+  body{
+        padding:10px 0;
+    }
+
+    .card{
+        border-radius:15px;
+        margin:0 5px;
+    }
+
+    .card-header{
+        padding:25px 15px !important;
+    }
+
+    .card-header h1{
+        font-size:28px;
+    }
+
+    .card-header h3{
+        font-size:18px;
+    }
+
+    .card-body{
+        padding:15px !important;
+    }
+
+    .score-circle{
+        width:120px;
+        height:120px;
+        font-size:2.5rem;
+    }
+
+    .score-circle small{
+        font-size:1rem !important;
+    }
+
+    .display-4{
+        font-size:1.8rem !important;
+    }
+
+    #q1,
+    #q2,
+    #q3,
+    #q4,
+    #q5{
+        scroll-margin-top:80px;
+    }
+
+    .template-output{
+        padding:10px !important;
+        border-width:1px !important;
+    }
+
+    .question-badge{
+        width:40px;
+        height:40px;
+        font-size:.8rem;
+    }
+
+    .alert{
+        padding:12px !important;
+        font-size:14px !important;
+    }
+
+    .alert .badge{
+        display:block;
+        float:none !important;
+        margin-top:10px;
+        width:fit-content;
+    }
+
+    .btn-lg{
+        width:100%;
+    }
+}
+
+/* Small Mobile */
+
+@media (max-width:480px){
+
+    .row.text-center .col-md-4{
+        margin-bottom:10px;
+    }
+
+    .row.text-center .p-5{
+        padding:20px !important;
+    }
+
+    .template-output{
+        padding:8px !important;
+    }
+
+    .template-output *{
+        max-width:100%;
+    }
+
+    h5{
+        font-size:16px;
     }
 }
 
@@ -242,7 +461,8 @@ svg, table, canvas {
                 $question_type = $q['question_type'];
             ?>
 
-            <div id="q<?= $question_number ?>" class="bg-white rounded-4 shadow-lg p-5 mb-5 border position-relative">
+           <div id="q<?= $question_number ?>"
+             class="bg-white rounded-4 shadow-sm p-3 p-md-4 p-lg-5 mb-4 border position-relative">
                 <div class="position-absolute top-0 start-0 translate-middle-y ms-3">
                     <span class="badge <?= $badge_class ?> text-white question-badge shadow">
                         <i class="fas <?= $icon ?> me-1"></i><?= $question_number ?>
@@ -252,7 +472,7 @@ svg, table, canvas {
                 <div class="ps-5">
                     <h5 class="mb-4 text-primary fw-bold">Question <?= $question_number ?>:</h5>
 
-                    <div class="template-output border border-3 border-primary rounded-4">
+                    <div class="template-output">
                         <?php
                         switch ($q['question_type']) {
                             case 'fill_blank2':          include 'templates/fill_blank2.php'; break;
@@ -290,6 +510,7 @@ svg, table, canvas {
                             case 'equation_volume':      include 'templates/equation/equation_volume.php'; break;
                             case 'equation_star':      include 'templates/equation/equation_star.php'; break;
                             case 'display_angles':       include 'templates/Angles/display_angles.php'; break;
+                            case 'verify_triangle_angles': include 'templates/Angles/verify_triangle_angles.php'; break;
                             case 'angles_classification':include 'templates/Angles/angles_classification.php'; break;
                             case 'types_angles':         include 'templates/Angles/types_angles.php'; break;
                             case 'polygons_intro':       include 'templates/Angles/polygons_intro.php'; break;
@@ -344,7 +565,58 @@ svg, table, canvas {
                             break;
                             case 'surface_area_rectangular_solid':
                             include 'templates/volumn&surface/surface_area_rectangular_solid.php';
-                            break;   
+                            break;
+                            case 'square_complete':
+                            case 'square_missing_digit':
+                            case 'square_match':
+                            case 'perfect_square_root':
+                            include 'templates/square/square_numbers.php';
+                            break; 
+                            case 'math_expression':
+                            include 'templates/square/math_expression.php';
+                            break; 
+                            case 'number_line_square_root':
+                            include 'templates/square/number_line_square_root.php';
+                            break;
+                            case 'square_side_length':
+                            include 'templates/square/square_side_length.php';
+                            break;  
+                            case 'identify_lines':
+                            include 'templates/lineAngles/identifylines.php';
+                            break;
+                            case 'angle_bisector_check':
+                            include 'templates/lineAngles/angle_bisector_check.php';
+                            break;
+                            case 'draw_perpendicular_bisector_midpoint':
+                            include 'templates/lineAngles/draw_perpendicular_bisector_midpoint.php';
+                            break; 
+                            case 'draw_angle_bisector_canvas':
+                            include 'templates/lineAngles/draw_angle_bisector_canvas.php';
+                            break;    
+                            case 'geometry_multi_blank':
+                            include 'templates/lineAngles/geometry_multi_blank.php';
+                            break;
+                            case 'geometry_congruence_rule':
+                            include 'templates/TrianglesCongruence/geometry_congruence_rule.php';
+                            break; 
+                            case 'geometry_congruence_prove':
+                            include 'templates/TrianglesCongruence/geometry_congruence_prove.php';
+                            break;
+                            case 'rectangle_perimeter':
+                            include 'templates/AreaPerimeter/rectangle_perimeter.php';
+                            break;
+                            case 'algebra_expression':
+                            include 'templates/Algebra/algebra_expression.php';
+                            break;     
+                            case 'expression_equation_table':
+                            include 'templates/Algebra/expression_equation_table.php';
+                            break;
+                            case 'exponent_universal':
+                            include 'templates/Algebra/exponent_universal.php';
+                            break; 
+                            case 'algebra_universal':
+                            include 'templates/Algebra/algebra_universal.php';
+                            break;              
                             default:
                                 echo '<div class="p-4 text-muted fst-italic">Question type: ' . htmlspecialchars($q['question_type']) . '</div>';
                         }
@@ -352,18 +624,18 @@ svg, table, canvas {
                     </div>
 
                     <?php if ($ans === ''): ?>
-                        <div class="alert alert-secondary text-center mt-4 py-5 fs-4">Not Attempted</div>
+                        <div class="alert alert-secondary text-center mt-3 py-3">Not Attempted</div>
                     <?php else: ?>
                         <div class="alert alert-info mt-4 p-4 fs-5">
                             <strong>Your Answer:</strong> 
-                            <span class="fw-bold text-primary"><?= htmlspecialchars($ans) ?></span>
+                            <span class="fw-bold text-primary"><?= displayAnswer($ans) ?></span>
                             <span class="badge bg-<?= $q['is_correct'] == 1 ? 'success' : 'danger' ?> float-end fs-5 px-4 py-2">
                                 <?= $q['is_correct'] == 1 ? 'Correct' : 'Wrong' ?>
                             </span>
                         </div>
                         <?php if ($q['is_correct'] != 1): ?>
                             <div class="alert alert-success mt-3 p-4 fs-5">
-                                <strong>Correct Answer:</strong> <?= htmlspecialchars($q['correct_answer']) ?>
+                                <strong>Correct Answer:</strong> <?= displayAnswer($q['correct_answer']) ?>
                             </div>
                         <?php endif; ?>
                     <?php endif; ?>

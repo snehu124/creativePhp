@@ -1,9 +1,9 @@
-<!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
-
 <?php
 session_start();
 include 'db_config.php';
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 if (!isset($_SESSION['teacher_id'])) {
     header("Location: teacher_login.php");
@@ -12,7 +12,10 @@ if (!isset($_SESSION['teacher_id'])) {
 
 $teacher_id = $_SESSION['teacher_id'];
 $date_today = date('Y-m-d');
+?>
 
+<link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
+<?php
 
 /*
 ------------------------------------

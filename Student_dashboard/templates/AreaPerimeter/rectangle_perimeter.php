@@ -37,16 +37,19 @@ $final_image_path = $image_path !== ''
 
 .surface-wrapper{
     width:100%;
-    max-width:900px;
-    margin:10px auto 25px;
-    padding:0 10px;
+    max-width:1000px;
+    margin:15px auto 25px;
+    padding:25px;
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 4px 10px rgba(0,0,0,.08);
 }
 
 .surface-heading{
-    font-size:16px;
-    font-weight:600;
+    font-size:22px;
+    font-weight:700;
     color:#222;
-    margin-bottom:12px;
+    margin-bottom:20px;
 }
 
 .q-label{
@@ -62,26 +65,21 @@ $final_image_path = $image_path !== ''
 }
 
 .surface-image{
-    width:220px;
-    min-height:180px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    background:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:10px;
+    flex:0 0 320px;
+    width:320px;
+    min-height:250px;
 }
 
 .surface-image img{
     max-width:100%;
-    max-height:100%;
+    max-height:400px;
     object-fit:contain;
+    display:block;
 }
 
 .surface-answer{
     flex:1;
-    min-width:260px;
+    min-width:300px;
 }
 
 .answer-label{
@@ -98,6 +96,7 @@ $final_image_path = $image_path !== ''
     font-size:16px;
     outline:none;
     background:transparent;
+    text-align: center;
 }
 
 .answer-input:focus{
@@ -108,6 +107,13 @@ $final_image_path = $image_path !== ''
     margin-left:6px;
     font-weight:600;
     color:#444;
+}
+
+.answer-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
 }
 
 @media(max-width:600px){
@@ -127,6 +133,108 @@ $final_image_path = $image_path !== ''
     }
 }
 
+/* Large Tablet */
+@media (max-width:1024px){
+
+    .surface-wrapper{
+        padding:20px;
+    }
+
+    .surface-image{
+        width:280px;
+    }
+
+    .surface-heading{
+        font-size:20px;
+    }
+
+}
+
+/* Tablet */
+@media (max-width:768px){
+
+    .surface-row{
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+    }
+
+    .surface-image{
+        flex:none;
+        width:100%;
+        max-width:100%;
+        min-height:auto;
+    }
+
+    .surface-image img{
+        width:100%;
+        height:auto;
+        max-height:none;
+    }
+
+    .surface-answer{
+        width:100%;
+        min-width:unset;
+    }
+
+    .answer-label{
+        font-size:16px;
+    }
+
+}
+
+/* Mobile */
+@media (max-width:480px){
+
+    .surface-wrapper{
+        padding:15px;
+        border-radius:10px;
+    }
+
+    .surface-heading{
+        font-size:18px;
+        line-height:1.4;
+    }
+
+    .surface-row{
+        gap:15px;
+    }
+
+    .surface-image{
+        width:100%;
+    }
+
+    .surface-image img{
+    width:100%;
+    height:auto;
+}
+
+    .surface-answer > div{
+        flex-wrap:wrap;
+        gap:8px;
+    }
+
+  
+    .answer-row{
+        flex-wrap:nowrap;
+        align-items:center;
+    }
+
+    .answer-label{
+        width:auto;
+        white-space:nowrap;
+    }
+
+    .answer-input{
+        flex:1;
+        min-width:100px;
+    }
+
+    .unit-text{
+        white-space:nowrap;
+    }
+}
+
 </style>
 
 <div class="surface-wrapper">
@@ -140,16 +248,16 @@ $final_image_path = $image_path !== ''
 
         <?php if($final_image_path !== ''): ?>
         <div class="surface-image">
-            <img src="<?= $h($final_image_path) ?>" alt="Surface Area Question">
+            <img src="<?= $h($final_image_path) ?>" alt="loading...">
         </div>
         <?php endif; ?>
 
         <div class="surface-answer">
 
-    <div style="display:flex; align-items:center; gap:10px; width:100%;">
+    <div class="answer-row">
 
         <div class="answer-label" style="margin-bottom:0; white-space:nowrap;">
-            Surface Area =
+            <?= $h($data['label'] ?? 'Answer') ?> =
         </div>
 
         <input

@@ -76,13 +76,13 @@
 
         $check = mysqli_query($conn,"SELECT id FROM students WHERE email='$email'");
 
-        if(mysqli_num_rows($check) > 0){
-            echo "<script>
-            alert('⚠️ This email is already registered. Please use another email.');
-            window.history.back();
-            </script>";
-            exit;
-        }
+        // if(mysqli_num_rows($check) > 0){
+        //     echo "<script>
+        //     alert('⚠️ This email is already registered. Please use another email.');
+        //     window.history.back();
+        //     </script>";
+        //     exit;
+        // }
 
         /* =========================
         STEP 2: CREATE STUDENT
@@ -131,12 +131,67 @@
             STEP 4: CREATE INVOICE
             ========================= */
 
-            // Basic price (simple version – later dynamic kar denge)
-            $total = 150;
+          /* =========================
+DYNAMIC FEES CALCULATION
+========================= */
 
-            // GST calculation (5%)
-            $gst = $total * (5/105);
-            $price = $total - $gst;
+if(
+    $grade == "Pre-School" ||
+    $grade == "Kindergarten" ||
+    $grade == "Grade 1" ||
+    $grade == "Grade 2"
+){
+    $price = 150;
+}
+elseif(in_array($grade, [
+    "Grade 3","Grade 4","Grade 5",
+    "Grade 6","Grade 7","Grade 8"
+])){
+
+    if($program_count == "1"){
+        $price = 140;
+    }
+    elseif($program_count == "2"){
+        $price = 270;
+    }
+    else{
+        $price = 400;
+    }
+
+}
+elseif(in_array($grade, [
+    "Grade 9","Grade 10",
+    "Grade 11","Grade 12"
+])){
+
+    if($program_count == "1"){
+        $price = 160;
+    }
+    elseif($program_count == "2"){
+        $price = 310;
+    }
+    else{
+        $price = 460;
+    }
+
+}
+
+if(!isset($price)){
+    $price = 150;
+}
+
+/* Half Month Rule */
+
+$day = (int)date("d", strtotime($enroll_date));
+
+if($day > 15){
+    $price = $price / 2;
+}
+
+/* GST */
+
+$gst   = $price * (5/105);
+$total = $price;
 
             // Insert invoice
            $invoice_insert = mysqli_query($conn,"
