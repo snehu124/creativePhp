@@ -623,7 +623,7 @@ else {
 
         <!-- OLD TEMPLATE OUTPUT -->
         <?php foreach($pairs_left as $left): ?>
-            <div class="factor-line"><?= $left ?> ×</div>
+            <div class="factor-line"><?= $left ?> &times;</div>
         <?php endforeach; ?>
 
         <p><strong>Factors of <?= $number ?> are:</strong></p>
@@ -894,7 +894,10 @@ $correct_lcm = $correct['lcm'] ?? '';
 <div class="common-answer-row">
 
 <strong>
-<?= $GLOBALS['section_question'][$section_id]++ ?>)
+<?= isset($q['_sub_no'])
+      ? $q['_sub_no']
+      : $GLOBALS['section_question'][$section_id]++ ?>
+)
 </strong>
 
 <span class="common-text">
@@ -1115,7 +1118,7 @@ function toggleSelect(el){
 
     let selected = [];
 
-    // 🔥 FIX: include BOTH grid-cell + activity-cell
+    // FIX: include BOTH grid-cell + activity-cell
     parentBox.querySelectorAll(".selected").forEach(cell=>{
         selected.push(cell.getAttribute("data-value"));
     });
