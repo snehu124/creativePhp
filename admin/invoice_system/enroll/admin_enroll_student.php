@@ -611,7 +611,14 @@ programCountSelect.addEventListener("change", function(){
     subjectSection.style.display = "block"; 
     subjectContainer.innerHTML = "Loading...";
 
-    fetch("invoice_system/enroll/get_subjects.php?program=" + program)
+    let grade = document.getElementById("grade").value;
+
+    fetch(
+        "invoice_system/enroll/get_subjects.php?program=" +
+        encodeURIComponent(program) +
+        "&grade=" +
+        encodeURIComponent(grade)
+    )
     .then(res => res.json())
     .then(data => {
 
