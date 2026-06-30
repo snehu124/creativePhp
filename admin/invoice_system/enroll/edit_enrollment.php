@@ -40,26 +40,51 @@
     <div class="form-row">
     <div class="form-group">
     <label>Grade</label>
-    <select name="grade" id="grade" required>
+  <select name="grade" id="grade" required>
+    <option value="">Select Grade</option>
 
-    <option value="Pre-School" <?php if($data['grade']=="Pre-School") echo "selected"; ?>>Pre-School</option>
-    <option value="Kindergarten" <?php if($data['grade']=="Kindergarten") echo "selected"; ?>>Kindergarten</option>
+    <?php
 
-    <option value="Grade 1" <?php if($data['grade']=="1" || $data['grade']=="Grade 1") echo "selected"; ?>>Grade 1</option>
-    <option value="Grade 2" <?php if($data['grade']=="2" || $data['grade']=="Grade 2") echo "selected"; ?>>Grade 2</option>
-    <option value="Grade 3" <?php if($data['grade']=="3" || $data['grade']=="Grade 3") echo "selected"; ?>>Grade 3</option>
-    <option value="Grade 4" <?php if($data['grade']=="4" || $data['grade']=="Grade 4") echo "selected"; ?>>Grade 4</option>
-    <option value="Grade 5" <?php if($data['grade']=="5" || $data['grade']=="Grade 5") echo "selected"; ?>>Grade 5</option>
-    <option value="Grade 6" <?php if($data['grade']=="6" || $data['grade']=="Grade 6") echo "selected"; ?>>Grade 6</option>
-    <option value="Grade 7" <?php if($data['grade']=="7" || $data['grade']=="Grade 7") echo "selected"; ?>>Grade 7</option>
-    <option value="Grade 8" <?php if($data['grade']=="8" || $data['grade']=="Grade 8") echo "selected"; ?>>Grade 8</option>
+    $grades = mysqli_query($conn,"
+        SELECT DISTINCT grade
+        FROM subjects
+        ORDER BY
+            CASE
+                WHEN grade='pre-school' THEN 0
+                WHEN grade='kindergarten' THEN 1
+                ELSE CAST(grade AS UNSIGNED)+1
+            END
+    ");
 
-    <option value="Grade 9" <?php if($data['grade']=="9" || $data['grade']=="Grade 9") echo "selected"; ?>>Grade 9</option>
-    <option value="Grade 10" <?php if($data['grade']=="10" || $data['grade']=="Grade 10") echo "selected"; ?>>Grade 10</option>
-    <option value="Grade 11" <?php if($data['grade']=="11" || $data['grade']=="Grade 11") echo "selected"; ?>>Grade 11</option>
-    <option value="Grade 12" <?php if($data['grade']=="12" || $data['grade']=="Grade 12") echo "selected"; ?>>Grade 12</option>
+    while($g = mysqli_fetch_assoc($grades)){
 
-    </select>
+        $dbGrade = $g['grade'];
+
+        if(is_numeric($dbGrade)){
+            $display = "Grade ".$dbGrade;
+        }
+        else{
+            $display = ucwords($dbGrade);
+        }
+
+        $selected = "";
+
+        if(
+            strtolower($data['grade']) ==
+            strtolower($dbGrade)
+            ||
+            strtolower($data['grade']) ==
+            strtolower($display)
+        ){
+            $selected="selected";
+        }
+
+        echo "<option value='$display' $selected>$display</option>";
+    }
+
+    ?>
+
+</select>
     </div>
 
     <div class="form-group">
@@ -329,9 +354,32 @@ else{
     selectedSubjects = rawSubjects.split(",").map(s => s.trim());
 }
 document.getElementById("grade").addEventListener("change", function(){
+
     selectedSubjects = [];
+
     programCountSelect.value = "";
+
     subjectContainer.innerHTML = "";
+
+    let grade = this.value;
+
+    if(
+        grade=="Pre-School" ||
+        grade=="Kindergarten" ||
+        grade=="Grade 1" ||
+        grade=="Grade 2"
+    ){
+        programSelect.value="Early Starters";
+    }
+    else if(/^Grade\s([3-8])$/.test(grade)){
+        programSelect.value="Elementary";
+    }
+    else{
+        programSelect.value="Advanced Learners";
+    }
+
+    setProgramCount(programSelect.value);
+
 });
 /* ===== FUNCTIONS ===== */
 
@@ -375,7 +423,14 @@ function loadSubjects(){
     subjectSection.style.display = "block";
     subjectContainer.innerHTML = "Loading...";
 
-    fetch("invoice_system/enroll/get_subjects.php?program=" + encodeURIComponent(program))
+    let grade = document.getElementById("grade").value;
+
+    fetch(
+        "invoice_system/enroll/get_subjects.php?program=" +
+        encodeURIComponent(program) +
+        "&grade=" +
+        encodeURIComponent(grade)
+    )
     .then(res => res.json())
     .then(data => {
 
