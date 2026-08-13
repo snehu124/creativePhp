@@ -9,26 +9,30 @@ include "../../../db_config.php";
  {
     min-height: 400px;
 }
+
 .enroll-section{
-padding:0px 10px;
-background:#f7f9fc;
+    background:transparent;
+    padding:0 10px 30px;
 }
 
 .enroll-title{
-font-family:"Love Ya Like A Sister", cursive;
-font-size:36px;
-text-align:center;
-color:#05364d;
-margin-bottom:30px;
+    font-family:"Love Ya Like A Sister", cursive;
+    font-size:36px;
+    text-align:center;
+    color:#05364d;
+
+    margin:0 0 30px;
+    padding-top:25px;
 }
 
 .enroll-form{
-max-width:900px;
-margin:auto;
-background:#fff;
-padding:35px 30px;
-border-radius:18px;
-box-shadow:0 10px 35px rgba(0,0,0,0.08);
+    max-width:900px;
+    margin:0 auto;
+    background:#fff;
+    padding:35px 30px;
+    border-radius:18px;
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
+    margin-bottom:50px;
 }
 
 .form-row{
@@ -152,6 +156,18 @@ margin-right:6px;
     flex-wrap: wrap;
     gap: 10px;
 }
+/* Chrome, Edge, Safari, Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
 /* ================= MOBILE RESPONSIVE ================= */
 
 @media (max-width:768px){
@@ -213,9 +229,9 @@ margin-right:6px;
 
 <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
 
-<div class="enroll-section">
+<div class="enroll-section m-0 p-0">
 
-<h2 class="enroll-title">Admin Student Enrollment</h2>
+<h2 class="enroll-title">Student Enrollment</h2>
 
 <form id="enrollForm" class="enroll-form">
 
@@ -466,7 +482,30 @@ margin-right:6px;
   <label>Discount Description</label>
   <input type="text" name="discount_description" placeholder="Enter discount reason (optional)">
 </div>
+<!-- Extra Amount -->
 
+<h3 class="section-title">Extra Amount</h3>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>Extra Amount Type</label>
+    <select name="extra_type" id="extra_type">
+      <option value="">No Extra Amount</option>
+      <option value="one_time">One Time Extra</option>
+      <option value="permanent">Permanent Extra (Recurring)</option>
+    </select>
+  </div>
+
+  <div class="form-group" id="extra_amount_box" style="display:none;">
+    <label>Extra Amount (CAD $)</label>
+    <input type="number" name="extra_amount" id="extra_amount" min="0" step="0.01">
+  </div>
+</div>
+
+<div class="form-group">
+  <label>Extra Amount Description</label>
+  <input type="text" name="extra_description" placeholder="Reason for extra charge (optional)">
+</div>
 <!-- Admin Fields -->
 
 <h3 class="section-title">Payment Information</h3>
@@ -584,7 +623,7 @@ programSelect.addEventListener("change", function(){
         return;
     }
 
-    // 🔥 SHOW program count
+    // SHOW program count
     programCountSection.style.display = "block";
 
     if(program === "Early Starters"){
@@ -696,6 +735,19 @@ document.getElementById("discount_type").addEventListener("change", function(){
     }
 });
 
+// extra amount show/hide
+document.getElementById("extra_type").addEventListener("change", function(){
+    let type = this.value;
+    let box = document.getElementById("extra_amount_box");
+
+    if(type === "one_time" || type === "permanent"){
+        box.style.display = "block";
+    } else {
+        box.style.display = "none";
+        document.getElementById("extra_amount").value = "";
+    }
+});
+
 // grade dependency
 
 document.getElementById("grade").addEventListener("change", function(){
@@ -727,7 +779,7 @@ document.getElementById("grade").addEventListener("change", function(){
         programSelect.value = "Advanced Learners";
     }
 
-    // 🔥 trigger program change manually (VERY IMPORTANT)
+    // trigger program change manually (VERY IMPORTANT)
     programSelect.dispatchEvent(new Event('change'));
 });
 // disable program

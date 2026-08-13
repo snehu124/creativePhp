@@ -4,69 +4,218 @@ declare(strict_types=1);
 $q = $q ?? [];
 $index = $index ?? 0;
 
-$h = fn($s) => htmlspecialchars((string)$s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$h = fn($s) => htmlspecialchars(
+    (string)($s ?? ''),
+    ENT_QUOTES | ENT_SUBSTITUTE,
+    'UTF-8'
+);
 
 $data = json_decode($q['question_payload'] ?? '{}', true);
+
 $isInstruction = !empty($data['instruction']);
 $image = $data['image'] ?? null;
 
-/**
- * Detect sub-question:
- * starts with a) b) c) d)
- */
-$isSubQuestion = preg_match('/^[a-d]\)/i', trim($q['question_text'])) === 1;
+$isSubQuestion = preg_match(
+    '/^[a-d]\)/i',
+    trim($q['question_text'] ?? '')
+) === 1;
 ?>
 
 <style>
-.ps-image {
-    max-width: 260px;
-    margin: 10px 0;
+.ps-box {
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.10);
 }
+
+.ps-question {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+/* Main content: answer left + image right */
+.ps-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+}
+
+/* LEFT SIDE */
+.ps-answer-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.ps-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .ps-input {
     border: none;
     border-bottom: 2px solid #ccc;
-    width: 160px;
+    width: 180px;
     font-size: 18px;
     outline: none;
+    background: transparent;
+    padding: 8px 5px;
+}
+
+.ps-input:focus {
+    border-bottom-color: #007bff;
+}
+
+.ps-unit {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+/* RIGHT SIDE */
+.ps-image-area {
+    flex: 0 0 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ps-image {
+    max-width: 300px;
+    max-height: 250px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Instruction */
+.ps-instruction {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.ps-box:has(.ps-instruction) .ps-content {
+    min-height: auto;
+    align-items: center;
+}
+
+.ps-box:has(.ps-instruction) .ps-image {
+    max-width: 300px;
+    max-height: 180px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .ps-box {
+        padding: 20px;
+    }
+
+    .ps-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+
+    .ps-image-area {
+        flex: none;
+        order: 2;
+        justify-content: center;
+    }
+
+    .ps-answer-area {
+        order: 1;
+    }
+
+    .ps-image {
+        max-width: 250px;
+        max-height: 220px;
+    }
 }
 </style>
 
-<div class="quiz-box mb-4">
 
-    <!-- ✅ QUESTION HEADING -->
-    <p class="fw-bold">
+<div class="ps-box">
+
+    <!-- QUESTION -->
+    <div class="ps-question">
+
         <?php if (!$isSubQuestion): ?>
-            Que<?= ($index + 1) ?>. <?= $h($q['question_text']) ?>
+
+            Que<?= ($index + 1) ?>.
+            <?= $h($q['question_text'] ?? '') ?>
+
         <?php else: ?>
-            <?= $h($q['question_text']) ?>
+
+            <?= $h($q['question_text'] ?? '') ?>
+
         <?php endif; ?>
-    </p>
 
-    <!-- ✅ IMAGE -->
-    <?php if ($image): ?>
-        <img src="<?= $h($image) ?>" class="ps-image">
-    <?php endif; ?>
+    </div>
 
-    <?php if ($isInstruction): ?>
 
-        <!-- ✅ INSTRUCTION TEXT -->
-        <h6 class="mt-3">How far is:</h6>
+    <div class="ps-content">
 
-    <?php else: ?>
+        <!-- =========================
+             LEFT SIDE
+        ========================== -->
+        <div class="ps-answer-area">
 
-        <!-- ✅ ANSWER INPUT -->
-        <div class="d-flex align-items-center gap-2 mt-2">
-            <input
-                type="text"
-                name="answer[<?= $q['id'] ?>]"
-                class="ps-input"
-                placeholder="Enter your answer"
-            >
-            <?php if (!empty($q['unit'])): ?>
-                <span class="fw-bold"><?= $h($q['unit']) ?></span>
+            <?php if ($isInstruction): ?>
+
+                <div class="ps-instruction">
+                    How far is:
+                </div>
+
+            <?php else: ?>
+
+                <div class="ps-input-wrapper">
+
+                    <input
+                        type="text"
+                        name="answer[<?= $h($q['id'] ?? '') ?>]"
+                        class="ps-input"
+                        placeholder="Enter your answer"
+                    >
+
+                    <?php if (!empty($q['unit'])): ?>
+
+                        <span class="ps-unit">
+                            <?= $h($q['unit']) ?>
+                        </span>
+
+                    <?php endif; ?>
+
+                </div>
+
             <?php endif; ?>
+
         </div>
 
-    <?php endif; ?>
+
+        <!-- =========================
+             RIGHT SIDE IMAGE
+        ========================== -->
+        <?php if ($image): ?>
+
+            <div class="ps-image-area">
+
+                <img
+                    src="<?= $h($image) ?>"
+                    class="ps-image"
+                    alt="Question Image"
+                >
+
+            </div>
+
+        <?php endif; ?>
+
+    </div>
 
 </div>

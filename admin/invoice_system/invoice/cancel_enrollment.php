@@ -1,41 +1,68 @@
-<?php 
-include "../../../db_config.php";
+<?php
+session_start();
+include 'db_config.php';
 
-$id = $_GET['id'];
+if (!isset($_POST['id'])) {
+    die("Invalid Request");
+}
 
-// 🔹 Step 1: get student_id
-$data = mysqli_fetch_assoc(mysqli_query($conn,"
-SELECT student_id 
-FROM enrollment_inquiries 
-WHERE id='$id'
-"));
+$student_id = (int)$_POST['id'];
 
-$student_id = $data['student_id'] ?? 0;
+mysqli_begin_transaction($conn);
 
-// 🔹 Step 2: update enrollment
-mysqli_query($conn,"
-UPDATE enrollment_inquiries 
-SET status='Cancelled' 
-WHERE id='$id'
-");
+try {
 
-// 🔹 Step 3: update plan history
-mysqli_query($conn,"
-UPDATE student_plan_history 
-SET status='Cancelled', end_date=CURDATE()
-WHERE student_id='$student_id' AND status='Active'
-");
+    // Disable student
+    mysqli_query($conn,"
+        UPDATE students
+        SET status='0'
+        WHERE id='$student_id'
+    ");
 
-// 🔹 Step 4: update students table status
-mysqli_query($conn,"
-UPDATE students 
-SET status = 0 
-WHERE id='$student_id'
-");
+    // Cancel enrollment
+    mysqli_query($conn,"
+        UPDATE enrollment_inquiries
+        SET status='Cancelled'
+        WHERE student_id='$student_id'
+    ");
 
-// 🔹 redirect
-echo "<script>
-alert('Enrollment Cancelled');
-window.location.href='dashboard.php?page=invoice_system/dashboard/invoice_dashboard.php';
-</script>";
+    // Close active plan
+    mysqli_query($conn,"
+        UPDATE student_plan_history
+        SET status='Cancelled',
+            end_date=CURDATE()
+        WHERE student_id='$student_id'
+        AND status='Active'
+    ");
+
+    // Disable subject assignments
+    mysqli_query($conn,"
+        UPDATE student_subjects
+        SET status='0'
+        WHERE student_id='$student_id'
+    ");
+
+    // Cancel course enrollments
+    mysqli_query($conn,"
+        UPDATE course_enrollments
+        SET status='Cancelled'
+        WHERE student_id='$student_id'
+    ");
+
+    mysqli_commit($conn);
+
+    echo "<script>
+        alert('Student deleted successfully.');
+        window.location.href='teacher_dashboard.php?page=manage_students.php';
+    </script>";
+
+} catch (Exception $e) {
+
+    mysqli_rollback($conn);
+
+    echo "<script>
+        alert('Unable to delete student.');
+        window.location.href='teacher_dashboard.php?page=manage_students.php';
+    </script>";
+}
 ?>

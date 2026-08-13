@@ -3,11 +3,47 @@ session_start();
 include "../db_config.php";
 
 if (!isset($_SESSION['student_id'])) {
-    header("Location: ../student_login.php");
+    header("Location: student_login.php");
     exit();
 }
 
 $student_id = $_SESSION['student_id'];
+
+/* ============================
+   Check Current Month Invoice
+============================ */
+
+$currentMonth = date('Y-m');
+
+$sqlInvoice = "
+SELECT
+    invoice_number,
+    total,
+    status,
+    due_date
+FROM invoices
+WHERE student_id = ?
+AND DATE_FORMAT(invoice_date,'%Y-%m') = ?
+LIMIT 1
+";
+
+$stmtInvoice = $conn->prepare($sqlInvoice);
+$stmtInvoice->bind_param("is", $student_id, $currentMonth);
+$stmtInvoice->execute();
+
+$invoice = $stmtInvoice->get_result()->fetch_assoc();
+
+$canAccessSubjects = false;
+
+if ($invoice) {
+
+    if (strtolower($invoice['status']) == "paid") {
+
+        $canAccessSubjects = true;
+
+    }
+
+}
 
 $sql = "
 SELECT 
@@ -55,9 +91,10 @@ $result = $stmt->get_result();
   
 <style>
 
+
 /* BODY */
 body {
-    background: linear-gradient(135deg, #f8f9ff, #e0e7ff);
+    background: #f5f7fb;
     margin: 0;
     font-family: 'Segoe UI', system-ui, sans-serif;
 }
@@ -81,27 +118,93 @@ body {
 
 }
 
+.page-title{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-bottom:30px;
+}
+
+.icon-style{
+    font-size:50px;
+    line-height:1;
+    margin:0 !important;
+    background:linear-gradient(to right,#e02121,#2f55a4);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    color:transparent;
+    flex-shrink:0;
+}
+
+.page-title h3{
+    margin:0 !important;
+    font-size:42px;
+    font-weight:400;
+    background:linear-gradient(to right,#e02121,#2f55a4);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    color:transparent;
+    font-family:"Love Ya Like A Sister", cursive;
+}
 
 /* CARD */
 .card {
 
+    background: #fff !important;
+    border: 1px solid #e9ecef;
     border-radius: 12px;
-    border: none;
 
 }
 
+.payment-lock-icon{
+    font-size:70px;
+    background: linear-gradient(to right, #e02121, #2f55a4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display:inline-block;
+}
+
+.payment-title{
+    font-weight:700;
+    background: linear-gradient(to right, #e02121, #2f55a4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
 
 /* IMAGE */
-.course-img {
-
-    width: 130px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 6px;
-
+.course-img{
+    width:280px;
+    height:158px;
+    object-fit:cover;
+    border-radius:10px;
+    display:block;
 }
 
+.table{
+    table-layout: fixed;
+    width:100%;
+}
 
+.table th:nth-child(1),
+.table td:nth-child(1){
+    width:380px;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2){
+    width:240px;
+    text-align:left;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3){
+    width:120px;
+    text-align:center;
+}
 /* TABLE RESPONSIVE */
 .table-responsive {
 
@@ -114,12 +217,33 @@ body {
 /* TABLE DEFAULT */
 .table {
 
-    width: 100%;
-    white-space: nowrap;
+    background: #fff !important;
+    margin-bottom: 0;
 
 }
 
-.container-fluid h3{
+.table thead,
+.table thead th {
+    background: #fff !important;
+    color: var(--primary);
+}
+
+.table tbody tr,
+.table tbody td {
+    background: #fff !important;
+}
+
+.table-hover tbody tr:hover td {
+    background: #f8f9fc !important;
+}
+
+.page-subtitle{
+    color:#6b7280;
+    margin-top:-6px;
+    font-size:16px;
+}
+
+/* .container-fluid h3{
    font-size: 42px;
    font-weight: 400;
    margin-bottom: 6px !important;
@@ -128,7 +252,7 @@ body {
    -webkit-text-fill-color: transparent;
    font-family: "Love Ya Like A Sister", cursive;
    margin-left: 8px;
-}
+} */
 
 /* SCROLL ONLY BELOW 1280px */
 @media (max-width:1280px) {
@@ -175,6 +299,23 @@ body {
 
     }
 
+        .page-title{
+        gap:12px;
+        margin-bottom:20px;
+    }
+
+    .icon-style{
+        font-size:38px;
+    }
+
+    .page-title h3{
+        font-size:30px;
+        margin-top:27px !important;
+    }
+
+    .page-subtitle{
+    font-size:13px;
+    }
 }
 
 
@@ -188,6 +329,28 @@ body {
     width: 48px;
     height: 48px;
 
+}
+
+@media (max-width:768px){
+
+    .table{
+        table-layout:auto;
+        min-width:unset;
+    }
+
+    .table th:nth-child(1),
+    .table td:nth-child(1),
+    .table th:nth-child(2),
+    .table td:nth-child(2),
+    .table th:nth-child(3),
+    .table td:nth-child(3){
+        width:auto;
+    }
+
+    .course-img{
+        width:110px;
+        height:70px;
+    }
 }
 
 </style>
@@ -213,13 +376,26 @@ body {
 
     <!-- CONTENT -->
     <div class="content-area container-fluid">
+    <div class="page-title">
 
-        <h3 class="mb-4">
+    <i class="bi bi-book icon-style"></i>
+
+    <div>
+
+        <h3 class="mb-0">
             My Enrolled Courses
         </h3>
 
+        <div class="page-subtitle">
+            Access your enrolled subjects and continue your learning journey.
+        </div>
 
-        <?php if(mysqli_num_rows($result) > 0): ?>
+    </div>
+
+</div>
+        <?php if($canAccessSubjects): ?>
+
+    <?php if(mysqli_num_rows($result)>0): ?>
 
         <div class="card shadow-sm">
 
@@ -230,13 +406,12 @@ body {
 
                     <table class="table table-hover align-middle">
 
-                        <thead class="table-light">
+                        <thead>
 
                             <tr>
 
                                 <th>Image</th>
                                 <th>Subject</th>
-                                <th>Grade</th>
                                 <th>Action</th>
 
                             </tr>
@@ -268,15 +443,6 @@ body {
                                 <?= htmlspecialchars($row['subject_name']); ?>
 
                             </td>
-
-
-                            <td>
-
-                                <?= htmlspecialchars($row['grade']); ?>
-
-                            </td>
-
-
                             <td>
 
                                 <a href="course_sidebar.php?id=<?= urlencode($row['subject_id']); ?>"
@@ -302,15 +468,92 @@ body {
 
         </div>
 
+            <?php else: ?>
+
+    <div class="alert alert-info">
+
+        You have not enrolled in any courses yet.
+
+    </div>
+
+    <?php endif; ?>
+
+<?php else: ?>
+
+<div class="card shadow border-0 rounded-4">
+
+    <div class="card-body text-center py-5">
+
+       <i class="bi bi-lock-fill payment-lock-icon"></i>
+
+        <h3 class="mt-4 payment-title">
+            Payment Pending
+        </h3>
+
+        <p class="text-muted mt-3">
+
+            Your subjects are locked because this month's
+            payment has not been completed.
+
+        </p>
+
+        <?php if($invoice): ?>
+
+        <div class="alert alert-warning mt-4">
+
+            <h5>
+
+                Invoice Number :
+                <strong><?= htmlspecialchars($invoice['invoice_number']) ?></strong>
+
+            </h5>
+
+            <h4 class="mt-3">
+
+                Amount Payable :
+                <span class="text-primary">
+
+                    ₹<?= number_format($invoice['total'],2) ?>
+
+                </span>
+
+            </h4>
+
+            <p class="mb-0 mt-2">
+
+                Due Date :
+                <?= date("d M Y",strtotime($invoice['due_date'])) ?>
+
+            </p>
+
+        </div>
+
+        <a href="purchase_history.php"
+           class="btn btn-primary btn-lg mt-3">
+
+            <i class="bi bi-credit-card me-2"></i>
+
+            Pay Now
+
+        </a>
+
         <?php else: ?>
 
-        <div class="alert alert-info">
+        <div class="alert alert-danger mt-4">
 
-            You have not enrolled in any courses yet.
+            No invoice generated for this month.
+
+            Please contact the administrator.
 
         </div>
 
         <?php endif; ?>
+
+    </div>
+
+</div>
+
+<?php endif; ?>
 
 
     </div>

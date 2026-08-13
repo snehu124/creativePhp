@@ -530,6 +530,9 @@ svg, table, canvas {
                             case 'pattern_rule_mcq' :
                             case 'pattern_extend_rule' :
                             case 'pattern_match_rule' :  include 'templates/Probability/number_pattern_complete.php'; break;
+                            case 'dynamic_fill_table':
+                                include 'templates/exponent/dynamic_fill_table.php';
+                                break;
                             case 'problem_solving':
                         include 'templates/problem_solving.php';
                       break;
@@ -580,25 +583,25 @@ svg, table, canvas {
                             break;
                             case 'square_side_length':
                             include 'templates/square/square_side_length.php';
-                            break;  
+                            break;
                             case 'identify_lines':
                             include 'templates/lineAngles/identifylines.php';
                             break;
                             case 'angle_bisector_check':
-                            include 'templates/lineAngles/angle_bisector_check.php';
-                            break;
+                            include 'templates/lineAngles/angle_bisector_check.php';  
+                            break; 
                             case 'draw_perpendicular_bisector_midpoint':
                             include 'templates/lineAngles/draw_perpendicular_bisector_midpoint.php';
-                            break; 
-                            case 'draw_angle_bisector_canvas':
+                             break;
+                             case 'draw_angle_bisector_canvas':
                             include 'templates/lineAngles/draw_angle_bisector_canvas.php';
-                            break;    
-                            case 'geometry_multi_blank':
+                             break;
+                             case 'geometry_multi_blank':
                             include 'templates/lineAngles/geometry_multi_blank.php';
-                            break;
-                            case 'geometry_congruence_rule':
+                             break;
+                             case 'geometry_congruence_rule':
                             include 'templates/TrianglesCongruence/geometry_congruence_rule.php';
-                            break; 
+                            break;
                             case 'geometry_congruence_prove':
                             include 'templates/TrianglesCongruence/geometry_congruence_prove.php';
                             break;
@@ -607,7 +610,7 @@ svg, table, canvas {
                             break;
                             case 'algebra_expression':
                             include 'templates/Algebra/algebra_expression.php';
-                            break;     
+                            break;    
                             case 'expression_equation_table':
                             include 'templates/Algebra/expression_equation_table.php';
                             break;
@@ -616,7 +619,64 @@ svg, table, canvas {
                             break; 
                             case 'algebra_universal':
                             include 'templates/Algebra/algebra_universal.php';
-                            break;              
+                            break; 
+                            case 'compare_powers':
+                            include 'templates/Algebra/compare_powers.php';
+                            break;
+                            case 'integer_order_list':
+                            include 'templates/Integer/integer_order_list.php';
+                            break;
+                            case 'coordinate_points_input_negative':
+                            include 'templates/Integer/coordinate_points_input_negative.php';
+                            break; 
+                            case 'integer_number_line':
+                            include 'templates/Integer/integer_number_line.php';
+                            break;
+                            case 'mcq':
+                            include 'templates/Numbers/mcq.php';
+                            break;
+                            case 'place_value_table':
+                            include 'templates/Numbers/place_value_table.php';
+                            break; 
+                            case 'place_value_identify':
+                            include 'templates/Numbers/place_value_identify.php';
+                            break;    
+                            case 'multi_column_table':
+                            include 'templates/Numbers/multi_column_table.php';
+                            break;  
+                            case 'number_scramble':
+                            include 'templates/Numbers/number_scramble.php';
+                            break;            
+                            case 'number_order_dual':
+                            include 'templates/Numbers/number_order_dual.php';
+                            break;            
+                            case 'image_question_panel':
+                            include 'templates/Numbers/image_question_panel.php';
+                            break;                                          
+                            case 'train_number_panel':
+                            include 'templates/Numbers/train_number_panel.php';
+                            break;                                          
+                            case 'greatest_smallest_number':
+                            include 'templates/Numbers/greatest_smallest_number.php';
+                            break;                                          
+                            case 'place_value_digit':
+                            include 'templates/Numbers/place_value_digit.php';
+                            break;                                          
+                            case 'spelling_number_names':
+                            include 'templates/Numbers/spelling_number_names.php';
+                            break;                                          
+                            case 'expanded_form_5box':
+                            include 'templates/Numbers/expanded_form_5box.php';
+                            break;                                          
+                            case 'rounding_judgement':
+                            include 'templates/Numbers/rounding_judgement.php';
+                            break;                                          
+                            case 'odd_even_worksheet':
+                            include 'templates/Numbers/odd_even_worksheet.php';
+                            break;                                          
+                            case 'prime_composite_worksheet':
+                            include 'templates/Factor/prime_composite_worksheet.php';
+                            break;                                          
                             default:
                                 echo '<div class="p-4 text-muted fst-italic">Question type: ' . htmlspecialchars($q['question_type']) . '</div>';
                         }

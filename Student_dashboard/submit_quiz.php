@@ -23,6 +23,83 @@ include "../db_config.php";
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+function normalizeMath($v) {
+    $v = trim((string)$v);
+
+    // saare spaces hatao
+    $v = preg_replace('/\s+/u', '', $v);
+
+    // x, X, * sabko × me convert karo
+    $v = preg_replace('/[xX*·]/u', '×', $v);
+
+    return mb_strtolower($v);
+}
+
+/**
+ * Order-insensitive canonical form for worksheet answers where order does NOT matter.
+ *
+ *   "9,18,36,27"   and  "9,18,27,36"     -> same
+ *   "19+17"        and  "17+19"          -> same
+ *   "31 & 13"      and  "13 & 31"        -> same
+ *   '["90","91"]'  and  "90,91"          -> same   (strips JSON syntax too)
+ */
+function normalizeUnordered($v) {
+    $v = (string)$v;
+
+    // drop JSON syntax so a stored JSON array and a plain comma string match
+    $v = str_replace(['[', ']', '"', "'"], '', $v);
+
+    // reuse existing cleanup: strip spaces, lowercase, x/* -> ×
+    $v = normalizeMath($v);
+
+    if ($v === '') return '';
+
+    // list level: split on commas
+    $tokens = explode(',', $v);
+
+    foreach ($tokens as &$tok) {
+        // a token may itself be a commutative join: a+b  or  a&b
+        foreach (['+', '&'] as $sep) {
+            if (strpos($tok, $sep) !== false) {
+                $parts = array_filter(explode($sep, $tok), function ($p) {
+                    return $p !== '';
+                });
+                sort($parts, SORT_NATURAL);
+                $tok = implode($sep, $parts);
+                break; // one separator per token
+            }
+        }
+    }
+    unset($tok);
+
+    // drop empties, then make the list order irrelevant
+    $tokens = array_filter($tokens, function ($t) { return $t !== ''; });
+    sort($tokens, SORT_NATURAL);
+
+    return implode(',', $tokens);
+}
+
+function normalizeExponentExpression($v)
+{
+    $v = normalizeMath($v);
+
+    $parts = explode('×', $v);
+
+    // empty values remove
+    $parts = array_filter($parts);
+
+    // sort terms
+    sort($parts, SORT_NATURAL);
+
+    return implode('×', $parts);
+}
+
+function isExponentExpression($v)
+{
+    return preg_match('/[⁰¹²³⁴⁵⁶⁷⁸⁹^]/u', $v)
+        || substr_count($v, '×') > 0
+        || preg_match('/\d+\^\d+/u', $v);
+}
 
 // Check login
 if (!isset($_SESSION['student_id'])) {
@@ -41,7 +118,7 @@ if (!isset($_POST['submit_quiz'])) {
 }
 
 $quiz_id = intval($_POST['quiz_id'] ?? 0);
-// 🔥 EMPTY VALUES REMOVE
+//  EMPTY VALUES REMOVE
 $filtered_post = array_filter($_POST['answer'] ?? [], function($v){
     return $v !== '' && $v !== null;
 });
@@ -124,7 +201,9 @@ $answers = array_filter($answers, function($ans) {
 // ==========================
 // SAVE ANSWERS
 // ==========================
-$sql_correct = "SELECT correct_answer FROM quiz_questions WHERE id = ?";
+$sql_correct = "SELECT correct_answer, question_type, question_payload
+FROM quiz_questions
+WHERE id = ?";
 $stmt_corr = $conn->prepare($sql_correct);
 if (!$stmt_corr) {
     echo "correct_answer prepare error: " . $conn->error;
@@ -148,6 +227,20 @@ foreach ($answers as $question_id => $student_answer) {
     $row_corr = $res_corr->fetch_assoc();
     $correct_answer_raw = $row_corr['correct_answer'] ?? '';
     $correct_answer = is_string($correct_answer_raw) ? trim($correct_answer_raw) : '';
+    $question_type = $row_corr['question_type'] ?? '';
+
+    $payload = json_decode($row_corr['question_payload'] ?? '{}', true);
+
+    $mode = $payload['mode'] ?? '';
+
+    // prime/composite worksheet modes where item order does NOT matter
+    $pc_unordered_modes = [
+        'find_multiples_upto', 'sum_two_odd_primes', 'three_odd_primes',
+        'prime_composite_less20', 'twin_primes', 'pairs_sum_divisible_5',
+        'prime_pairs', 'seven_composite',
+    ];
+    $pc_is_unordered = ($question_type === 'prime_composite_worksheet'
+                        && in_array($mode, $pc_unordered_modes, true));
 
     // Smart comparison: supports both plain text and JSON correct answers
     $is_correct = 0;
@@ -156,7 +249,7 @@ foreach ($answers as $question_id => $student_answer) {
         // Try to decode both as JSON
         $expected_json = json_decode($correct_answer, true);
         $submitted_json = json_decode($student_answer, true);
-        // 🔥 NORMALIZE student JSON 
+        //  NORMALIZE student JSON 
         if (is_array($submitted_json) && isset($submitted_json['values'])) {
             $submitted_json = $submitted_json['values'];
         }
@@ -164,7 +257,7 @@ foreach ($answers as $question_id => $student_answer) {
  if (is_array($expected_json) && is_array($submitted_json)) {
 
  // ==========================
-// 🔥 HISTOGRAM TABLE SUPPORT
+//  HISTOGRAM TABLE SUPPORT
 // ==========================
 
 if (
@@ -176,7 +269,7 @@ if (
 
     $is_correct = 1;
 
-    // ✅ Frequency check
+    // Frequency check
     foreach ($expected_json['freq'] as $i => $val) {
         $student_val = $submitted_json['freq'][$i] ?? null;
 
@@ -186,7 +279,7 @@ if (
         }
     }
 
-    // ✅ Cumulative check
+    // Cumulative check
     if ($is_correct) {
         foreach ($expected_json['cum'] as $i => $val) {
             $student_val = $submitted_json['cum'][$i] ?? null;
@@ -198,7 +291,7 @@ if (
         }
     }
 
-    // ✅ Max interval check
+    // Max interval check
     if ($is_correct && isset($expected_json['max_interval'])) {
         $student_max = trim((string)($submitted_json['max_interval'] ?? ''));
 
@@ -242,21 +335,21 @@ if (
             }
         } else {
 
-            if (
-                strcasecmp(
-                    trim((string)$student_val),
-                    trim((string)$correct_val)
-                ) !== 0
-            ) {
-                $is_correct = 0;
-                break 2;
-            }
+           if (
+            normalizeMath($student_val)
+            !==
+            normalizeMath($correct_val)
+        )
+        {
+            $is_correct = 0;
+            break 2;
+        }
         }
     }
 
 } else {
 
-    // ✅ STRING SAFE COMPARISON
+    //  STRING SAFE COMPARISON
    if (
     strcasecmp(
         trim((string)$correct_array),
@@ -274,33 +367,176 @@ if (
 
     else {
 
-        $correct_values = array_map(function($v){
-            return trim((string)$v);
-        }, $expected_json);
+        // A single value may itself be a product of primes / an exponent
+        // expression, e.g. "3 x 3 x 11 x 101" vs "101*11*3*3". For those the
+        // ORDER of the factors does NOT matter, so sort the factors before
+        // comparing (via normalizeExponentExpression). Plain values still fall
+        // back to normalizeMath() exactly as before.
+        $normalizeValue = function ($v) {
+            $n = normalizeMath($v);
+            return isExponentExpression($n)
+                ? normalizeExponentExpression($v)
+                : $n;
+        };
 
-        $student_values = array_map(function($v){
-            return trim((string)$v);
-        }, $submitted_json);
+        $correct_values = array_map($normalizeValue, $expected_json);
+        $student_values = array_map($normalizeValue, $submitted_json);
 
-        sort($correct_values);
-        sort($student_values);
 
-        $is_correct = ($correct_values === $student_values) ? 1 : 0;
+        /*
+        |--------------------------------------------------------------------------
+        | ONLY Odd/Even Worksheet
+        |--------------------------------------------------------------------------
+        */
+        if(
+            $question_type === 'odd_even_worksheet'
+            &&
+            $mode === 'odd_even'
+        ){
+        
+            foreach($correct_values as &$v){
+        
+                $arr = array_filter(array_map('trim', explode(',', $v)));
+        
+                sort($arr, SORT_NUMERIC);
+        
+                $v = implode(',', $arr);
+            }
+        
+            foreach($student_values as &$v){
+        
+                $arr = array_filter(array_map('trim', explode(',', $v)));
+        
+                sort($arr, SORT_NUMERIC);
+        
+                $v = implode(',', $arr);
+            }
+        
+            unset($v);
+        }
+        
+        
+        /*
+        |--------------------------------------------------------------------------
+        | Prime / Composite worksheet: order inside a value does NOT matter
+        |--------------------------------------------------------------------------
+        */
+        if ($pc_is_unordered) {
+            $correct_values = array_map('normalizeUnordered', $correct_values);
+            $student_values = array_map('normalizeUnordered', $student_values);
+        }
+        
+        
+           /*
+        |--------------------------------------------------------------------------
+        | bodmas_fill_blank : ORDER MATTERS
+        | Every blank sits in a fixed position, so compare position-by-position
+        | WITHOUT sorting. This makes "1,1,2" WRONG when the answer is "2,1,1".
+        |--------------------------------------------------------------------------
+        */
+        if ($question_type === 'bodmas_fill_blank') {
+
+            if (count($correct_values) !== count($student_values)) {
+                $is_correct = 0;
+            } else {
+                $is_correct = 1;
+                foreach ($correct_values as $i => $cv) {
+                    if ((string)($student_values[$i] ?? null) !== (string)$cv) {
+                        $is_correct = 0;
+                        break;
+                    }
+                }
+            }
+
+        } else {
+
+            /*
+            |----------------------------------------------------------------------
+            | Existing behaviour for ALL other templates (order-insensitive)
+            |----------------------------------------------------------------------
+            */
+            sort($correct_values);
+            sort($student_values);
+
+            $is_correct = ($correct_values === $student_values) ? 1 : 0;
+        }
     }
 } elseif (is_array($submitted_json)) {
 
-            $is_correct = (strcasecmp($student_answer, $correct_answer) === 0) ? 1 : 0;
+if (
+    isExponentExpression($student_answer)
+    || isExponentExpression($correct_answer)
+) {
+
+    $is_correct =
+    (
+        normalizeExponentExpression($student_answer)
+        ===
+        normalizeExponentExpression($correct_answer)
+    ) ? 1 : 0;
+
+} else {
+
+    $is_correct =
+    (
+        normalizeMath($student_answer)
+        ===
+        normalizeMath($correct_answer)
+    ) ? 1 : 0;
+}
         } else {
             // Normal string comparison (old behavior)
-            if (is_numeric($student_answer) && is_numeric($correct_answer)) {
-                $tol = 0.001;
-                $is_correct = abs((float)$student_answer - (float)$correct_answer) < $tol ? 1 : 0;
-            } else {
-                $is_correct = (strcasecmp($student_answer, $correct_answer) === 0) ? 1 : 0;
-            }
-        }
+ if ($pc_is_unordered) {
+
+    $is_correct =
+    (
+        normalizeUnordered($student_answer)
+        ===
+        normalizeUnordered($correct_answer)
+    ) ? 1 : 0;
+
+} elseif (is_numeric($student_answer) && is_numeric($correct_answer)) {
+
+    $tol = 0.001;
+
+    $is_correct =
+        abs((float)$student_answer - (float)$correct_answer) < $tol
+        ? 1
+        : 0;
+
+} else {
+
+    if (
+        isExponentExpression($student_answer)
+        || isExponentExpression($correct_answer)
+    ) {
+
+        $is_correct =
+        (
+            normalizeExponentExpression($student_answer)
+            ===
+            normalizeExponentExpression($correct_answer)
+        )
+        ? 1
+        : 0;
+
+    } else {
+
+        $is_correct =
+        (
+            normalizeMath($student_answer)
+            ===
+            normalizeMath($correct_answer)
+        )
+        ? 1
+        : 0;
+
     }
-        // 🔥 FIX: ensure string before DB insert
+}
+
+}
+        }
+        // FIX: ensure string before DB insert
         if (is_array($student_answer)) {
             $student_answer = json_encode($student_answer);
 }

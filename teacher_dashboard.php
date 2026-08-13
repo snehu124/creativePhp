@@ -46,8 +46,7 @@ position:fixed;
 top:0;
 left:0;
 height:100vh;
-background:linear-gradient(180deg,#1e3c72,#2a5298);
-color:white;
+background:linear-gradient(135deg,#c9d9f5,#e5ddf7);
 padding:0 15px;
 overflow-y:auto;
 overflow-x:hidden;
@@ -70,19 +69,21 @@ margin-bottom:-20px;
 .sidebar-logo img{
 width:150px;
 height:100px;
+margin-bottom: 23px;
 }
 
 .sidebar a{
 display:flex;
 align-items:center;
 gap:10px;
-color:white;
-padding:12px 15px;
-margin:6px 0;
+color:#2a5298;
+padding:9px 15px;
+margin:20px 0;
 text-decoration:none;
 border-radius:12px;
 transition:0.3s;
 font-size:15px;
+font-weight:500;
 }
 
 .sidebar a:hover{
@@ -233,11 +234,11 @@ display:block;
   </div>
 
   <div class="sidebar-logo">
-  <img src="images/logo3.png">
+  <img src="images/logo.png">
   </div>
 
   <a href="#" class="menu-link active" data-page="dashboard_home.php">
-  <i class="bi bi-speedometer2"></i>
+  <i class="bi bi-house"></i>
   Dashboard
   </a>
 
@@ -261,30 +262,30 @@ display:block;
   Assign Chapters
   </a>
 
-  <a href="#" class="menu-link" data-page="invoice_system/dashboard/invoice_dashboard.php">
-  <i class="bi bi-receipt"></i>
-  Invoice Dashboard
-  </a>
+  <!--<a href="#" class="menu-link" data-page="invoice_system/dashboard/invoice_dashboard.php">-->
+  <!--<i class="bi bi-receipt"></i>-->
+  <!--Invoice Dashboard-->
+  <!--</a>-->
 
-  <a href="#" class="menu-link" data-page="invoice_system/enroll/admin_enroll_student.php">
-  <i class="bi bi-person-plus"></i>
-  Enroll Student
-  </a>
+  <!--<a href="#" class="menu-link" data-page="invoice_system/enroll/admin_enroll_student.php">-->
+  <!--<i class="bi bi-person-plus"></i>-->
+  <!--Enroll Student-->
+  <!--</a>-->
 
-  <a href="#" class="menu-link" data-page="invoice_system/enroll/manage_enrollment.php">
-  <i class="bi bi-pencil-square"></i>
-  Manage Enrollment
-  </a>
+  <!--<a href="#" class="menu-link" data-page="invoice_system/enroll/manage_enrollment.php">-->
+  <!--<i class="bi bi-pencil-square"></i>-->
+  <!--Manage Enrollment-->
+  <!--</a>-->
   
   <!-- <a href="#" class="menu-link" data-page="invoice_system/invoice/invoice_list.php">
   <i class="bi bi-file-earmark-text"></i>
   Invoices
   </a> -->
 
-  <a href="#" class="menu-link" data-page="invoice_system/payments/payment_list.php">
-  <i class="bi bi-cash-coin"></i>
-  Payments
-  </a>
+  <!--<a href="#" class="menu-link" data-page="invoice_system/payments/payment_list.php">-->
+  <!--<i class="bi bi-cash-coin"></i>-->
+  <!--Payments-->
+  <!--</a>-->
 
   <a href="#" class="menu-link" data-page="suggest_course_changes.php">
   <i class="bi bi-lightbulb"></i>
@@ -309,6 +310,11 @@ display:block;
   <a href="#" class="menu-link" data-page="teacher_question_pages/manage_questions.php">
   <i class="bi bi-patch-question"></i>
   Manage Questions
+  </a>
+
+  <a href="#" class="menu-link" data-page="teacher_settings.php">
+  <i class="bi bi-gear"></i>
+  Settings
   </a>
 
   <a href="teacher_logout.php">
@@ -386,7 +392,7 @@ display:block;
 
   $.ajax({
 
-  url: page + window.location.search,
+  url: page,
   type:"GET",
 
   success:function(data){
@@ -398,8 +404,11 @@ display:block;
   $('.menu-link[data-page="'+page+'"]').addClass("active");
 
   if(addToHistory){
-  history.pushState({page:page},"","?page="+page+window.location.search);
-  }
+history.pushState(
+    {page:page},
+    "",
+    "?page="+encodeURIComponent(page)
+);  }
 
   if(typeof initCalendar==="function"){
   setTimeout(function(){
@@ -424,12 +433,13 @@ display:block;
   }
 
 
-  // click menu
-  $(".menu-link").click(function(e){
-  e.preventDefault();
-  let page=$(this).data("page");
-  loadPage(page,true);
-  });
+ // click menu (delegated so links injected later via AJAX, e.g. inside
+// my_students.php or manage_students.php, respond to clicks too)
+$(document).on("click", ".menu-link", function(e){
+e.preventDefault();
+let page=$(this).data("page");
+loadPage(page,true);
+});
 
 
   // browser back
@@ -447,12 +457,21 @@ display:block;
 
   if(!page){
   page="dashboard_home.php";
-  history.replaceState({page:page},"","?page="+page);
+  history.replaceState(
+    {page:page},
+    "",
+    "?page="+encodeURIComponent(page)
+);
   }
 
   loadPage(page,false);
 
   });
+
+    // Keep this teacher marked "online" while the dashboard tab is open
+  setInterval(function () {
+    fetch('api/teacher_heartbeat.php').catch(function () {});
+  }, 60000); // every 60 seconds
 
   </script>
 
