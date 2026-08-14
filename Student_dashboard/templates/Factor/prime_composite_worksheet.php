@@ -77,6 +77,133 @@ $mode=$data['mode'];
     background: #fff;
 }
 
+/* =====================================================
+   PRIME / COMPOSITE SORT
+===================================================== */
+
+.prime-composite-wrapper {
+    margin-top: 25px;
+}
+
+.sort-columns {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 25px;
+}
+
+.sort-column {
+    width: 260px;
+    min-height: 330px;
+    border: 2px solid #222;
+    border-radius: 15px;
+    background: #fff;
+    padding: 0;
+}
+
+.sort-column-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 17px;
+    padding: 12px 8px;
+    border-bottom: 2px solid #222;
+    background: #fff;
+    border-radius: 13px 13px 0 0;
+}
+
+.sort-drop-zone {
+    min-height: 275px;
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    gap: 10px;
+    transition: .2s;
+}
+
+.sort-drop-zone.drag-over {
+    background: #f3f6ff;
+}
+
+.sort-number-pool {
+    border: 2px solid #222;
+    padding: 15px;
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 10px;
+    background: #fff;
+    max-width: 700px;
+    margin: auto;
+}
+
+.sort-number {
+    width: 42px;
+    height: 38px;
+    border: 1px solid #222;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: grab;
+    user-select: none;
+    transition: .2s;
+}
+
+.sort-number:hover {
+    transform: scale(1.05);
+}
+
+.sort-number.dragging {
+    opacity: .45;
+}
+
+.sort-number.source-used {
+    opacity: .25;
+    pointer-events: none;
+}
+
+.sort-number.correct-sort {
+    border-color: #22c55e;
+}
+
+.sort-number.wrong-sort {
+    border-color: #ef4444;
+}
+
+@media(max-width:768px) {
+
+    .sort-columns {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .sort-column {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .sort-drop-zone {
+        min-height: 220px;
+    }
+
+    .sort-number-pool {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .sort-number {
+        width: 40px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+}
+
 @media (max-width: 768px) {
 
     .pc-card {
@@ -833,3 +960,338 @@ Fill in the missing multiples:
 </div>
 
 <?php endif; ?>
+<?php if($mode=="prime_composite_sort"): ?>
+
+<?php
+$sortNumbers = $data['numbers'] ?? [];
+?>
+
+<div class="pc-card">
+
+    <div class="pc-title">
+
+        <?= ($index + 1) ?>.
+
+        <?= htmlspecialchars(
+            $q['question_text']
+            ?? 'Drag and drop the numbers into the correct columns to identify prime and composite numbers.'
+        ) ?>
+
+    </div>
+
+
+    <div class="prime-composite-wrapper"
+         data-qid="<?= $q['id'] ?>">
+
+        <!-- =================================================
+             PRIME / COMPOSITE COLUMNS
+        ================================================== -->
+
+        <div class="sort-columns">
+
+            <!-- PRIME -->
+            <div class="sort-column">
+
+                <div class="sort-column-title">
+                    PRIME NUMBER
+                </div>
+
+                <div
+                    class="sort-drop-zone"
+                    data-sort-type="prime"
+                ></div>
+
+            </div>
+
+
+            <!-- COMPOSITE -->
+            <div class="sort-column">
+
+                <div class="sort-column-title">
+                    COMPOSITE NUMBER
+                </div>
+
+                <div
+                    class="sort-drop-zone"
+                    data-sort-type="composite"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             NUMBER POOL
+        ================================================== -->
+
+        <div class="sort-number-pool">
+
+            <?php foreach($sortNumbers as $number): ?>
+
+                <div
+                    class="sort-number"
+                    draggable="true"
+                    data-number="<?= htmlspecialchars($number) ?>"
+                >
+                    <?= htmlspecialchars($number) ?>
+                </div>
+
+            <?php endforeach; ?>
+
+        </div>
+
+
+        <!-- =================================================
+             HIDDEN ANSWER
+        ================================================== -->
+
+        <input
+            type="hidden"
+            name="answer[<?= $q['id'] ?>]"
+            id="primeCompositeAnswer_<?= $q['id'] ?>"
+            value=""
+        >
+
+    </div>
+
+</div>
+
+<?php endif; ?>
+<script>
+
+/* =====================================================
+   PRIME / COMPOSITE SORT
+===================================================== */
+
+document.querySelectorAll('.prime-composite-wrapper').forEach(function(wrapper) {
+
+    const qid = wrapper.dataset.qid;
+
+    const hiddenInput =
+        wrapper.querySelector('#primeCompositeAnswer_' + qid);
+
+    const pool =
+        wrapper.querySelector('.sort-number-pool');
+
+    const dropZones =
+        wrapper.querySelectorAll('.sort-drop-zone');
+
+
+    /* =====================================================
+       DRAG EVENTS
+    ===================================================== */
+
+    function addDragEvents(item) {
+
+        item.addEventListener('dragstart', function(e) {
+
+            e.dataTransfer.setData(
+                'text/plain',
+                this.dataset.number
+            );
+
+            e.dataTransfer.effectAllowed = 'move';
+
+            this.classList.add('dragging');
+
+        });
+
+
+        item.addEventListener('dragend', function() {
+
+            this.classList.remove('dragging');
+
+        });
+
+    }
+
+
+    /* Original pool numbers */
+
+    wrapper.querySelectorAll('.sort-number').forEach(function(item) {
+
+        addDragEvents(item);
+
+    });
+
+
+    /* =====================================================
+       DROP ZONES
+    ===================================================== */
+
+    dropZones.forEach(function(zone) {
+
+
+        zone.addEventListener('dragover', function(e) {
+
+            e.preventDefault();
+
+            e.dataTransfer.dropEffect = 'move';
+
+            this.classList.add('drag-over');
+
+        });
+
+
+        zone.addEventListener('dragleave', function() {
+
+            this.classList.remove('drag-over');
+
+        });
+
+
+        zone.addEventListener('drop', function(e) {
+
+            e.preventDefault();
+
+            this.classList.remove('drag-over');
+
+
+            const number =
+                e.dataTransfer.getData('text/plain');
+
+            if(!number) return;
+
+
+            /*
+             * Check if number is already
+             * inside Prime or Composite.
+             */
+
+            const existing =
+                wrapper.querySelector(
+                    '.sort-drop-zone .sort-number[data-number="' +
+                    number +
+                    '"]'
+                );
+
+
+            /*
+             * If already placed,
+             * move it to the new column.
+             */
+
+            if(existing) {
+
+                this.appendChild(existing);
+
+                updateAnswer();
+
+                return;
+
+            }
+
+
+            /*
+             * Find original number from pool.
+             */
+
+            const original =
+                pool.querySelector(
+                    '.sort-number[data-number="' +
+                    number +
+                    '"]'
+                );
+
+
+            if(!original) return;
+
+
+            /*
+             * Clone number into selected column.
+             */
+
+            const item =
+                original.cloneNode(true);
+
+            item.classList.remove('source-used');
+
+            item.setAttribute('draggable', 'true');
+
+            addDragEvents(item);
+
+
+            /*
+             * Add to selected column.
+             */
+
+            this.appendChild(item);
+
+
+            /*
+             * Mark original pool number as used.
+             */
+
+            original.classList.add('source-used');
+
+
+            /*
+             * Update answer.
+             */
+
+            updateAnswer();
+
+        });
+
+    });
+
+
+    /* =====================================================
+       UPDATE HIDDEN ANSWER
+    ===================================================== */
+
+    function updateAnswer() {
+
+        const result = {
+            prime: [],
+            composite: []
+        };
+
+
+        /*
+         * PRIME NUMBERS
+         */
+
+        wrapper
+            .querySelectorAll(
+                '.sort-drop-zone[data-sort-type="prime"] .sort-number'
+            )
+            .forEach(function(item) {
+
+                result.prime.push(
+                    item.dataset.number
+                );
+
+            });
+
+
+        /*
+         * COMPOSITE NUMBERS
+         */
+
+        wrapper
+            .querySelectorAll(
+                '.sort-drop-zone[data-sort-type="composite"] .sort-number'
+            )
+            .forEach(function(item) {
+
+                result.composite.push(
+                    item.dataset.number
+                );
+
+            });
+
+
+        /*
+         * Save JSON
+         */
+
+        hiddenInput.value =
+            JSON.stringify(result);
+
+    }
+
+});
+
+</script>

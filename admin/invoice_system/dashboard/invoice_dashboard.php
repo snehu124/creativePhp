@@ -89,9 +89,9 @@ SELECT invoices.*,
        enrollment_inquiries.billing_paused, 
 
        CASE 
+    WHEN enrollment_inquiries.status = 'Cancelled' THEN 'Cancelled'
     WHEN sph.status = 'Expired' THEN 'Expired'
     WHEN sph.status = 'Active' THEN 'Active'
-    WHEN enrollment_inquiries.status = 'Cancelled' THEN 'Cancelled'
     ELSE 'Active'
     END AS enroll_status
 
@@ -99,17 +99,15 @@ FROM invoices
 LEFT JOIN enrollment_inquiries
 ON invoices.student_id = enrollment_inquiries.student_id
 
-LEFT JOIN (
-    SELECT sph1.*
-    FROM student_plan_history sph1
-    INNER JOIN (
-        SELECT invoice_id, MAX(id) as max_id
-        FROM student_plan_history
-        GROUP BY invoice_id
-    ) sph2 
-    ON sph1.id = sph2.max_id
-) sph 
-ON invoices.id = sph.invoice_id
+LEFT JOIN student_plan_history sph
+ON sph.id = (
+    SELECT s2.id
+    FROM student_plan_history s2
+    WHERE s2.student_id = invoices.student_id
+      AND s2.start_date <= invoices.invoice_date
+    ORDER BY s2.start_date DESC, s2.id DESC
+    LIMIT 1
+)
 
 $where
 ORDER BY invoices.id DESC
@@ -123,17 +121,15 @@ FROM invoices
 LEFT JOIN enrollment_inquiries
 ON invoices.student_id = enrollment_inquiries.student_id
 
-LEFT JOIN (
-    SELECT sph1.*
-    FROM student_plan_history sph1
-    INNER JOIN (
-        SELECT invoice_id, MAX(id) as max_id
-        FROM student_plan_history
-        GROUP BY invoice_id
-    ) sph2 
-    ON sph1.id = sph2.max_id
-) sph 
-ON invoices.id = sph.invoice_id
+LEFT JOIN student_plan_history sph
+ON sph.id = (
+    SELECT s2.id
+    FROM student_plan_history s2
+    WHERE s2.student_id = invoices.student_id
+      AND s2.start_date <= invoices.invoice_date
+    ORDER BY s2.start_date DESC, s2.id DESC
+    LIMIT 1
+)
 
 $where
 ");
@@ -258,6 +254,7 @@ Download
 <th>Invoice</th>
 <th>Student</th>
 <th>Total</th>
+<th>Invoice Date</th>
 <th>Enroll Date</th>
 <th>Status</th>
 <th>Enrollment</th>
@@ -270,7 +267,7 @@ Download
 
 <?php if(mysqli_num_rows($recent) == 0){ ?>
 <tr>
-<td colspan="8" style="text-align:center;">No invoices found</td>
+<td colspan="9" style="text-align:center;">No invoices found</td>
 </tr>
 <?php }  else { ?>
 
@@ -282,8 +279,25 @@ $is_overdue = ($row['due_date'] < $today && strtolower($row['status']) != "paid"
 <tr class="<?php echo (strtolower($row['enroll_status'])=='cancelled') ? 'cancel-row' : ''; ?> <?php echo (($row['billing_paused'] ?? 0)==1) ? 'paused-row' : ''; ?>">
 <td><?php echo $row['invoice_number']?></td>
 <td><?php echo $row['first_name']?></td>
-<td>$<?php echo number_format($row['total'],2)?></td>
-<td><?php echo !empty($row['enroll_date']) ? date("d M Y", strtotime($row['enroll_date'])) : '-'; ?></td>
+<td>
+    $<?php echo number_format($row['total'], 2); ?>
+</td>
+
+<td>
+    <?php 
+    echo !empty($row['invoice_date']) 
+        ? date("d M Y", strtotime($row['invoice_date'])) 
+        : '-'; 
+    ?>
+</td>
+
+<td>
+    <?php 
+    echo !empty($row['enroll_date']) 
+        ? date("d M Y", strtotime($row['enroll_date'])) 
+        : '-'; 
+    ?>
+</td>
 <td>
 <?php if($row['status']=="Paid"){ ?>
 
@@ -581,6 +595,28 @@ font-family: "Love Ya Like A Sister", cursive;
   gap:15px;
 }
 
+/* Disabled action buttons (Paid/Cancelled/Expired) — click hi na ho */
+.action-btns .disabled-btn{
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: .9;
+}
+
+/* Action cell ko table-cell rakho taaki row ki line seedhi rahe */
+.invoice-table .table td.action-btns{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    white-space: nowrap;
+}
+.invoice-table .table td.action-btns .btn{
+    display: inline-flex;
+    vertical-align: middle;
+}
+.invoice-table .table td.action-btns .btn + .btn{
+    margin-left: 10px;
+}
+
 @media(min-width:768px){
   .stats-grid{
     grid-template-columns:repeat(3,1fr);
@@ -864,8 +900,9 @@ font-family: "Love Ya Like A Sister", cursive;
 
 /* enroll date: keep on one line */
 .invoice-table .table td:nth-child(4),
-.invoice-table .table th:nth-child(4){
-  width:auto;
+.invoice-table .table th:nth-child(4),
+.invoice-table .table td:nth-child(5),
+.invoice-table .table th:nth-child(5){
   white-space:nowrap;
 }
 
@@ -986,16 +1023,16 @@ $('#filterForm').on('submit', function(e){
 
     let query = $(this).serialize() + '&p=1';
 
-    history.pushState(null, '', '?' + query);
+    history.pushState(null, '', '?page=invoice_system/dashboard/invoice_dashboard.php&' + query);
 
-    $('#page-content').html('<div class="text-center py-5"><div class="loading-spinner"></div></div>');
+    $('#page-body').html('<div class="text-center py-5"><div class="loading-spinner"></div></div>');
 
     $.get('invoice_system/dashboard/invoice_dashboard.php?' + query, function(data){
-        $('#page-content').html(data);
+        $('#page-body').html(data);
     });
 });
 
-// Instant filter 
+// Instant filter
 $('#filterForm input, #filterForm select').on('change', function(){
     $('#filterForm').submit();
 });
@@ -1006,22 +1043,20 @@ $(document).on('click', '.page-btn', function(e){
 
     let page = $(this).data('page');
 
-    // 👉 Get current URL params (IMPORTANT FIX)
     let urlParams = new URLSearchParams(window.location.search);
-
-    // update page
     urlParams.set('p', page);
 
     let query = urlParams.toString();
 
     history.pushState(null, '', '?' + query);
 
-    $('#page-content').html('<div class="text-center py-5"><div class="loading-spinner"></div></div>');
+    $('#page-body').html('<div class="text-center py-5"><div class="loading-spinner"></div></div>');
 
     $.get('invoice_system/dashboard/invoice_dashboard.php?' + query, function(data){
-        $('#page-content').html(data);
+        $('#page-body').html(data);
     });
 });
+
 // PAUSE / RESUME billing
 $(document).on('click', '.toggle-billing', function(e){
     e.preventDefault();
@@ -1034,17 +1069,15 @@ $(document).on('click', '.toggle-billing', function(e){
 
     $.post('invoice_system/dashboard/toggle_billing.php', { student_id: sid, pause: pause }, function(){
 
-        // tiny toast
         let msg = (pause == 1) ? 'Billing paused' : 'Billing resumed';
         let $toast = $('<div class="billing-toast">'+ msg +'</div>').appendTo('body');
         setTimeout(function(){ $toast.addClass('show'); }, 30);
         setTimeout(function(){ $toast.removeClass('show'); }, 1800);
         setTimeout(function(){ $toast.remove(); }, 2200);
 
-        // reload dashboard keeping filters/page
         let query = new URLSearchParams(window.location.search).toString();
         $.get('invoice_system/dashboard/invoice_dashboard.php?' + query, function(data){
-            $('#page-content').html(data);
+            $('#page-body').html(data);
         });
     });
 });

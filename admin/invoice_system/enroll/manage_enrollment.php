@@ -178,7 +178,7 @@ function loadData(page = 1){
             $(".table-scroll").css("opacity","0.5");
         },
         success:function(res){
-            $("#page-content").html(res);
+            $("#page-body").html(res);
         }
     });
 }

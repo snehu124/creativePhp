@@ -8,7 +8,7 @@ if (!in_array($status_filter, $allowed)) {
 }
 
 if ($status_filter === 'all') {
-    $sql = "SELECT * FROM teachers ORDER BY id DESC";
+    $sql = "SELECT * FROM teachers WHERE status != 'deleted' ORDER BY id DESC";
     $result = mysqli_query($conn, $sql);
 } else {
     $stmt = $conn->prepare("SELECT * FROM teachers WHERE status = ? ORDER BY id DESC");
@@ -387,7 +387,7 @@ while ($row = mysqli_fetch_assoc($result)):
 
 <tr id="row-<?= $row['id'] ?>">
 
-<td><strong><?= $i++ ?></strong></td>
+<td class="sr-no"><strong><?= $i++ ?></strong></td>
 
 <td><?= htmlspecialchars($row['name']) ?></td>
 
@@ -457,6 +457,13 @@ while ($row = mysqli_fetch_assoc($result)):
 </div>
 
 <script>
+// Baaki rows ke Sr number dobara set karo (1,2,3...)
+function renumberTeacherRows() {
+    $('.students-table tbody tr').each(function (index) {
+        $(this).find('.sr-no strong').text(index + 1);
+    });
+}
+
 $(document).off('click', '.delete-btn').on('click', '.delete-btn', function() {
 
     let teacherId = $(this).data('id');
@@ -473,6 +480,16 @@ $(document).off('click', '.delete-btn').on('click', '.delete-btn', function() {
                 if (result.status) {
                     $('#row-' + teacherId).fadeOut(300, function() {
                         $(this).remove();
+
+                        // ✅ Serial numbers fix (bina refresh ke)
+                        renumberTeacherRows();
+
+                        // ✅ Total badge bhi update kar do
+                        let n = $('.students-table tbody tr').length;
+                        $('.subject-badge').html('<i class="bi bi-people-fill me-1"></i> Total : ' + n);
+
+                        // agar koi teacher bacha hi nahi to empty-state dikhane ke liye reload
+                        if (n === 0) { location.reload(); }
                     });
                 } else {
                     alert(result.message || 'Unable to delete teacher.');

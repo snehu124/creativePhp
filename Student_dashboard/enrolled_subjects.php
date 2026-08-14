@@ -7,43 +7,32 @@ if (!isset($_SESSION['student_id'])) {
     exit();
 }
 
-$student_id = $_SESSION['student_id'];
-
-/* ============================
-   Check Current Month Invoice
-============================ */
+$student_id = (int) $_SESSION['student_id'];   // ✅ YE LINE WAAPAS ADD KARO
 
 $currentMonth = date('Y-m');
 
-$sqlInvoice = "
-SELECT
-    invoice_number,
-    total,
-    status,
-    due_date
-FROM invoices
-WHERE student_id = ?
-AND DATE_FORMAT(invoice_date,'%Y-%m') = ?
-LIMIT 1
-";
-
-$stmtInvoice = $conn->prepare($sqlInvoice);
+/* Current month ki SABSE LATEST (date-wise) invoice utha lo.
+   Upgrade hone pe nayi invoice hi latest hogi -> usi ki status decide karegi. */
+$stmtInvoice = $conn->prepare("
+    SELECT invoice_number, total, status, due_date, invoice_date
+    FROM invoices
+    WHERE student_id = ?
+      AND DATE_FORMAT(invoice_date, '%Y-%m') = ?
+      AND status != 'Cancelled'
+    ORDER BY invoice_date DESC, id DESC
+    LIMIT 1
+");
 $stmtInvoice->bind_param("is", $student_id, $currentMonth);
 $stmtInvoice->execute();
-
 $invoice = $stmtInvoice->get_result()->fetch_assoc();
 
 $canAccessSubjects = false;
 
-if ($invoice) {
-
-    if (strtolower($invoice['status']) == "paid") {
-
-        $canAccessSubjects = true;
-
-    }
-
+// Sirf LATEST invoice paid ho to hi unlock
+if ($invoice && strtolower($invoice['status']) === 'paid') {
+    $canAccessSubjects = true;
 }
+
 
 $sql = "
 SELECT 

@@ -429,6 +429,25 @@ body {
     width:290px;
     text-align:center;
 }
+.receipt-unavailable{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    width:130px;
+    height:42px;
+    border-radius:25px;
+    background:#f3f4f6;
+    color:#9ca3af;
+    border:1px solid #e5e7eb;
+    font-size:13px;
+    font-weight:600;
+    white-space:nowrap;
+}
+
+.receipt-unavailable i{
+    font-size:14px;
+}
 /* Mobile */
 @media(max-width:768px){
 
@@ -587,25 +606,34 @@ body {
                                         </span>
                                     <?php endif; ?>
                                 </td>
-                             <td class="action-btns">
+                          <td class="action-btns">
 
-                            <a href="../admin/invoice_system/invoice/generate_invoice_pdf.php?invoice_id=<?= $inv['id']; ?>"
-                            class="btn btn-view"
+                        <a href="../admin/invoice_system/invoice/generate_invoice_pdf.php?invoice_id=<?= $inv['id']; ?>"
+                        class="btn btn-view"
+                        target="_blank">
+                            <i class="bi bi-file-earmark-pdf"></i>
+                            Invoice
+                        </a>
+
+                        <?php if (strtolower($inv['status']) === 'paid' && !empty($inv['payment_id'])): ?>
+
+                            <a href="../admin/invoice_system/payments/generate_receipt_pdf.php?payment_id=<?= $inv['payment_id']; ?>"
+                            class="btn btn-paid"
                             target="_blank">
-                                <i class="bi bi-file-earmark-pdf"></i> Invoice
+                                <i class="bi bi-receipt"></i>
+                                Receipt
                             </a>
 
-                            <?php if(strtolower($inv['status'])=="paid" && !empty($inv['payment_id'])){ ?>
+                        <?php else: ?>
 
-                                <a href="../admin/invoice_system/payments/generate_receipt_pdf.php?payment_id=<?= $inv['payment_id']; ?>"
-                                class="btn btn-paid"
-                                target="_blank">
-                                    <i class="bi bi-receipt"></i> Receipt
-                                </a>
+                            <span class="receipt-unavailable">
+                            <i class="bi bi-receipt"></i>
+                            Not Available
+                        </span>
 
-                            <?php } ?>
+                        <?php endif; ?>
 
-                        </td>
+                    </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
