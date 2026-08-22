@@ -438,11 +438,13 @@ border:2px solid #000;
 }
 
 .activity-grid{
-display:grid;
-grid-template-columns:repeat(10,minmax(35px,1fr));
-border:2px solid #8a00ff;
-width:100%;
-max-width:700px;
+    display:grid;
+    grid-template-columns:repeat(6, minmax(70px, 1fr));
+    gap:10px;
+    border:2px solid #8a00ff;
+    width:100%;
+    max-width:700px;
+    padding:10px;
 }
 
 .activity-wrapper{
@@ -563,8 +565,8 @@ z-index:10;
 
 .match-item{
     display:flex;
+    justify-content:space-between;
     align-items:center;
-    gap:12px;
     border:1px solid #ddd;
     border-radius:10px;
     padding:14px 16px;
@@ -660,7 +662,7 @@ z-index:10;
     }
 
     .activity-grid{
-        grid-template-columns:repeat(10,minmax(35px,1fr));
+        grid-template-columns:repeat(6, minmax(70px, 1fr));
     }
 
     .grid-box {
@@ -849,7 +851,7 @@ z-index:10;
     }
 
     .activity-grid{
-        grid-template-columns:repeat(10,minmax(35px,1fr));
+        grid-template-columns:repeat(6, minmax(70px, 1fr));
     }
 }
 </style>
@@ -1347,11 +1349,11 @@ Column 2
 <div class="match-item match-right"
      data-label="<?= $item['label'] ?>">
 
-    <div class="match-dot"></div>
+<div>
+<?= $item['label'] ?>) <?= $item['text'] ?>
+</div>
 
-    <div>
-        <?= $item['label'] ?>) <?= $item['text'] ?>
-    </div>
+<div class="match-dot"></div>
 
 </div>
 
@@ -1488,33 +1490,61 @@ $correct_lcm = $correct['lcm'] ?? '';
 <div class="activity-header">
 
 <div class="color-box"
-style="background:<?= $data['color'] ?>"></div>
+style="background:<?= htmlspecialchars($data['color'] ?? '#1f75fe') ?>"></div>
 
 <div class="activity-text">
-Multiples of <?= $data['number'] ?>
+
+<?php if (isset($data['numbers'])): ?>
+
+    Follow the boxes with prime numbers
+
+<?php else: ?>
+
+    Multiples of <?= htmlspecialchars((string)($data['number'] ?? '')) ?>
+
+<?php endif; ?>
+
 </div>
 
 </div>
+
 
 <div class="activity-grid"
      data-qid="<?= $q['id'] ?>"
-     data-color="<?= $data['color'] ?>">
+     data-color="<?= htmlspecialchars($data['color'] ?? '#1f75fe') ?>">
 
-<?php for($i=1;$i<=100;$i++): ?>
+<?php if (isset($data['numbers'])): ?>
 
-<div class="activity-cell"
-     data-value="<?= $i ?>"
-     onclick="toggleSelect(this)">
-<?= $i ?>
+    <?php foreach($data['numbers'] as $value): ?>
+
+        <div class="activity-cell"
+             data-value="<?= htmlspecialchars((string)$value) ?>"
+             onclick="toggleSelect(this)">
+            <?= htmlspecialchars((string)$value) ?>
+        </div>
+
+    <?php endforeach; ?>
+
+<?php else: ?>
+
+    <?php for($i=1;$i<=100;$i++): ?>
+
+        <div class="activity-cell"
+             data-value="<?= $i ?>"
+             onclick="toggleSelect(this)">
+            <?= $i ?>
+        </div>
+
+    <?php endfor; ?>
+
+<?php endif; ?>
+
 </div>
 
-<?php endfor; ?>
-
-</div>
 
 <input type="hidden"
-name="answer[<?= $q['id'] ?>]"
-id="selected_<?= $q['id'] ?>">
+       name="answer[<?= $q['id'] ?>]"
+       id="selected_<?= $q['id'] ?>">
 
 </div>
 

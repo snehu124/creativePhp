@@ -206,9 +206,20 @@ if(!empty($row['underline'])){
 <tr>
 
 <td class="multi-number">
-
-<?= $display ?>
-
+<?php if($display !== ''): ?>
+    <?= $display ?>
+<?php else: ?>
+    <input
+        type="text"
+        class="multi-input"
+        name="answer[<?= $q['id'] ?>][number][<?= $i ?>]"
+        value="<?= $h($student['number'][$i] ?? '') ?>">
+    <?php if(isset($is_result_page) && ($student['number'][$i] ?? '') !== '' && ($student['number'][$i] ?? '') != ($correct['number'][$i] ?? '')): ?>
+        <div class="text-success small mt-1">
+            <?= $h($correct['number'][$i] ?? '') ?>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>
 </td>
 
 <?php

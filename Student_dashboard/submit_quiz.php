@@ -242,6 +242,24 @@ foreach ($answers as $question_id => $student_answer) {
     $pc_is_unordered = ($question_type === 'prime_composite_worksheet'
                         && in_array($mode, $pc_unordered_modes, true));
 
+    /*
+    |--------------------------------------------------------------------------
+    | multi_column_table
+    |--------------------------------------------------------------------------
+    | Answer looks like:
+    |   {"factors":["1,5,25","1,2,3,4,6,9,12,18,36", ...],
+    |    "prime_/_composite":["Composite","Composite", ...]}
+    |
+    | Two things must be forgiven when comparing:
+    |   1. CASE      -> "composite" == "Composite"
+    |   2. ORDER INSIDE A CELL -> "1,2,3,4,6,9,12,36,18" == "1,2,3,4,6,9,12,18,36"
+    |
+    | The ROW order (which cell lines up with which number) STILL matters, so we
+    | only normalise the value *inside* each cell (via normalizeUnordered) and
+    | keep comparing the arrays position-by-position.
+    */
+    $is_multi_column = ($question_type === 'multi_column_table');
+
     // Smart comparison: supports both plain text and JSON correct answers
     $is_correct = 0;
 
@@ -249,7 +267,7 @@ foreach ($answers as $question_id => $student_answer) {
         // Try to decode both as JSON
         $expected_json = json_decode($correct_answer, true);
         $submitted_json = json_decode($student_answer, true);
-        //  NORMALIZE student JSON 
+        //  NORMALIZE student JSON
         if (is_array($submitted_json) && isset($submitted_json['values'])) {
             $submitted_json = $submitted_json['values'];
         }
@@ -315,7 +333,7 @@ if (
 
             $student_array = $submitted_json[$key] ?? null;
 
-         
+
     if (is_array($correct_array) && is_array($student_array)) {
 
     if (count($correct_array) !== count($student_array)) {
@@ -335,22 +353,43 @@ if (
             }
         } else {
 
-           if (
-            normalizeMath($student_val)
-            !==
-            normalizeMath($correct_val)
-        )
-        {
-            $is_correct = 0;
-            break 2;
-        }
+            // multi_column_table: forgive CASE + order-inside-the-cell.
+            // Everything else keeps the original case-insensitive normalizeMath.
+            if ($is_multi_column) {
+                $cell_match = (
+                    normalizeUnordered($student_val)
+                    ===
+                    normalizeUnordered($correct_val)
+                );
+            } else {
+                $cell_match = (
+                    normalizeMath($student_val)
+                    ===
+                    normalizeMath($correct_val)
+                );
+            }
+
+            if (!$cell_match) {
+                $is_correct = 0;
+                break 2;
+            }
         }
     }
 
 } else {
 
     //  STRING SAFE COMPARISON
-   if (
+   if ($is_multi_column) {
+        // case-insensitive + order-inside-cell-insensitive
+        if (
+            normalizeUnordered($correct_array)
+            !==
+            normalizeUnordered($student_array)
+        ) {
+            $is_correct = 0;
+            break;
+        }
+   } elseif (
     strcasecmp(
         trim((string)$correct_array),
         trim((string)$student_array)
@@ -363,7 +402,7 @@ if (
 }
         }
 
-    } 
+    }
 
     else {
 
@@ -393,29 +432,29 @@ if (
             &&
             $mode === 'odd_even'
         ){
-        
+
             foreach($correct_values as &$v){
-        
+
                 $arr = array_filter(array_map('trim', explode(',', $v)));
-        
+
                 sort($arr, SORT_NUMERIC);
-        
+
                 $v = implode(',', $arr);
             }
-        
+
             foreach($student_values as &$v){
-        
+
                 $arr = array_filter(array_map('trim', explode(',', $v)));
-        
+
                 sort($arr, SORT_NUMERIC);
-        
+
                 $v = implode(',', $arr);
             }
-        
+
             unset($v);
         }
-        
-        
+
+
         /*
         |--------------------------------------------------------------------------
         | Prime / Composite worksheet: order inside a value does NOT matter
@@ -425,8 +464,8 @@ if (
             $correct_values = array_map('normalizeUnordered', $correct_values);
             $student_values = array_map('normalizeUnordered', $student_values);
         }
-        
-        
+
+
            /*
         |--------------------------------------------------------------------------
         | bodmas_fill_blank : ORDER MATTERS
@@ -434,7 +473,16 @@ if (
         | WITHOUT sorting. This makes "1,1,2" WRONG when the answer is "2,1,1".
         |--------------------------------------------------------------------------
         */
-        if ($question_type === 'bodmas_fill_blank') {
+                $ordered_types = ['bodmas_fill_blank', 'order_arrange'];
+
+        // Fill-in-the-blank worksheets (time_fractions A/B, time_table, and every
+        // other prime_composite_worksheet mode NOT listed in $pc_unordered_modes)
+        // have each blank in a FIXED position, so they must be checked IN ORDER.
+        $is_ordered =
+            in_array($question_type, $ordered_types, true)
+            || ($question_type === 'prime_composite_worksheet' && !$pc_is_unordered);
+
+        if ($is_ordered) {
 
             if (count($correct_values) !== count($student_values)) {
                 $is_correct = 0;
@@ -450,11 +498,6 @@ if (
 
         } else {
 
-            /*
-            |----------------------------------------------------------------------
-            | Existing behaviour for ALL other templates (order-insensitive)
-            |----------------------------------------------------------------------
-            */
             sort($correct_values);
             sort($student_values);
 

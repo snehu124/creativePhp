@@ -14,6 +14,7 @@ $data = json_decode($q['question_payload'] ?? '{}', true);
 
 $isInstruction = !empty($data['instruction']);
 $image = $data['image'] ?? null;
+$solution = $data['solution'] ?? null;
 
 $isSubQuestion = preg_match(
     '/^[a-d]\)/i',
@@ -28,6 +29,7 @@ $isSubQuestion = preg_match(
     padding: 30px;
     margin-bottom: 25px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+    margin-top: 25px;
 }
 
 .ps-question {
@@ -35,6 +37,14 @@ $isSubQuestion = preg_match(
     font-weight: 700;
     line-height: 1.5;
     margin-bottom: 25px;
+}
+
+.ps-solution {
+    margin-top: 15px;
+    color: red;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.5;
 }
 
 /* Main content: answer left + image right */
@@ -159,7 +169,14 @@ $isSubQuestion = preg_match(
 
     </div>
 
-
+    <?php if (!empty($solution)): ?>
+    
+        <div class="ps-solution">
+            <?= $h($solution) ?>
+        </div>
+    
+    <?php endif; ?>
+    
     <div class="ps-content">
 
         <!-- =========================
@@ -177,12 +194,20 @@ $isSubQuestion = preg_match(
 
                 <div class="ps-input-wrapper">
 
-                    <input
-                        type="text"
-                        name="answer[<?= $h($q['id'] ?? '') ?>]"
-                        class="ps-input"
-                        placeholder="Enter your answer"
-                    >
+                   <input
+                type="text"
+                name="answer[<?= $h($q['id'] ?? '') ?>]"
+                id="ans_<?= $h($q['id'] ?? '') ?>"
+                class="ps-input"
+                placeholder="Enter your answer"
+                value=""
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                data-lpignore="true"
+                data-form-type="other"
+            >
 
                     <?php if (!empty($q['unit'])): ?>
 

@@ -780,14 +780,47 @@ if (
 
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    document.addEventListener("DOMContentLoaded", () => MathJax.typesetPromise());
+  <script>
+document.addEventListener("DOMContentLoaded", () => MathJax.typesetPromise());
 
-    var videoModal = document.getElementById('videoModal');
-    videoModal.addEventListener('hidden.bs.modal', function () {
-        var iframe = videoModal.querySelector('iframe');
-        if (iframe) { iframe.src = iframe.src; }
+var videoModal = document.getElementById('videoModal');
+videoModal.addEventListener('hidden.bs.modal', function () {
+    var iframe = videoModal.querySelector('iframe');
+    if (iframe) { iframe.src = iframe.src; }
+});
+
+/* ===== Double submit protection ===== */
+(function () {
+    var quizForm = document.querySelector('form[action="submit_quiz.php"]');
+    if (!quizForm) return;
+
+    var isSubmitting = false;
+
+    quizForm.addEventListener('submit', function (e) {
+        // Agar pehle se ek submit chal raha hai -> dusra block
+        if (isSubmitting) {
+            e.preventDefault();
+            return;
+        }
+        isSubmitting = true;
+
+        // setTimeout(0): taaki jis button pe click hua uska name/value
+        // form ke saath chala jaaye, aur uske TURANT baad button disable ho.
+        // (Agar submit event me hi disable karoge to Next/Previous ki value POST me nahi jayegi)
+        setTimeout(function () {
+            quizForm.querySelectorAll('button[type="submit"]').forEach(function (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                btn.style.cursor = 'not-allowed';
+            });
+
+            var submitBtn = quizForm.querySelector('.next-btn');
+            if (submitBtn) {
+                submitBtn.innerHTML = 'Processing...';
+            }
+        }, 0);
     });
-    </script>
+})();
+</script>
 </body>
 </html>

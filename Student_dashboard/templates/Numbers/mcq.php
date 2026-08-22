@@ -1,8 +1,22 @@
 <?php
 
-$payload=json_decode($q['question_payload'],true);
+$payload = json_decode($q['question_payload'], true);
 
-$options=$payload['options'] ?? [];
+$options = $payload['options'] ?? [];
+
+/*
+|--------------------------------------------------------------------------
+| Multiple-answer MCQ
+|--------------------------------------------------------------------------
+| Only questions having:
+| "selection":"multiple"
+| will show checkboxes.
+|
+| All existing MCQs without this setting will remain radio buttons.
+|--------------------------------------------------------------------------
+*/
+
+$isMultiple = (($payload['selection'] ?? '') === 'multiple');
 
 ?>
 
@@ -17,46 +31,30 @@ $options=$payload['options'] ?? [];
 }
 
 .option-grid{
-
-display:grid;
-
-grid-template-columns:repeat(2,1fr);
-
-gap:15px;
-
-margin-top:15px;
-
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    margin-top:15px;
 }
 
 .option{
-
-display:flex;
-
-align-items:center;
-
-gap:8px;
-
-font-size:17px;
-
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:17px;
 }
 
 .option input{
-
-width:18px;
-
-height:18px;
-
-cursor:pointer;
-
+    width:18px;
+    height:18px;
+    cursor:pointer;
 }
 
 @media(max-width:768px){
 
-.option-grid{
-
-grid-template-columns:1fr;
-
-}
+    .option-grid{
+        grid-template-columns:1fr;
+    }
 
 }
 
@@ -64,30 +62,32 @@ grid-template-columns:1fr;
 
 <div class="mcq-card">
 
-<h6><?= $char.'. '.htmlspecialchars($q['question_text']) ?></h6>
+    <h6>
+        <?= $char.'. '.htmlspecialchars($q['question_text']) ?>
+    </h6>
 
-<?php $char++; ?>
+    <?php $char++; ?>
 
-<div class="option-grid">
+    <div class="option-grid">
 
-<?php foreach($options as $option){ ?>
+        <?php foreach($options as $option){ ?>
 
-<label class="option">
+            <label class="option">
 
-<input
+                <input
+                    type="<?= $isMultiple ? 'checkbox' : 'radio' ?>"
+                    name="answer[<?= $q['id'] ?>]<?= $isMultiple ? '[]' : '' ?>"
+                    value="<?= htmlspecialchars($option) ?>"
+                >
 
-type="radio"
+                <span>
+                    <?= htmlspecialchars($option) ?>
+                </span>
 
-name="answer[<?= $q['id']?>]"
+            </label>
 
-value="<?= htmlspecialchars($option) ?>">
+        <?php } ?>
 
-<span><?= htmlspecialchars($option) ?></span>
-
-</label>
-
-<?php } ?>
-
-</div>
+    </div>
 
 </div>

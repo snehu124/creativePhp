@@ -1,17 +1,31 @@
 <?php
 declare(strict_types=1);
+
 $h = fn($s)=>htmlspecialchars((string)$s,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
+
 $q=$q??[];
+
 $id=(int)($q['id']??0);
+
 $payload=json_decode($q['question_payload']??'{}',true)?:[];
+
 $sentence=$payload['sentence']??'';
+
 $isResultPage=isset($latest_time)&&$latest_time!==null;
-/* alphabet label a) b) c) ... using $index from parent loop */
-$labels='abcdefghijklmnopqrstuvwxyz';
-$label=isset($labels[$index])?$labels[$index].')':(($index+1).')');
+
+/* Number label 1) 2) 3) ... */
+$label = ($index + 1) . ')';
+
 /* ---------------- student answers ---------------- */
-$student=['','','','',''];
+
+$correct=json_decode($q['correct_answer']??'[]',true)?:[];
+
+$boxCount=count($correct);
+
+$student=array_fill(0,$boxCount,'');
+
 if($isResultPage){
+
 $stmt=$conn->prepare("
 SELECT student_answer
 FROM student_answers
@@ -21,16 +35,31 @@ AND question_id=?
 AND created_at=?
 LIMIT 1
 ");
+
 $stmt->bind_param("iiis",$student_id,$topic_id,$id,$latest_time);
+
 $stmt->execute();
+
 $row=$stmt->get_result()->fetch_assoc();
+
 $stmt->close();
+
 if($row){
+
 $tmp=json_decode($row['student_answer'],true);
+
 if(is_array($tmp)){
-for($i=0;$i<5;$i++){ $student[$i]=$tmp[$i]??''; }
+
+for($i=0;$i<$boxCount;$i++){
+
+$student[$i]=$tmp[$i]??'';
+
 }
+
 }
+
+}
+
 }
 ?>
 <style>
@@ -90,7 +119,7 @@ color:#111;
 <div class="ef-row">
 <span class="ef-label"><?= $h($label) ?></span>
 <span class="ef-sentence"><?= $h($sentence) ?></span>
-<?php for($i=0;$i<5;$i++): ?>
+<?php for($i=0;$i<$boxCount;$i++): ?>
 <input
 type="text"
 class="ef-input"
@@ -98,7 +127,7 @@ name="answer[<?= $id ?>][]"
 value="<?= $h($student[$i]) ?>"
 <?= $isResultPage?'disabled':'' ?>
 >
-<?php if($i<4): ?>
+<?php if($i<$boxCount-1): ?>
 <span class="ef-plus">+</span>
 <?php endif; ?>
 <?php endfor; ?>

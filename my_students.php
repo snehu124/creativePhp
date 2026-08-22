@@ -24,6 +24,9 @@ $teacher_id=(int)$_SESSION['teacher_id'];
 |--------------------------------------------------------------------------
 | FETCH STUDENTS
 |--------------------------------------------------------------------------
+| Fallback: if a student's own phone/email is missing, pull it from
+| enrollment_inquiries (matched via student_id) — guardian, then mother,
+| then father, whichever is available first.
 */
 
 $sql="
@@ -39,9 +42,9 @@ s.first_name,
 IFNULL(s.last_name,'')
 ) AS name,
 
-s.email,
-s.phone,
-s.gender,
+MAX(COALESCE(NULLIF(s.email,''), ei.guardian_email, ei.mother_email, ei.father_email)) AS email,
+MAX(COALESCE(NULLIF(s.phone,''), ei.guardian_phone, ei.mother_phone, ei.father_phone)) AS phone,
+
 s.dob,
 
 COUNT(DISTINCT sd.id) AS documents
@@ -61,6 +64,9 @@ LEFT JOIN student_documents sd
 ON sd.student_id=s.id
 AND sd.subject_id=ss.subject_id
 
+LEFT JOIN enrollment_inquiries ei
+ON ei.student_id = s.id
+
 WHERE ts.teacher_id=?
 
 GROUP BY
@@ -68,9 +74,6 @@ GROUP BY
 s.id,
 s.first_name,
 s.last_name,
-s.email,
-s.phone,
-s.gender,
 s.dob
 
 ORDER BY s.first_name
@@ -187,10 +190,6 @@ from{opacity:0;transform:translateY(10px);}
 to{opacity:1;transform:translateY(0);}
 }
 
-/* .table-responsive{
-border-radius:18px;
-} */
-
 .students-table{
 width:100%;
 border-collapse:collapse;
@@ -241,6 +240,16 @@ gap:12px;
 
     overflow:hidden;
 
+    background:linear-gradient(135deg,#1e3c72,#2a5298);
+    color:#fff;
+    font-weight:700;
+    font-size:18px;
+
+    border:3px solid #fff;
+    box-shadow:0 3px 12px rgba(0,0,0,.18);
+
+    flex-shrink:0;
+
 }
 
 .student-photo{
@@ -261,26 +270,6 @@ gap:12px;
 
     image-rendering:auto;
 
-}
-
-.gender-badge{
-display:inline-flex;
-align-items:center;
-gap:6px;
-padding:6px 14px;
-border-radius:30px;
-font-size:12px;
-font-weight:600;
-}
-
-.gender-male{
-background:#d9f3ff;
-color:#0c7abf;
-}
-
-.gender-female{
-background:#ffe0ef;
-color:#d63384;
 }
 
 .btn-view{
@@ -359,11 +348,6 @@ min-width:850px;
 Total : <?= $total_students ?>
 </span>
 
-<!-- <a href="#" class="btn-manage-student menu-link" data-page="manage_students.php">
-<i class="bi bi-person-gear"></i>
-Manage Students
-</a> -->
-
 </div>
 
 </div>
@@ -392,8 +376,6 @@ Manage Students
 
 <th>Phone</th>
 
-<th>Gender</th>
-
 <th>DOB</th>
 
 <th width="170">Documents</th>
@@ -413,6 +395,10 @@ while($row=$result->fetch_assoc()):
 $btnClass=$row['documents']>0
 ? "btn-primary"
 : "btn-outline-secondary";
+
+$phone = $row['phone'] ?? '';
+$email = $row['email'] ?? '';
+$dob = $row['dob'] ?? null;
 
 ?>
 
@@ -452,35 +438,15 @@ $btnClass=$row['documents']>0
 </td>
 
 <td>
-<?= htmlspecialchars($row['email']) ?>
+<?= $email !== '' ? htmlspecialchars($email) : '<span class="text-muted">—</span>' ?>
 </td>
 
 <td>
-<?= htmlspecialchars($row['phone']) ?>
+<?= $phone !== '' ? htmlspecialchars($phone) : '<span class="text-muted">—</span>' ?>
 </td>
 
 <td>
-
-<?php if(strtolower($row['gender'])=="male"){ ?>
-
-<span class="gender-badge gender-male">
-<i class="bi bi-gender-male"></i>
-Male
-</span>
-
-<?php }else{ ?>
-
-<span class="gender-badge gender-female">
-<i class="bi bi-gender-female"></i>
-Female
-</span>
-
-<?php } ?>
-
-</td>
-
-<td>
-<?= date("d M Y",strtotime($row['dob'])) ?>
+<?= $dob ? date("d M Y",strtotime($dob)) : '<span class="text-muted">—</span>' ?>
 </td>
 
 <td>
@@ -492,7 +458,6 @@ data-name="<?= htmlspecialchars($row['name']) ?>">
 
 <?php if($row['documents']>0){ ?>
 
-<!-- <i class="bi bi-folder2-open me-1"></i> -->
 View
 <span class="badge bg-light text-dark ms-1">
 <?= $row['documents'] ?>
