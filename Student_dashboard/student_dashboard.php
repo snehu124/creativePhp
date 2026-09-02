@@ -94,6 +94,13 @@ $dob_formatted = (!empty($student['dob']) && $student['dob'] !== '0000-00-00')
 $dob_input_value = (!empty($student['dob']) && $student['dob'] !== '0000-00-00')
     ? date('Y-m-d', strtotime($student['dob']))
     : '';
+
+// Fetch extra profile details from enrollment_inquiries (linked via student_id)
+$sql_enroll = "SELECT * FROM enrollment_inquiries 
+               WHERE student_id = " . (int)$student_id . " 
+               ORDER BY id DESC LIMIT 1";
+$res_enroll = mysqli_query($conn, $sql_enroll);
+$enroll_info = $res_enroll ? mysqli_fetch_assoc($res_enroll) : null;    
 ?>
 
 <!DOCTYPE html>
@@ -478,6 +485,32 @@ $dob_input_value = (!empty($student['dob']) && $student['dob'] !== '0000-00-00')
             color: var(--primary-dark);
         } */
 
+        .edit-profile-btn {
+        background: var(--primary-light);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 12px 26px;
+        border-radius: 50px;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 14px rgba(30, 60, 114, 0.3);
+        transition: 0.25s;
+        }
+
+        .edit-profile-btn i {
+            font-size: 16px;
+        }
+
+        .edit-profile-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 60, 114, 0.4);
+            color: var(--primary-light);
+        }    
+
         /* ============ MISC (materials / footer / chart) ============ */
         .card-material {
             height: 100%;
@@ -848,6 +881,10 @@ $dob_input_value = (!empty($student['dob']) && $student['dob'] !== '0000-00-00')
                     <!-- <button type="button" class="edit-profile-btn btn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                         <i class="bi bi-pencil me-1"></i> Edit Profile
                     </button> -->
+
+                   <button type="button" class="edit-profile-btn btn" data-bs-toggle="modal" data-bs-target="#viewProfileModal">
+                    <i class="bi bi-person-lines-fill"></i> View Profile
+                </button>
                 </div>
             </section>
 
@@ -1084,6 +1121,94 @@ $dob_input_value = (!empty($student['dob']) && $student['dob'] !== '0000-00-00')
         </div>
     </div>
 </div> -->
+
+<!-- View Profile Modal -->
+<div class="modal fade" id="viewProfileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold"><i class="bi bi-person-vcard me-2 text-primary"></i>My Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <?php if ($enroll_info): ?>
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Grade</small>
+                        <p class="fw-semibold mb-0"><?= htmlspecialchars($enroll_info['grade'] ?? '—') ?></p>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Program</small>
+                        <p class="fw-semibold mb-0"><?= htmlspecialchars($enroll_info['program'] ?? '—') ?></p>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Subjects</small>
+                        <p class="fw-semibold mb-0"><?= htmlspecialchars($enroll_info['specific_subject'] ?? '—') ?></p>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Mode of Education</small>
+                        <p class="fw-semibold mb-0"><?= htmlspecialchars($enroll_info['mode_of_education'] ?? '—') ?></p>
+                    </div>
+
+                    <div class="col-12"><hr class="my-1"></div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Guardian Name</small>
+                        <p class="fw-semibold mb-0"><?= htmlspecialchars($enroll_info['guardian_name'] ?? '—') ?> 
+                            <span class="text-muted small">(<?= htmlspecialchars($enroll_info['authorized_relation'] ?? '—') ?>)</span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Guardian Contact</small>
+                        <p class="fw-semibold mb-0"><?= htmlspecialchars($enroll_info['guardian_phone'] ?? '—') ?> · <?= htmlspecialchars($enroll_info['guardian_email'] ?? '—') ?></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Father's Name</small>
+                        <p class="fw-semibold mb-0"><?= htmlspecialchars($enroll_info['father_name'] ?? '—') ?></p>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Father's Contact</small>
+                        <p class="fw-semibold mb-0"><?= htmlspecialchars($enroll_info['father_phone'] ?? '—') ?> · <?= htmlspecialchars($enroll_info['father_email'] ?? '—') ?></p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Mother's Name</small>
+                        <p class="fw-semibold mb-0"><?= htmlspecialchars($enroll_info['mother_name'] ?? '—') ?></p>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Mother's Contact</small>
+                        <p class="fw-semibold mb-0"><?= htmlspecialchars($enroll_info['mother_phone'] ?? '—') ?> · <?= htmlspecialchars($enroll_info['mother_email'] ?? '—') ?></p>
+                    </div>
+
+                    <div class="col-12"><hr class="my-1"></div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Emergency Contact</small>
+                        <p class="fw-semibold mb-0"><?= htmlspecialchars($enroll_info['emergency_name'] ?? '—') ?> · <?= htmlspecialchars($enroll_info['emergency_phone'] ?? '—') ?></p>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted d-block">Enrollment Date</small>
+                        <p class="fw-semibold mb-0">
+                            <?= !empty($enroll_info['enroll_date']) ? date('d M Y', strtotime($enroll_info['enroll_date'])) : '—' ?>
+                        </p>
+                    </div>
+
+                </div>
+                <?php else: ?>
+                    <div class="text-center py-4">
+                        <i class="bi bi-info-circle display-5 text-muted mb-3"></i>
+                        <p class="text-muted fw-medium mb-0">No enrollment details found.</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Change Password Modal -->
 <div class="modal fade" id="changePasswordModal" tabindex="-1">

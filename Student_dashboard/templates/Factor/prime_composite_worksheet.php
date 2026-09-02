@@ -1344,6 +1344,152 @@ name="answer[<?= $q['id']?>]">
 </div>
 
 <?php endif; ?>
+<?php if($mode=="ratio_table"): ?>
+
+<style>
+
+.ratio-card{
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    padding:25px 30px;
+    margin-bottom:25px;
+    width:100%;
+    margin-top: 20px;
+}
+
+.ratio-title{
+    font-size:19px;
+    font-weight:700;
+    color:#000;
+    margin-bottom:12px;
+    line-height:1.5;
+}
+
+.ratio-desc{
+    font-size:16px;
+    font-weight:600;
+    color:#111;
+    margin-bottom:14px;
+}
+
+.ratio-table-wrap{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    max-width:520px;
+}
+
+.ratio-row{
+    display:flex;
+    gap:8px;
+}
+
+.ratio-label{
+    width:110px;
+    min-width:110px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:14px;
+    border-radius:6px;
+    padding:12px 6px;
+    text-align:center;
+}
+
+.ratio-cell{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:6px;
+    min-height:42px;
+    font-size:16px;
+    font-weight:600;
+}
+
+.ratio-input{
+    width:100%;
+    height:100%;
+    border:none;
+    outline:none;
+    background:transparent;
+    text-align:center;
+    font-size:16px;
+    font-weight:600;
+    padding:6px;
+}
+
+@media(max-width:768px){
+
+    .ratio-card{padding:18px;}
+
+    .ratio-label{
+        width:85px;
+        min-width:85px;
+        font-size:13px;
+    }
+
+}
+
+</style>
+
+<div class="ratio-card">
+
+    <div class="ratio-title">
+        <?= ($index + 1) ?>.
+        <?= htmlspecialchars($data['title'] ?? 'Use the information to fill in the missing values in the table.') ?>
+    </div>
+
+    <div class="ratio-desc">
+        <?= htmlspecialchars($data['description'] ?? '') ?>
+    </div>
+
+    <div class="ratio-table-wrap">
+
+        <?php foreach(($data['rows'] ?? []) as $rIndex => $row): ?>
+
+            <div class="ratio-row">
+
+                <div class="ratio-label"
+                     style="background:<?= htmlspecialchars($row['color'] ?? '#dde3f7') ?>;">
+                    <?= htmlspecialchars($row['label'] ?? '') ?>
+                </div>
+
+                <?php foreach(($row['values'] ?? []) as $vIndex => $val): ?>
+
+                    <div class="ratio-cell"
+                         style="background:<?= htmlspecialchars($row['cellColor'] ?? '#eef1fb') ?>;">
+
+                        <?php if($val === '' || $val === null): ?>
+
+                            <input
+                                type="text"
+                                class="ratio-input"
+                                name="answer[<?= $q['id'] ?>][]"
+                                autocomplete="off"
+                            >
+
+                        <?php else: ?>
+
+                            <?= htmlspecialchars($val) ?>
+
+                        <?php endif; ?>
+
+                    </div>
+
+                <?php endforeach; ?>
+
+            </div>
+
+        <?php endforeach; ?>
+
+    </div>
+
+</div>
+
+<?php endif; ?>
 <?php if($mode=="equivalent_fractions"): ?>
 
 <style>

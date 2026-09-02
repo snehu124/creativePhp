@@ -431,12 +431,12 @@ if (!isset($_SESSION['admin_logged_in'])) {
           </a>
         </li>
 
-        <li>
+        <!-- <li>
           <a class="nav-link menu-link" data-page="manage_students.php">
             <i class="bi bi-people"></i>
             Students
           </a>
-        </li>
+        </li> -->
 
         <li>
           <a href="#" class="nav-link menu-link" data-page="invoice_system/dashboard/invoice_dashboard.php">

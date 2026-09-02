@@ -34,7 +34,10 @@ $status = $_GET['status'] ?? '';
 $enroll_status = $_GET['enroll_status'] ?? '';
 $billing = $_GET['billing'] ?? '';
 // ✅ PAGINATION
-$limit = 5; 
+$allowed_limits = [5, 10, 20, 50, 100];
+$limit = (isset($_GET['per_page']) && in_array((int)$_GET['per_page'], $allowed_limits))
+    ? (int)$_GET['per_page']
+    : 5;
 $page_no = isset($_GET['p']) ? (int)$_GET['p'] : 1;
 
 if($page_no < 1) $page_no = 1;
@@ -425,36 +428,35 @@ if($payment == "paid"){
 </tbody>
 
 </table>
-
+</div>
 <!-- PAGINATION -->
 <div class="pagination-box">
 
-<?php if($total_pages > 1){ ?>
+    <span class="pg-info">Page <?php echo $page_no; ?> of <?php echo max($total_pages,1); ?></span>
 
-    <!-- Prev -->
-    <?php if($page_no > 1){ ?>
-        <a href="#" class="page-btn" data-page="<?php echo $page_no - 1; ?>">Prev</a>
-    <?php } ?>
+    <button type="button" class="page-nav prev-btn"
+        <?php echo ($page_no <= 1) ? 'disabled' : ''; ?>
+        data-page="<?php echo $page_no - 1; ?>">
+        <i class="bi bi-chevron-left"></i> Previous
+    </button>
 
-    <!-- Numbers -->
-    <?php for($i = 1; $i <= $total_pages; $i++){ ?>
-        <a href="#"
-           class="page-btn <?php echo ($i == $page_no) ? 'active' : ''; ?>"
-           data-page="<?php echo $i; ?>">
-           <?php echo $i; ?>
-        </a>
-    <?php } ?>
+    <select class="per-page-select" id="perPageSelect">
+        <?php foreach($allowed_limits as $opt){ ?>
+            <option value="<?php echo $opt; ?>" <?php echo ($opt == $limit) ? 'selected' : ''; ?>>
+                <?php echo $opt; ?>
+            </option>
+        <?php } ?>
+    </select>
 
-    <!-- Next -->
-    <?php if($page_no < $total_pages){ ?>
-        <a href="#" class="page-btn" data-page="<?php echo $page_no + 1; ?>">Next</a>
-    <?php } ?>
-
-<?php } ?>
-
-</div>
+    <button type="button" class="page-nav next-btn"
+        <?php echo ($page_no >= $total_pages) ? 'disabled' : ''; ?>
+        data-page="<?php echo $page_no + 1; ?>">
+        Next <i class="bi bi-chevron-right"></i>
+    </button>
 
 </div>
+
+
 
 
 </div>
@@ -473,31 +475,59 @@ if($payment == "paid"){
 }
 .pagination-box{
   display:flex;
-  gap:8px;
+  align-items:center;
   justify-content:flex-end;
+  gap:14px;
   margin-top:20px;
   flex-wrap:wrap;
 }
 
-.page-btn{
-  padding:6px 12px;
-  background:#eee;
-  border-radius:8px;
-  text-decoration:none;
-  color:#333;
+.pg-info{
   font-size:13px;
+  color:#8a94a6;
+  margin-right:auto;
+}
+
+.page-nav{
+  padding:10px 20px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(180deg,#1e3c72,#2a5298);
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:.2s ease;
+}
+.page-nav:hover:not(:disabled){
+  background:#0a4c6c;
+  transform:translateY(-1px);
+}
+.page-nav:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.per-page-select{
+  padding:9px 16px;
+  border:2px solid #05364d;
+  border-radius:30px;
+  color:#05364d;
+  font-weight:600;
+  font-size:14px;
+  background:#fff;
   cursor:pointer;
 }
 
-.page-btn.active{
-  background:#05364d;
-  color:#fff;
+@media(max-width:768px){
+  .pagination-box{ justify-content:center; }
+  .pg-info{ margin-right:0; width:100%; text-align:center; order:-1; }
 }
 
-.page-btn:hover{
-  background:#05364d;
-  color:#fff;
-}
 /* ===== GLOBAL ===== */
 *{box-sizing:border-box;}
 
@@ -544,7 +574,7 @@ font-family: "Love Ya Like A Sister", cursive;
 }
 
 .filter-bar button{
-  background:#05364d;
+  background:linear-gradient(180deg,#1e3c72,#2a5298);
   color:#fff;
   border:none;
   padding:10px 16px;
@@ -1018,10 +1048,13 @@ font-family: "Love Ya Like A Sister", cursive;
 
 <script>
 // Submit (AJAX)
-$('#filterForm').on('submit', function(e){
+$('#filterForm').off('submit').on('submit', function(e){
     e.preventDefault();
 
-    let query = $(this).serialize() + '&p=1';
+    let urlParams = new URLSearchParams(window.location.search);
+    let per_page = urlParams.get('per_page') || 5;
+
+    let query = $(this).serialize() + '&p=1&per_page=' + per_page;
 
     history.pushState(null, '', '?page=invoice_system/dashboard/invoice_dashboard.php&' + query);
 
@@ -1033,32 +1066,43 @@ $('#filterForm').on('submit', function(e){
 });
 
 // Instant filter
-$('#filterForm input, #filterForm select').on('change', function(){
+$('#filterForm input, #filterForm select').off('change').on('change', function(){
     $('#filterForm').submit();
 });
 
-// PAGINATION CLICK
-$(document).on('click', '.page-btn', function(e){
-    e.preventDefault();
+// PREV / NEXT
+$(document).off('click.pageNav').on('click.pageNav', '.page-nav', function(){
+    if ($(this).prop('disabled')) return;
 
     let page = $(this).data('page');
-
     let urlParams = new URLSearchParams(window.location.search);
     urlParams.set('p', page);
+    urlParams.set('per_page', $('#perPageSelect').val() || 5);
 
-    let query = urlParams.toString();
-
-    history.pushState(null, '', '?' + query);
+    history.pushState(null, '', '?' + urlParams.toString());
 
     $('#page-body').html('<div class="text-center py-5"><div class="loading-spinner"></div></div>');
+    $.get('invoice_system/dashboard/invoice_dashboard.php?' + urlParams.toString(), function(data){
+        $('#page-body').html(data);
+    });
+});
 
-    $.get('invoice_system/dashboard/invoice_dashboard.php?' + query, function(data){
+// PER PAGE CHANGE
+$(document).off('change.perPage').on('change.perPage', '#perPageSelect', function(){
+    let urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('per_page', $(this).val());
+    urlParams.set('p', 1);
+
+    history.pushState(null, '', '?' + urlParams.toString());
+
+    $('#page-body').html('<div class="text-center py-5"><div class="loading-spinner"></div></div>');
+    $.get('invoice_system/dashboard/invoice_dashboard.php?' + urlParams.toString(), function(data){
         $('#page-body').html(data);
     });
 });
 
 // PAUSE / RESUME billing
-$(document).on('click', '.toggle-billing', function(e){
+$(document).off('click.toggleBilling').on('click.toggleBilling', '.toggle-billing', function(e){
     e.preventDefault();
 
     let btn   = $(this);
@@ -1075,8 +1119,8 @@ $(document).on('click', '.toggle-billing', function(e){
         setTimeout(function(){ $toast.removeClass('show'); }, 1800);
         setTimeout(function(){ $toast.remove(); }, 2200);
 
-        let query = new URLSearchParams(window.location.search).toString();
-        $.get('invoice_system/dashboard/invoice_dashboard.php?' + query, function(data){
+        let urlParams = new URLSearchParams(window.location.search);
+        $.get('invoice_system/dashboard/invoice_dashboard.php?' + urlParams.toString(), function(data){
             $('#page-body').html(data);
         });
     });

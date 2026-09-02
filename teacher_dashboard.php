@@ -312,6 +312,11 @@ display:block;
   Manage Questions
   </a>
 
+  <a href="#" class="menu-link" data-page="review_drawings.php">
+  <i class="bi bi-easel2"></i>
+  Review Drawings
+  </a>
+
   <a href="#" class="menu-link" data-page="teacher_settings.php">
   <i class="bi bi-gear"></i>
   Settings

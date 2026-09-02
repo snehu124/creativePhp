@@ -1573,22 +1573,46 @@ $mode = $data['mode'] ?? '';
 <?php else: ?>
 
 <style>
+    /* ============================================================
+       DEFAULT QUESTION — CARD STYLE
+       (matches the .math-fill-blank card look used by other templates)
+       ============================================================ */
     .quiz-line {
         display: flex;
         align-items: center;
-        margin-bottom: 18px; 
+
         font-size: 18px;
-        line-height: 2.4;
+
+        /* CARD */
+        background: #ffffff;
+        border: 1px solid #d9d9d9;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+        /* CARD SIZE */
+        width: 50%;
+        max-width: 50%;
+        min-height: 85px;
+
+        /* CARD SPACING */
+        margin-bottom: 20px;
+        margin-top: 10px;
+
+        /* CARD INNER SPACE */
+        padding: 16px 20px;
+
+        box-sizing: border-box;
     }
     .quiz-line strong {
-        margin-right: 10px;
+        margin-right: 14px;
         font-weight: 600;
+        flex-shrink: 0;
     }
     /* Editable underline box */
     .answer-blank {
         display: inline-block;
         border: none;
-        border-bottom: 2px solid black;
+        border-bottom: 2px solid #000;
         width: 120px;
         height: 28px;
         margin-left: 10px;
@@ -1596,6 +1620,7 @@ $mode = $data['mode'] ?? '';
         font-size: 18px;
         outline: none;
         background: transparent;
+        flex-shrink: 0;
     }
     .answer-blank:focus {
         border-bottom: 2px solid #007bff; /* highlight on focus */
@@ -1604,8 +1629,33 @@ $mode = $data['mode'] ?? '';
         display: inline-block;
         white-space: nowrap;
     }
+
+    /* ============================================================
+       MOBILE
+       ============================================================ */
+    @media(max-width: 768px) {
+        .quiz-line {
+            width: 100%;
+            max-width: 100%;
+            min-height: 75px;
+
+            font-size: 16px;
+
+            margin-top: 10px;
+            margin-bottom: 15px;
+
+            padding: 12px 16px;
+        }
+        .quiz-line strong {
+            margin-right: 10px;
+        }
+        .answer-blank {
+            width: 90px;
+            font-size: 16px;
+        }
+    }
 </style>
-<div class="quiz-line">
+<div class="quiz-line col-md-6">
     <strong><?= chr(97 + $index) ?>)</strong>
 
     <?php if ($isVertical): ?>

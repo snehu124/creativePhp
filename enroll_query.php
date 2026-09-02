@@ -1,4 +1,4 @@
-  <?php
+<?php
   use PHPMailer\PHPMailer\PHPMailer;
   use PHPMailer\PHPMailer\Exception;
   use Dompdf\Dompdf;
@@ -10,7 +10,46 @@
 
   include 'db_config.php';
 
+  // ===== CAPTCHA CONFIG (STEP 1) =====
+  // Get your keys from: https://www.google.com/recaptcha/admin/create
+  // Choose "reCAPTCHA v2 - I'm not a robot Checkbox"
+  $recaptcha_site_key   = "6LcFcpktAAAAANc7xKpT8rUH5RnhtrZbPnyS-9o1";
+  $recaptcha_secret_key = "6LcFcpktAAAAABsBtM0aCHhc8x_NbqBzHTqJkcYv";
+  // ===================================
+
   if (isset($_POST['submit_query'])) {
+
+      // ===== CAPTCHA VERIFY (STEP 2) =====
+      $recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
+
+      if (empty($recaptcha_response)) {
+          echo "<script>alert('Please verify that you are not a robot.'); window.history.back();</script>";
+          exit;
+      }
+
+      $verify_url = "https://www.google.com/recaptcha/api/siteverify";
+      $verify_data = [
+          'secret'   => $recaptcha_secret_key,
+          'response' => $recaptcha_response,
+          'remoteip' => $_SERVER['REMOTE_ADDR']
+      ];
+
+      $ch = curl_init($verify_url);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($verify_data));
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+      $verify_response = curl_exec($ch);
+      curl_close($ch);
+
+      $captcha_result = json_decode($verify_response, true);
+
+      if (!isset($captcha_result['success']) || $captcha_result['success'] !== true) {
+          echo "<script>alert('Captcha verification failed. Please try again.'); window.history.back();</script>";
+          exit;
+      }
+      // ===== END CAPTCHA VERIFY =====
+
       // Personal Details
       $first_name    = mysqli_real_escape_string($conn, trim($_POST['first_name']));
       $last_name     = mysqli_real_escape_string($conn, trim($_POST['last_name']));
@@ -414,6 +453,8 @@ $total = $price;
       <link rel="shortcut icon" href="assets/img/favicon.ico">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
       <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
+      <!-- ===== CAPTCHA SCRIPT (STEP 3) ===== -->
+      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
       <style>
       
     *{
@@ -553,6 +594,13 @@ $total = $price;
     }
 
     .form-check-label { cursor: pointer; }
+
+    /* ===== CAPTCHA WRAPPER ===== */
+    .captcha-wrapper{
+    display:flex;
+    justify-content:center;
+    margin:20px 0;
+    }
                 
         /* TABLET */
 
@@ -596,6 +644,11 @@ $total = $price;
     padding:14px;
     }
 
+    .captcha-wrapper{
+    transform: scale(0.9);
+    transform-origin: center;
+    }
+
     }
     </style>
     </head>
@@ -606,7 +659,7 @@ $total = $price;
       <div class="container">
           <h2 class="enroll-title">Student Enrollment Form</h2>
 
-          <form method="POST" class="enroll-form">
+          <form method="POST" class="enroll-form" id="enrollForm">
 
               <!-- Personal Details -->
               <h3 class="section-title">Student Details</h3>
@@ -803,6 +856,12 @@ $total = $price;
                     </label>
                 </div>
             </div>
+
+            <!-- ===== CAPTCHA WIDGET (STEP 4) ===== -->
+            <div class="captcha-wrapper">
+                <div class="g-recaptcha" data-sitekey="<?php echo $recaptcha_site_key; ?>"></div>
+            </div>
+
               <div style="text-align:center">
                   <button type="submit" name="submit_query" class="submit-btn">Submit</button>
               </div>
@@ -947,7 +1006,7 @@ subjectContainer.addEventListener("change", function(){
             programSelect.dispatchEvent(new Event("change"));
 
         });
-document.querySelector(".enroll-form").addEventListener("submit", function(e){
+document.getElementById("enrollForm").addEventListener("submit", function(e){
 
     let paymentBy = document.querySelector("[name='payment_by']").value;
 
@@ -965,6 +1024,7 @@ document.querySelector(".enroll-form").addEventListener("submit", function(e){
         if(guardianEmail === ""){
             alert("Guardian email is required!");
             e.preventDefault();
+            return;
         }
     }
 
@@ -972,6 +1032,7 @@ document.querySelector(".enroll-form").addEventListener("submit", function(e){
         if(motherName === "" || motherEmail === "" || motherPhone === ""){
             alert("Mother name, email & phone are required!");
             e.preventDefault();
+            return;
         }
     }
 
@@ -979,7 +1040,16 @@ document.querySelector(".enroll-form").addEventListener("submit", function(e){
         if(fatherName === "" || fatherEmail === "" || fatherPhone === ""){
             alert("Father name, email & phone are required!");
             e.preventDefault();
+            return;
         }
+    }
+
+    // ===== CAPTCHA CLIENT CHECK (STEP 5) =====
+    let captchaResponse = grecaptcha.getResponse();
+    if(captchaResponse.length === 0){
+        alert("Please verify that you are not a robot.");
+        e.preventDefault();
+        return;
     }
 
 });

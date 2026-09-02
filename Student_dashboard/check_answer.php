@@ -50,24 +50,27 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 $questions = [];
-$correct = $wrong = $skipped = 0;
+$correct = $wrong = $skipped = $pending_review = 0;
 
 while ($row = $result->fetch_assoc()) {
 
     $payload = json_decode($row['question_payload'] ?? '{}', true);
     $isInstruction = !empty($payload['instruction']);
 
-    // ❌ instruction completely excluded
     if ($isInstruction) {
         continue;
     }
 
-    // ✅ only real questions
     $questions[] = $row;
 
     $ans = trim($row['student_answer'] ?? '');
+
     if ($ans === '') {
         $skipped++;
+    } elseif ($row['question_type'] === 'perimeter_word_problem') {
+        // Diagram-based question — numeric part may auto-match, but the
+        // overall result waits on the teacher's review of the drawing.
+        $pending_review++;
     } elseif ($row['is_correct'] == 1) {
         $correct++;
     } else {
@@ -422,11 +425,32 @@ svg, table, canvas {
                 <h2 class="mt-4 text-success display-4"><?= $percent ?>% Correct</h2>
             </div>
 
-            <div class="row text-center g-4 mb-5">
-                <div class="col-md-4"><div class="p-5 bg-success text-white rounded-4 shadow-lg"><h3><?= $correct ?></h3><p>Correct</p></div></div>
-                <div class="col-md-4"><div class="p-5 bg-danger text-white rounded-4 shadow-lg"><h3><?= $wrong ?></h3><p>Wrong</p></div></div>
-                <div class="col-md-4"><div class="p-5 bg-secondary text-white rounded-4 shadow-lg"><h3><?= $skipped ?></h3><p>Not Attempted</p></div></div>
+        <div class="row text-center g-4 mb-5">
+            <div class="col-md-3 col-6 d-flex">
+                <div class="p-4 p-md-5 bg-success text-white rounded-4 shadow-lg w-100 d-flex flex-column justify-content-center align-items-center">
+                    <h3 class="mb-1"><?= $correct ?></h3>
+                    <p class="mb-0">Correct</p>
+                </div>
             </div>
+            <div class="col-md-3 col-6 d-flex">
+                <div class="p-4 p-md-5 bg-danger text-white rounded-4 shadow-lg w-100 d-flex flex-column justify-content-center align-items-center">
+                    <h3 class="mb-1"><?= $wrong ?></h3>
+                    <p class="mb-0">Wrong</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 d-flex">
+                <div class="p-4 p-md-5 bg-warning text-dark rounded-4 shadow-lg w-100 d-flex flex-column justify-content-center align-items-center">
+                    <h3 class="mb-1"><?= $pending_review ?></h3>
+                    <p class="mb-0 text-center">Pending Review</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 d-flex">
+                <div class="p-4 p-md-5 bg-secondary text-white rounded-4 shadow-lg w-100 d-flex flex-column justify-content-center align-items-center">
+                    <h3 class="mb-1"><?= $skipped ?></h3>
+                    <p class="mb-0 text-center">Not Attempted</p>
+                </div>
+            </div>
+        </div>
 
             <hr class="my-5">
 
@@ -434,9 +458,11 @@ svg, table, canvas {
                 <strong class="fs-4">Quick Navigation:</strong><br>
                 <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
                     <?php foreach ($questions as $i => $q):
-                        $ans = trim($q['student_answer'] ?? '');
-                        $btn = $ans === '' ? "btn-outline-secondary" : ($q['is_correct'] == 1 ? "btn-outline-success" : "btn-outline-danger");
-                    ?>
+                    $ans = trim($q['student_answer'] ?? '');
+                    $btn = $ans === '' ? "btn-outline-secondary"
+                         : ($q['question_type'] === 'perimeter_word_problem' ? "btn-outline-warning"
+                         : ($q['is_correct'] == 1 ? "btn-outline-success" : "btn-outline-danger"));
+                ?>
                         <a href="#q<?= $i+1 ?>" class="btn <?= $btn ?> btn-sm rounded-pill px-3"><?= $i+1 ?></a>
                     <?php endforeach; ?>
                 </div>
@@ -676,7 +702,13 @@ svg, table, canvas {
                             break;                                          
                             case 'prime_composite_worksheet':
                             include 'templates/Factor/prime_composite_worksheet.php';
-                            break;                                          
+                            break; 
+                            case 'perimeter_word_problem':
+                            include 'templates/equation/perimeter_word_problem.php';
+                            break; 
+                            case 'ratio_three_ways':
+                            include 'templates/AreaPerimeter/ratio_three_ways_template.php';
+                            break;                                               
                             default:
                                 echo '<div class="p-4 text-muted fst-italic">Question type: ' . htmlspecialchars($q['question_type']) . '</div>';
                         }
@@ -685,6 +717,20 @@ svg, table, canvas {
 
                     <?php if ($ans === ''): ?>
                         <div class="alert alert-secondary text-center mt-3 py-3">Not Attempted</div>
+                    
+                    <?php elseif ($q['question_type'] === 'perimeter_word_problem'): ?>
+                        <div class="alert alert-info mt-4 p-4 fs-5">
+                            <strong>Your Answer:</strong> 
+                            <span class="fw-bold text-primary"><?= displayAnswer($ans) ?></span>
+                            <span class="badge bg-warning text-dark float-end fs-6 px-4 py-2">
+                                <i class="fas fa-hourglass-half me-1"></i> Diagram Pending Review
+                            </span>
+                        </div>
+                        <div class="alert alert-light border mt-3 p-3 fs-6 text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Your teacher will review your drawing and confirm the final result.
+                        </div>
+                    
                     <?php else: ?>
                         <div class="alert alert-info mt-4 p-4 fs-5">
                             <strong>Your Answer:</strong> 

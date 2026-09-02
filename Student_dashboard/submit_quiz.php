@@ -23,6 +23,17 @@ include "../db_config.php";
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+// ===== TEMP DEBUG — isko baad mein hata dena =====
+error_log('POST keys: ' . implode(', ', array_keys($_POST)));
+if (isset($_POST['drawing'])) {
+    foreach ($_POST['drawing'] as $qid => $val) {
+        error_log("drawing[$qid] raw length: " . strlen((string)$val));
+    }
+} else {
+    error_log('drawing key MISSING from $_POST entirely');
+}
+// ===== TEMP DEBUG END =====
 function normalizeMath($v) {
     $v = trim((string)$v);
 
@@ -132,7 +143,7 @@ if ($quiz_id == 0) {
     exit;
 }
 
-if (empty($raw_answers)) {
+if (empty($raw_answers) && empty($_POST['drawing'])) {
     echo "ERROR: No answers received";
     exit;
 }
@@ -583,9 +594,57 @@ if (
         if (is_array($student_answer)) {
             $student_answer = json_encode($student_answer);
 }
-    // Insert the answer
+      // Insert the answer
     $stmt_insert->bind_param("iiisis", $student_id, $quiz_id, $question_id, $student_answer, $is_correct, $created_at);
     $stmt_insert->execute();
+}
+
+// ==========================
+// SAVE DRAWINGS (canvas snapshots)
+// ==========================
+if (!empty($_POST['drawing']) && is_array($_POST['drawing'])) {
+
+    $upload_dir = __DIR__ . '/uploads/drawings/';
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
+
+    $sql_drawing = "INSERT INTO student_drawings
+        (student_id, quiz_id, question_id, drawing_path, created_at)
+        VALUES (?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE drawing_path = VALUES(drawing_path), created_at = VALUES(created_at)";
+    $stmt_draw = $conn->prepare($sql_drawing);
+
+    if (!$stmt_draw) {
+        error_log("drawing prepare error: " . $conn->error);
+    } else {
+
+        foreach ($_POST['drawing'] as $qid => $dataUrl) {
+
+            if (empty($dataUrl) || strpos($dataUrl, 'base64,') === false) {
+                continue;
+            }
+
+            $base64 = explode('base64,', $dataUrl)[1];
+            $imgData = base64_decode($base64);
+
+            if (strlen($imgData) < 500) {
+                continue;
+            }
+
+            $qid_int = (int)$qid;
+            $filename = "q{$qid_int}_s{$student_id}_" . time() . ".png";
+            $filepath = $upload_dir . $filename;
+            file_put_contents($filepath, $imgData);
+
+            $relative_path = "uploads/drawings/" . $filename;
+
+            $stmt_draw->bind_param("iiiss", $student_id, $quiz_id, $qid_int, $relative_path, $created_at);
+            if (!$stmt_draw->execute()) {
+                error_log("Drawing insert failed for qid=$qid_int: " . $stmt_draw->error);
+            }
+        }
+    }
 }
 
 // Clean up session

@@ -30,11 +30,11 @@ if ($topic_id) {
 
     // Instructions + Questions
     $sql4 = "SELECT i.instruction, qq.instruction_id, qq.id, qq.question_type, 
-             qq.question_text, qq.question_payload, qq.correct_answer, qq.question_image
-             FROM instructions i 
-             JOIN quiz_questions qq ON i.id = qq.instruction_id 
-             WHERE i.topic_id = ? 
-             ORDER BY i.id ASC, qq.id ASC";
+         qq.question_text, qq.question_payload, qq.correct_answer, qq.question_image, qq.unit
+         FROM instructions i 
+         JOIN quiz_questions qq ON i.id = qq.instruction_id 
+         WHERE i.topic_id = ? 
+         ORDER BY i.id ASC, qq.id ASC";
 
     $stmt4 = $conn->prepare($sql4);
     $stmt4->bind_param("i", $topic_id);
@@ -51,7 +51,7 @@ if ($topic_id) {
  /* ======================
     PAGINATION LOGIC 
   ====================== */
-  $QUESTIONS_PER_PAGE = 40; 
+  $QUESTIONS_PER_PAGE = 4; 
 
   $all_questions = [];
   $inst_counter = 0;           
@@ -704,6 +704,12 @@ if (
             break;
             case 'prime_composite_worksheet':
             include 'templates/Factor/prime_composite_worksheet.php';
+            break;
+            case 'perimeter_word_problem':
+            include 'templates/equation/perimeter_word_problem.php';
+            break;
+            case 'ratio_three_ways':
+            include 'templates/AreaPerimeter/ratio_three_ways_template.php';
             break;
      }
     ?>

@@ -43,6 +43,7 @@ if($underline !== ''){
     padding:25px 30px;
     margin-bottom:25px;
     width:100%;
+    margin-top: 15px;
 }
 
 /* =========================
@@ -50,8 +51,8 @@ if($underline !== ''){
 ========================= */
 
 .exp-question{
-    font-size:19px;
-    font-weight:700;
+    font-size:18px;
+    font-weight:600;
     line-height:1.6;
     color:#000;
 }
