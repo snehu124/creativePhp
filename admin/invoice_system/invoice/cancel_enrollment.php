@@ -43,14 +43,14 @@ try {
     ");
 
     // Disable subject assignments
-    mysqli_query($conn, "
-        UPDATE student_subjects SET status=0 WHERE student_id='$student_id'
-    ");
+    // mysqli_query($conn, "
+    //     UPDATE student_subjects SET status=0 WHERE student_id='$student_id'
+    // ");
 
     // Cancel course enrollments
-    mysqli_query($conn, "
-        UPDATE course_enrollments SET status='Cancelled' WHERE student_id='$student_id'
-    ");
+    // mysqli_query($conn, "
+    //     UPDATE course_enrollments SET status='Cancelled' WHERE student_id='$student_id'
+    // ");
 
     mysqli_commit($conn);
 
