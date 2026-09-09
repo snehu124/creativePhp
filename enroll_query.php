@@ -229,15 +229,21 @@ if($day > 15){
 
 /* GST */
 
+/* GST (tuition based) */
 $gst   = $price * (5/105);
-$total = $price;
+
+/* ⭐ FIRST-TIME ENROLLMENT FEE — $50. $price ko HAATH NAHI lagana! */
+$feeCheck = mysqli_query($conn, "SELECT COUNT(*) AS c FROM invoices WHERE student_id='$student_id'");
+$enrollment_fee = ((int)(mysqli_fetch_assoc($feeCheck)['c'] ?? 0) == 0) ? 50 : 0;
+
+$total = $price + $enrollment_fee;
 
             // Insert invoice
            $invoice_insert = mysqli_query($conn,"
             INSERT INTO invoices
-            (student_id, invoice_date, due_date, price, gst, total, status)
+            (student_id, invoice_date, due_date, price, gst, total, enrollment_fee, status)
             VALUES
-            ('$student_id', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 15 DAY), '$price', '$gst', '$total', 'Pending')
+            ('$student_id', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 15 DAY), '$price', '$gst', '$total', '$enrollment_fee', 'Pending')
             ");
 
             if(!$invoice_insert){
@@ -263,6 +269,14 @@ $total = $price;
                     "program"=>$program,
                     "created_at"=>date("Y-m-d")
                 ];
+
+                $invoice = [
+                "enrollment_fee"  => $enrollment_fee,
+                "discount_type"   => "",
+                "discount_amount" => 0,
+                "extra_type"      => "",
+                "extra_amount"    => 0,
+            ];
 
                 $logoBase64="data:image/png;base64,".base64_encode(file_get_contents("images/logo.png"));
 
