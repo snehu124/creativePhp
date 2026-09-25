@@ -221,8 +221,8 @@ if (!$stmt_corr) {
     exit;
 }
 
-$sql_insert = "INSERT INTO student_answers (student_id, quiz_id, question_id, student_answer, is_correct, created_at)
-               VALUES (?, ?, ?, ?, ?, ?)";
+$sql_insert = "INSERT INTO student_answers (student_id, quiz_id, question_id, student_answer, is_correct, correct_count, total_count, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt_insert = $conn->prepare($sql_insert);
 if (!$stmt_insert) {
     echo "INSERT prepare error: " . $conn->error;
@@ -591,12 +591,43 @@ if (
 }
         }
         // FIX: ensure string before DB insert
+              // FIX: ensure string before DB insert
         if (is_array($student_answer)) {
             $student_answer = json_encode($student_answer);
-}
-      // Insert the answer
-    $stmt_insert->bind_param("iiisis", $student_id, $quiz_id, $question_id, $student_answer, $is_correct, $created_at);
-    $stmt_insert->execute();
+        }
+
+        // ---- PARTIAL SCORING: multi-part coordinate questions ----
+        $total_count   = 1;
+        $correct_count = $is_correct ? 1 : 0;
+
+        if ($question_type === 'coordinate_points_input') {
+            $exp = json_decode($correct_answer, true);
+            $sub = json_decode($student_answer, true);
+            if (is_array($exp) && $exp && array_keys($exp) !== range(0, count($exp) - 1)) {
+                $total_count   = count($exp);
+                $correct_count = 0;
+                foreach ($exp as $k => $cv) {
+                    $sv = (is_array($sub) && isset($sub[$k])) ? $sub[$k] : null;
+                    if (is_array($cv) || is_array($sv)) {
+                        $ok = false;
+                    } elseif (is_numeric($cv) && is_numeric($sv)) {
+                        $ok = abs((float)$cv - (float)$sv) < 0.001;
+                    } else {
+                        $ok = strcasecmp(trim((string)$cv), trim((string)$sv)) === 0;
+                    }
+                    if ($ok) $correct_count++;
+                }
+                $is_correct = ($correct_count === $total_count) ? 1 : 0;
+            }
+        }
+
+        // Insert the answer
+        $stmt_insert->bind_param(
+            "iiisiiis",
+            $student_id, $quiz_id, $question_id, $student_answer,
+            $is_correct, $correct_count, $total_count, $created_at
+        );
+        $stmt_insert->execute();
 }
 
 // ==========================

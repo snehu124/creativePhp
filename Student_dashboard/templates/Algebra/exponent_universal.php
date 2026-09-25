@@ -108,6 +108,7 @@ if($underline !== ''){
     gap:15px;
     flex-wrap:wrap;
     margin-top:18px;
+    margin-bottom:18px;
 }
 
 .exp-highlight{

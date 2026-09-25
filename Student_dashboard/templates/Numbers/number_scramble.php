@@ -3,7 +3,14 @@ declare(strict_types=1);
 $q = $q ?? [];
 $data = json_decode($q['question_payload'] ?? '{}', true) ?: [];
 $showAsQuestion = !empty($data['show_bank_as_question']);
-$mode = (isset($data['bank']) && !$showAsQuestion) ? 'bank' : 'order';
+
+if (($data['mode'] ?? '') === 'metric_order') {
+    $mode = 'metric_order';
+} else {
+    $mode = (isset($data['bank']) && !$showAsQuestion)
+        ? 'bank'
+        : 'order';
+}
 $studentDigits = json_decode($q['student_answer'] ?? '[]', true);
 if(!is_array($studentDigits)){
     $studentDigits = [];
@@ -83,7 +90,56 @@ font-size:19px;
 }
 </style>
 <div class="scramble-box">
-<?php if($mode==='bank'): ?>
+ <?php if($mode==='metric_order'): ?>
+
+<style>
+.metric-order-box{background:transparent;box-shadow:none;border-radius:0;padding:0;margin:0;width:100%;box-sizing:border-box;}
+.metric-order-flex{display:flex;align-items:flex-start;gap:14px;}
+.metric-order-number{font-size:18px;font-weight:700;color:#111;flex-shrink:0;padding-top:2px;}
+.metric-order-body{flex:1;min-width:0;}
+.metric-order-items{display:grid;grid-template-columns:repeat(4,1fr);align-items:center;gap:35px;width:100%;margin-bottom:38px;}
+.metric-order-item{font-family:Georgia,"Times New Roman",serif;font-size:18px;font-weight:700;color:#111;text-align:center;white-space:nowrap;}
+.metric-order-answers{display:grid;grid-template-columns:repeat(4,1fr);gap:35px;width:100%;}
+.metric-order-input{width:100%;height:32px;border:none;border-bottom:4px solid #ff3434;background:transparent;outline:none;text-align:center;font-family:Georgia,"Times New Roman",serif;font-size:18px;font-weight:700;box-sizing:border-box;}
+@media(max-width:800px){.metric-order-items,.metric-order-answers{gap:20px;}.metric-order-item{font-size:16px;}}
+@media(max-width:600px){.metric-order-items,.metric-order-answers{grid-template-columns:repeat(2,1fr);row-gap:22px;}}
+</style>
+
+<?php
+$items = $data['items'] ?? [];
+if(!is_array($items)){ $items = []; }
+$answers = $studentDigits;
+?>
+
+<div class="metric-order-box">
+    <div class="metric-order-flex">
+
+        <div class="metric-order-number"><?= ($index + 1) ?>)</div>
+
+        <div class="metric-order-body">
+            <div class="metric-order-items">
+                <?php foreach($items as $item): ?>
+                    <div class="metric-order-item"><?= htmlspecialchars((string)$item) ?></div>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="metric-order-answers">
+                <?php for($i = 0; $i < 4; $i++): ?>
+                    <input
+                        type="text"
+                        class="metric-order-input"
+                        name="answer[<?= (int)$q['id'] ?>][<?= $i ?>]"
+                        value="<?= htmlspecialchars((string)($answers[$i] ?? '')) ?>"
+                        autocomplete="off">
+                <?php endfor; ?>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<?php elseif($mode==='bank'): ?>
+
     <?php
     $bank = str_split($data['bank'] ?? '');
     $question = $data['question'] ?? '';

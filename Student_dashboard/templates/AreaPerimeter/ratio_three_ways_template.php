@@ -219,7 +219,6 @@ $number_display = ($index !== null) ? ((int)$index + 1) . ')' : $h($char) . '.';
 
 <?php endif; ?>
 
-
 <?php if ($mode === 'part_to_part'): ?>
 
     <?php
@@ -328,6 +327,7 @@ $number_display = ($index !== null) ? ((int)$index + 1) . ')' : $h($char) . '.';
     </div>
 
 <?php endif; ?>
+
 <?php if ($mode === 'part_to_part_count'): ?>
 
     <?php
@@ -423,6 +423,7 @@ $number_display = ($index !== null) ? ((int)$index + 1) . ')' : $h($char) . '.';
     </div>
 
 <?php endif; ?>
+
 <?php if ($mode === 'share_ratio'): ?>
 
     <?php
@@ -544,6 +545,7 @@ $number_display = ($index !== null) ? ((int)$index + 1) . ')' : $h($char) . '.';
     </div>
 
 <?php endif; ?>
+
 <?php if ($mode === 'writing_ratio'): ?>
 
     <?php
@@ -712,4 +714,5 @@ $number_display = ($index !== null) ? ((int)$index + 1) . ')' : $h($char) . '.';
     </div>
 
 <?php endif; ?>
+
 <?php $char++; ?>

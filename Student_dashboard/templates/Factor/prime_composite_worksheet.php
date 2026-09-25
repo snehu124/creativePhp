@@ -17,14 +17,13 @@ $mode=$data['mode'];
     border-radius: 14px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     padding: 25px 30px;
-    margin-bottom: 25px;
     width: 100%;
+    margin-top: 30px;
+    margin-bottom: 25px;
 }
 
 .pc-title {
     font-size: 19px;
-    font-weight: 700;
-    color: #000;
     line-height: 1.6;
     margin-bottom: 18px;
 }
@@ -2208,263 +2207,263 @@ name="answer[<?= $q['id']?>]">
 
     <?php endif; ?>
 
-</div>
-
-<?php endif; ?>
-<?php if($mode=="short_answer"): ?>
-
-<div class="pc-card">
-
-<div class="pc-title">
-
-<?= ($index+1) ?>.
-<?= $data['question'] ?>
-
-</div>
-
-<input
-type="text"
-class="pc-long"
-name="answer[<?= $q['id']?>]">
-
-</div>
-
-<?php endif; ?>
-<?php if($mode=="number_prime_factors"): ?>
-
-<div class="pc-card">
-
-<div class="pc-title">
-
-<?= ($index+1) ?>.
-<?= $data['question'] ?>
-
-</div>
-
-<div class="pc-row">
-<span><?= ucfirst($data['type']) ?> <?= $data['digits'] ?>-digit number:</span>
-<input type="text" class="pc-input" name="answer[<?= $q['id']?>][]">
-</div>
-
-<div class="pc-row">
-<span>Prime factors:</span>
-<input type="text" class="pc-input" name="answer[<?= $q['id']?>][]">
-</div>
-
-</div>
-
-<?php endif; ?>
-<?php if($mode=="prime_factors_relation"): ?>
-
-<div class="pc-card">
-
-<div class="pc-title">
-
-<?= ($index+1) ?>.
-Find all the prime factors of <?= $data['number'] ?> and arrange them in ascending order.
-Now state the relation, if any, between two consecutive prime factors.
-
-</div>
-
-<div class="pc-row">
-<span>Prime factors:</span>
-<input type="text" class="pc-input" name="answer[<?= $q['id']?>][]">
-</div>
-
-<div class="pc-row">
-<span>Relation:</span>
-<input type="text" class="pc-long" name="answer[<?= $q['id']?>][]">
-</div>
-
-</div>
-
-<?php endif; ?>
-<?php if($mode=="verify_statement"): ?>
-
-<div class="pc-card">
-
-<div class="pc-title">
-
-<?= ($index+1) ?>.
-<?= $data['statement'] ?>
-
-</div>
-
-<textarea
-class="pc-long"
-rows="3"
-name="answer[<?= $q['id']?>]"
-style="border:2px solid #000; border-radius:6px; padding:8px; resize:vertical;"
-></textarea>
-
-</div>
-
-<?php endif; ?>
-<?php if($mode=="identify_prime_factorisation"): ?>
-
-<div class="pc-card">
-
-<div class="pc-title">
-
-<?= ($index+1) ?>.
-In which of the following expressions, prime factorisation has been done?
-
-</div>
-
-<?php $opts = $data['options'] ?? ['Yes','No']; ?>
-
-<?php foreach($data['expressions'] as $k=>$exp): ?>
-
-<div class="pc-row">
-<span><?= $exp['label'] ?>) <?= $exp['text'] ?></span>
-
-<select name="answer[<?= $q['id']?>][]" class="pc-select">
-<option value="">Select</option>
-<?php foreach($opts as $o): ?>
-<option value="<?= $o ?>"><?= $o ?></option>
-<?php endforeach; ?>
-</select>
-
-</div>
-
-<?php endforeach; ?>
-
-</div>
-
-<?php endif; ?>
-<?php if($mode=="divisibility_check"): ?>
-
-<div class="pc-card">
-
-<div class="pc-title">
-
-<?= ($index+1) ?>.
-Determine if <?= $data['number'] ?> is divisible by <?= $data['divisor'] ?>.
-<?php if(!empty($data['hint'])): ?>
-<br><span style="color:#0d6efd; font-weight:400; font-size:15px;">[Hint: <?= $data['hint'] ?>]</span>
-<?php endif; ?>
-
-</div>
-
-<?php $opts = $data['options'] ?? ['Yes','No']; ?>
-
-<div class="pc-row">
-<span>Answer:</span>
-<select name="answer[<?= $q['id']?>][]" class="pc-select">
-<option value="">Select</option>
-<?php foreach($opts as $o): ?>
-<option value="<?= $o ?>"><?= $o ?></option>
-<?php endforeach; ?>
-</select>
-</div>
-
-<div class="pc-row">
-<span>Reason:</span>
-<input type="text" class="pc-input" name="answer[<?= $q['id']?>][]">
-</div>
-
-</div>
-
-<?php endif; ?>
-<?php if($mode=="verify_lcm_statement"): ?>
-
-<div class="pc-card">
-
-<div class="pc-title">
-
-<?= ($index+1) ?>.
-18 is divisible by both 2 and 3. It is also divisible by 2 x 3 = 6.
-Similarly, a number is divisible by both 4 and 6.
-Can we say that the number must also be divisible by 4 x 6 = 24? If not, give an example to justify your answer.
-
-</div>
-
-<?php $opts = $data['options'] ?? ['Yes','No']; ?>
-
-<div class="pc-row">
-<span>Answer:</span>
-<select name="answer[<?= $q['id']?>][]" class="pc-select">
-<option value="">Select</option>
-<?php foreach($opts as $o): ?>
-<option value="<?= $o ?>"><?= $o ?></option>
-<?php endforeach; ?>
-</select>
-</div>
-
-<div class="pc-row">
-<span>Example:</span>
-<input type="text" class="pc-input" name="answer[<?= $q['id']?>][]">
-</div>
-
-</div>
-
-<?php endif; ?>
-<?php if($mode=="smallest_four_prime_factors"): ?>
-
-<div class="pc-card">
-
-<div class="pc-title">
-
-<?= ($index+1) ?>.
-I am the smallest number, having four different prime factors. Can you find me?
-
-</div>
-
-<input
-type="text"
-class="pc-long"
-name="answer[<?= $q['id']?>]">
-
-</div>
-
-<?php endif; ?>
-<?php if($mode=="select_numbers"): ?>
-
-<div class="pc-card">
-
-<div class="pc-title">
-
-<?= ($index+1) ?>.
-<?= $data['question'] ?>
-
-</div>
-
-<div class="pc-row">
-<?php foreach($data['numbers'] as $num): ?>
-<label style="display:flex; align-items:center; gap:6px; font-size:17px;">
-<input type="checkbox" name="answer[<?= $q['id']?>][]" value="<?= $num ?>">
-<?= $num ?>
-</label>
-<?php endforeach; ?>
-</div>
-
-</div>
-
-<?php endif; ?>
-<?php if($mode=="missing_multiples"): ?>
-
-<div class="pc-card">
-
-<div class="pc-title">
-
-<?= ($index+1) ?>.
-Fill in the missing multiples:
-
-</div>
-
-<div class="pc-row">
-<?php foreach($data['sequence'] as $val): ?>
-    <?php if($val === ""): ?>
-        <input type="text" class="pc-small" style="width:70px;" name="answer[<?= $q['id']?>][]">
-    <?php else: ?>
-        <span><?= $val ?></span>
+    </div>
+    
     <?php endif; ?>
-<?php endforeach; ?>
-</div>
-
-</div>
-
-<?php endif; ?>
+    <?php if($mode=="short_answer"): ?>
+    
+    <div class="pc-card">
+    
+    <div class="pc-title">
+    
+    <?= ($index+1) ?>.
+    <?= $data['question'] ?>
+    
+    </div>
+    
+    <input
+    type="text"
+    class="pc-long"
+    name="answer[<?= $q['id']?>]">
+    
+    </div>
+    
+    <?php endif; ?>
+    <?php if($mode=="number_prime_factors"): ?>
+    
+    <div class="pc-card">
+    
+    <div class="pc-title">
+    
+    <?= ($index+1) ?>.
+    <?= $data['question'] ?>
+    
+    </div>
+    
+    <div class="pc-row">
+    <span><?= ucfirst($data['type']) ?> <?= $data['digits'] ?>-digit number:</span>
+    <input type="text" class="pc-input" name="answer[<?= $q['id']?>][]">
+    </div>
+    
+    <div class="pc-row">
+    <span>Prime factors:</span>
+    <input type="text" class="pc-input" name="answer[<?= $q['id']?>][]">
+    </div>
+    
+    </div>
+    
+    <?php endif; ?>
+    <?php if($mode=="prime_factors_relation"): ?>
+    
+    <div class="pc-card">
+    
+    <div class="pc-title">
+    
+    <?= ($index+1) ?>.
+    Find all the prime factors of <?= $data['number'] ?> and arrange them in ascending order.
+    Now state the relation, if any, between two consecutive prime factors.
+    
+    </div>
+    
+    <div class="pc-row">
+    <span>Prime factors:</span>
+    <input type="text" class="pc-input" name="answer[<?= $q['id']?>][]">
+    </div>
+    
+    <div class="pc-row">
+    <span>Relation:</span>
+    <input type="text" class="pc-long" name="answer[<?= $q['id']?>][]">
+    </div>
+    
+    </div>
+    
+    <?php endif; ?>
+    <?php if($mode=="verify_statement"): ?>
+    
+    <div class="pc-card">
+    
+    <div class="pc-title">
+    
+    <?= ($index+1) ?>.
+    <?= $data['statement'] ?>
+    
+    </div>
+    
+    <textarea
+    class="pc-long"
+    rows="3"
+    name="answer[<?= $q['id']?>]"
+    style="border:2px solid #000; border-radius:6px; padding:8px; resize:vertical;"
+    ></textarea>
+    
+    </div>
+    
+    <?php endif; ?>
+    <?php if($mode=="identify_prime_factorisation"): ?>
+    
+    <div class="pc-card">
+    
+    <div class="pc-title">
+    
+    <?= ($index+1) ?>.
+    In which of the following expressions, prime factorisation has been done?
+    
+    </div>
+    
+    <?php $opts = $data['options'] ?? ['Yes','No']; ?>
+    
+    <?php foreach($data['expressions'] as $k=>$exp): ?>
+    
+    <div class="pc-row">
+    <span><?= $exp['label'] ?>) <?= $exp['text'] ?></span>
+    
+    <select name="answer[<?= $q['id']?>][]" class="pc-select">
+    <option value="">Select</option>
+    <?php foreach($opts as $o): ?>
+    <option value="<?= $o ?>"><?= $o ?></option>
+    <?php endforeach; ?>
+    </select>
+    
+    </div>
+    
+    <?php endforeach; ?>
+    
+    </div>
+    
+    <?php endif; ?>
+    <?php if($mode=="divisibility_check"): ?>
+    
+    <div class="pc-card">
+    
+    <div class="pc-title">
+    
+    <?= ($index+1) ?>.
+    Determine if <?= $data['number'] ?> is divisible by <?= $data['divisor'] ?>.
+    <?php if(!empty($data['hint'])): ?>
+    <br><span style="color:#0d6efd; font-weight:400; font-size:15px;">[Hint: <?= $data['hint'] ?>]</span>
+    <?php endif; ?>
+    
+    </div>
+    
+    <?php $opts = $data['options'] ?? ['Yes','No']; ?>
+    
+    <div class="pc-row">
+    <span>Answer:</span>
+    <select name="answer[<?= $q['id']?>][]" class="pc-select">
+    <option value="">Select</option>
+    <?php foreach($opts as $o): ?>
+    <option value="<?= $o ?>"><?= $o ?></option>
+    <?php endforeach; ?>
+    </select>
+    </div>
+    
+    <div class="pc-row">
+    <span>Reason:</span>
+    <input type="text" class="pc-input" name="answer[<?= $q['id']?>][]">
+    </div>
+    
+    </div>
+    
+    <?php endif; ?>
+    <?php if($mode=="verify_lcm_statement"): ?>
+    
+    <div class="pc-card">
+    
+    <div class="pc-title">
+    
+    <?= ($index+1) ?>.
+    18 is divisible by both 2 and 3. It is also divisible by 2 x 3 = 6.
+    Similarly, a number is divisible by both 4 and 6.
+    Can we say that the number must also be divisible by 4 x 6 = 24? If not, give an example to justify your answer.
+    
+    </div>
+    
+    <?php $opts = $data['options'] ?? ['Yes','No']; ?>
+    
+    <div class="pc-row">
+    <span>Answer:</span>
+    <select name="answer[<?= $q['id']?>][]" class="pc-select">
+    <option value="">Select</option>
+    <?php foreach($opts as $o): ?>
+    <option value="<?= $o ?>"><?= $o ?></option>
+    <?php endforeach; ?>
+    </select>
+    </div>
+    
+    <div class="pc-row">
+    <span>Example:</span>
+    <input type="text" class="pc-input" name="answer[<?= $q['id']?>][]">
+    </div>
+    
+    </div>
+    
+    <?php endif; ?>
+    <?php if($mode=="smallest_four_prime_factors"): ?>
+    
+    <div class="pc-card">
+    
+    <div class="pc-title">
+    
+    <?= ($index+1) ?>.
+    I am the smallest number, having four different prime factors. Can you find me?
+    
+    </div>
+    
+    <input
+    type="text"
+    class="pc-long"
+    name="answer[<?= $q['id']?>]">
+    
+    </div>
+    
+    <?php endif; ?>
+    <?php if($mode=="select_numbers"): ?>
+    
+    <div class="pc-card">
+    
+    <div class="pc-title">
+    
+    <?= ($index+1) ?>.
+    <?= $data['question'] ?>
+    
+    </div>
+    
+    <div class="pc-row">
+    <?php foreach($data['numbers'] as $num): ?>
+    <label style="display:flex; align-items:center; gap:6px; font-size:17px;">
+    <input type="checkbox" name="answer[<?= $q['id']?>][]" value="<?= $num ?>">
+    <?= $num ?>
+    </label>
+    <?php endforeach; ?>
+    </div>
+    
+    </div>
+    
+    <?php endif; ?>
+    <?php if($mode=="missing_multiples"): ?>
+    
+    <div class="pc-card">
+    
+    <div class="pc-title">
+    
+    <?= ($index+1) ?>.
+    Fill in the missing multiples:
+    
+    </div>
+    
+    <div class="pc-row">
+    <?php foreach($data['sequence'] as $val): ?>
+        <?php if($val === ""): ?>
+            <input type="text" class="pc-small" style="width:70px;" name="answer[<?= $q['id']?>][]">
+        <?php else: ?>
+            <span><?= $val ?></span>
+        <?php endif; ?>
+    <?php endforeach; ?>
+    </div>
+    
+    </div>
+    
+    <?php endif; ?>
 <?php if($mode=="missing_number"): ?>
 
 <div class="pc-card">
@@ -2476,45 +2475,200 @@ Fill in the missing multiples:
             <?= ($index + 1) ?>.
         </span>
 
-        <?php if(!empty($data['result_first'])): ?>
 
-            <span><?= htmlspecialchars($data['result']) ?></span>
-            <span>=</span>
+        <!-- =================================================
+             NEW TEXT / MULTI-BLANK MODE
+             ================================================= -->
 
-        <?php endif; ?>
+        <?php if(isset($data['parts']) && is_array($data['parts'])): ?>
 
-        <?php foreach($data['terms'] as $i => $term): ?>
+            <?php foreach($data['parts'] as $part): ?>
 
-            <?php if($term === ""): ?>
+                <?php if(is_array($part) && !empty($part['blank'])): ?>
 
-                <input
-                    type="text"
-                    class="pc-small"
-                    style="width:130px;"
-                    name="answer[<?= $q['id'] ?>]"
-                    autocomplete="off"
-                >
+                    <input
+                        type="text"
+                        class="pc-small"
+                        style="width:130px;"
+                        name="answer[<?= $q['id'] ?>][]"
+                        autocomplete="off"
+                    >
 
-            <?php else: ?>
+                <?php else: ?>
 
-                <span><?= htmlspecialchars($term) ?></span>
+                    <span><?= $part ?></span>
+
+                <?php endif; ?>
+
+            <?php endforeach; ?>
+
+
+        <!-- =================================================
+             YOUR EXISTING missing_number CODE
+             NOTHING CHANGED
+             ================================================= -->
+
+        <?php else: ?>
+
+
+            <?php if(!empty($data['result_first'])): ?>
+
+                <span><?= htmlspecialchars($data['result']) ?></span>
+                <span>=</span>
 
             <?php endif; ?>
 
-            <?php if($i < count($data['terms']) - 1): ?>
-                <span>+</span>
+            <?php foreach($data['terms'] as $i => $term): ?>
+
+                <?php if($term === ""): ?>
+
+                    <input
+                        type="text"
+                        class="pc-small"
+                        style="width:130px;"
+                        name="answer[<?= $q['id'] ?>]"
+                        autocomplete="off"
+                    >
+
+                <?php else: ?>
+
+                    <span><?= htmlspecialchars($term) ?></span>
+
+                <?php endif; ?>
+
+                <?php if($i < count($data['terms']) - 1): ?>
+                    <span>+</span>
+                <?php endif; ?>
+
+            <?php endforeach; ?>
+
+            <?php if(empty($data['result_first'])): ?>
+
+                <span>=</span>
+                <span><?= htmlspecialchars($data['result']) ?></span>
+
             <?php endif; ?>
 
-        <?php endforeach; ?>
-
-        <?php if(empty($data['result_first'])): ?>
-
-            <span>=</span>
-            <span><?= htmlspecialchars($data['result']) ?></span>
 
         <?php endif; ?>
 
     </div>
+
+</div>
+
+<?php endif; ?>
+<?php if($mode=="ratio_detailed"): ?>
+
+<style>
+.ratio-detailed-card{
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    padding:25px 30px;
+    margin-bottom:25px;
+    width:100%;
+}
+
+.ratio-detailed-title{
+    font-size:19px;
+    line-height:1.45;
+    margin-bottom:25px;
+}
+
+.ratio-detailed-row{
+    font-size:18px;
+    font-weight:600;
+    line-height:1.7;
+    margin-bottom:3px;
+}
+
+.ratio-detailed-input{
+    border:none;
+    border-bottom:2px solid #222;
+    outline:none;
+    background:transparent;
+    height:25px;
+    font-size:18px;
+    padding:0 3px;
+    margin-left:5px;
+    text-align: center;
+}
+
+.ratio-detailed-q17{
+    margin-top:22px;
+}
+
+.ratio-detailed-answer{
+    font-size:18px;
+    line-height:1.7;
+    margin-top:22px;
+}
+
+@media(max-width:768px){
+    .ratio-detailed-card{
+        padding:18px;
+    }
+
+    .ratio-detailed-title,
+    .ratio-detailed-row,
+    .ratio-detailed-answer{
+        font-size:16px;
+    }
+
+    .ratio-detailed-input{
+        font-size:16px;
+    }
+}
+</style>
+
+<div class="ratio-detailed-card">
+
+    <div class="ratio-detailed-title">
+        <?= ($index + 1) ?>.
+        <?= htmlspecialchars($q['question_text'] ?? '') ?>
+    </div>
+
+    <?php if(($data['type'] ?? '') === 'q16'): ?>
+
+        <?php foreach(($data['parts'] ?? []) as $part): ?>
+
+            <div class="ratio-detailed-row">
+                <?= htmlspecialchars($part['label']) ?>
+                <?= htmlspecialchars($part['text']) ?>
+                &nbsp;&nbsp;<?= htmlspecialchars($part['answer_label']) ?>
+
+                <input
+                    type="text"
+                    class="ratio-detailed-input"
+                    style="width:<?= htmlspecialchars($part['blank_width'] ?? '70px') ?>;"
+                    name="answer[<?= $q['id'] ?>][]"
+                    autocomplete="off"
+                >
+            </div>
+
+        <?php endforeach; ?>
+
+    <?php elseif(($data['type'] ?? '') === 'q17'): ?>
+
+        <?php foreach(($data['parts'] ?? []) as $part): ?>
+
+            <div class="ratio-detailed-answer">
+                <?= htmlspecialchars($part['label']) ?>
+
+                <input
+                    type="text"
+                    class="ratio-detailed-input"
+                    style="width:<?= htmlspecialchars($part['blank_width'] ?? '110px') ?>;"
+                    name="answer[<?= $q['id'] ?>][]"
+                    autocomplete="off"
+                >
+
+                <?= htmlspecialchars($part['suffix'] ?? '') ?>
+            </div>
+
+        <?php endforeach; ?>
+
+    <?php endif; ?>
 
 </div>
 
@@ -2749,6 +2903,932 @@ $sortNumbers = $data['numbers'] ?? [];
     </div>
 
 </div>
+
+<?php endif; ?>
+<?php if($mode=="proportion_or_not"): ?>
+
+<?php
+
+$q = $q ?? [];
+
+$id = (int)($q['id'] ?? 0);
+
+$ratio1 = $data['ratio1'] ?? '';
+$ratio2 = $data['ratio2'] ?? '';
+
+$options = $data['options'] ?? [
+    'PROPORTIONAL',
+    'NOT PROPORTIONAL'
+];
+
+
+/* =========================================================
+   STUDENT ANSWER
+========================================================= */
+
+$studentAnswer = '';
+
+if (
+    isset($q['student_answer'])
+    && $q['student_answer'] !== ''
+    && $q['student_answer'] !== null
+) {
+
+    $decodedStudent = json_decode(
+        $q['student_answer'],
+        true
+    );
+
+    if (is_scalar($decodedStudent)) {
+
+        $studentAnswer = (string)$decodedStudent;
+
+    }
+
+}
+
+
+/* =========================================================
+   CORRECT ANSWER
+========================================================= */
+
+$correctAnswer = '';
+
+if (
+    isset($q['correct_answer'])
+    && $q['correct_answer'] !== ''
+    && $q['correct_answer'] !== null
+) {
+
+    $decodedCorrect = json_decode(
+        $q['correct_answer'],
+        true
+    );
+
+    if (is_scalar($decodedCorrect)) {
+
+        $correctAnswer = (string)$decodedCorrect;
+
+    }
+
+}
+
+
+/* =========================================================
+   RESULT CLASS
+========================================================= */
+
+$answerClass = '';
+
+if (
+    isset($is_result_page)
+    && $studentAnswer !== ''
+) {
+
+    if (
+        strtoupper(trim($studentAnswer))
+        ===
+        strtoupper(trim($correctAnswer))
+    ) {
+
+        $answerClass = 'proportion-answer-correct';
+
+    } else {
+
+        $answerClass = 'proportion-answer-wrong';
+
+    }
+
+}
+
+?>
+
+<style>
+
+/* =========================================================
+   PROPORTION OR NOT - MAIN
+========================================================= */
+
+.proportion-not-wrapper{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    padding:0 5px;
+
+}
+
+
+/* =========================================================
+   ONE QUESTION
+========================================================= */
+
+.proportion-not-col{
+
+    width:100%;
+
+    margin-bottom:34px;
+
+}
+
+
+/* =========================================================
+   QUESTION ROW
+========================================================= */
+
+.proportion-not-row{
+
+    width:100%;
+
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:left;
+
+    gap:16px;
+
+    box-sizing:border-box;
+    
+    margin-top: 40px;
+
+}
+
+
+/* =========================================================
+   QUESTION NUMBER
+========================================================= */
+
+.proportion-not-number{
+
+    width:32px;
+
+    min-width:32px;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#111;
+
+    text-align:left;
+
+}
+
+
+/* =========================================================
+   RATIO BOX
+========================================================= */
+
+.proportion-not-card{
+
+    width:250px;
+
+    min-width:250px;
+
+    height:62px;
+
+    box-sizing:border-box;
+
+    background:#fff;
+
+    border:2px solid #222;
+
+    border-radius:10px;
+
+    box-shadow:0 6px 0 #222;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:0 12px;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:#111;
+
+    white-space:nowrap;
+
+}
+
+
+/* =========================================================
+   "and"
+========================================================= */
+
+.proportion-not-and{
+
+    margin:0 7px;
+
+}
+
+
+/* =========================================================
+   ANSWER BOX
+========================================================= */
+
+.proportion-not-select{
+
+    width:250px;
+
+    min-width:250px;
+
+    height:62px;
+
+    box-sizing:border-box;
+
+    background:#fff;
+
+    border:2px solid #222;
+
+    border-radius:10px;
+
+    box-shadow:0 6px 0 #222;
+
+    padding:0 15px;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    color:#111;
+
+    text-align:center;
+
+    text-align-last:center;
+
+    outline:none;
+
+    cursor:pointer;
+
+}
+
+
+/* =========================================================
+   SELECT FOCUS
+========================================================= */
+
+.proportion-not-select:focus{
+
+    border-color:#222;
+
+    outline:none;
+
+}
+
+
+/* =========================================================
+   RESULT - CORRECT
+========================================================= */
+
+.proportion-not-select.proportion-answer-correct{
+
+    background:#d4edda !important;
+
+    border-color:#198754;
+
+    color:#0f5132;
+
+}
+
+
+/* =========================================================
+   RESULT - WRONG
+========================================================= */
+
+.proportion-not-select.proportion-answer-wrong{
+
+    background:#f8d7da !important;
+
+    border-color:#dc3545;
+
+    color:#842029;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:768px){
+
+    .proportion-not-col{
+
+        margin-bottom:25px;
+
+    }
+
+
+    .proportion-not-row{
+
+        justify-content:center;
+
+        gap:10px;
+
+    }
+
+
+    .proportion-not-number{
+
+        width:24px;
+
+        min-width:24px;
+
+        font-size:17px;
+
+    }
+
+
+    .proportion-not-card{
+
+        width:calc(50% - 25px);
+
+        min-width:0;
+
+        height:52px;
+
+        font-size:16px;
+
+        padding:0 7px;
+
+        box-shadow:0 5px 0 #222;
+
+    }
+
+
+    .proportion-not-select{
+
+        width:calc(50% - 25px);
+
+        min-width:0;
+
+        height:52px;
+
+        font-size:14px;
+
+        box-shadow:0 5px 0 #222;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media(max-width:480px){
+
+    .proportion-not-wrapper{
+
+        padding:0;
+
+    }
+
+
+    .proportion-not-row{
+
+        gap:7px;
+
+    }
+
+
+    .proportion-not-number{
+
+        width:20px;
+
+        min-width:20px;
+
+        font-size:15px;
+
+    }
+
+
+    .proportion-not-card{
+
+        width:calc(50% - 14px);
+
+        min-width:0;
+
+        height:48px;
+
+        font-size:14px;
+
+        border-radius:9px;
+
+        box-shadow:0 5px 0 #222;
+
+    }
+
+
+    .proportion-not-select{
+
+        width:calc(50% - 14px);
+
+        min-width:0;
+
+        height:48px;
+
+        font-size:13px;
+
+        border-radius:9px;
+
+        box-shadow:0 5px 0 #222;
+
+    }
+
+}
+
+</style>
+
+
+<div class="proportion-not-wrapper">
+
+
+    <!-- =====================================================
+         ONE QUESTION / ONE LINE
+    ====================================================== -->
+
+    <div class="proportion-not-col">
+
+        <div class="proportion-not-row">
+
+
+            <!-- QUESTION NUMBER -->
+
+            <span class="proportion-not-number">
+
+                <?= ($index + 1) ?>.
+
+            </span>
+
+
+            <!-- RATIO -->
+
+            <div class="proportion-not-card">
+
+                <?= htmlspecialchars(
+                    $ratio1,
+                    ENT_QUOTES | ENT_SUBSTITUTE,
+                    'UTF-8'
+                ) ?>
+
+                <span class="proportion-not-and">
+                    and
+                </span>
+
+                <?= htmlspecialchars(
+                    $ratio2,
+                    ENT_QUOTES | ENT_SUBSTITUTE,
+                    'UTF-8'
+                ) ?>
+
+            </div>
+
+
+            <!-- ANSWER -->
+
+            <select
+                name="answer[<?= $id ?>]"
+                class="proportion-not-select <?= $answerClass ?>"
+            >
+
+                <option value="">
+                    Select
+                </option>
+
+
+                <?php foreach($options as $option): ?>
+
+                    <?php
+
+                    $option = (string)$option;
+
+                    $selected =
+                        (
+                            strtoupper(trim($studentAnswer))
+                            ===
+                            strtoupper(trim($option))
+                        )
+                        ? 'selected'
+                        : '';
+
+                    ?>
+
+                    <option
+                        value="<?= htmlspecialchars(
+                            $option,
+                            ENT_QUOTES | ENT_SUBSTITUTE,
+                            'UTF-8'
+                        ) ?>"
+                        <?= $selected ?>
+                    >
+
+                        <?= htmlspecialchars(
+                            $option,
+                            ENT_QUOTES | ENT_SUBSTITUTE,
+                            'UTF-8'
+                        ) ?>
+
+                    </option>
+
+                <?php endforeach; ?>
+
+            </select>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<?php endif; ?>
+
+<?php if ($mode == "metric_unit_conversion"): ?>
+
+<div class="pc-card">
+
+    <div class="pc-row">
+
+        <span class="pc-question">
+            <?= ($index + 1) ?>)
+            <?= htmlspecialchars($data['value']) ?>
+        </span>
+
+        <span>=</span>
+
+        <input
+            type="text"
+            class="pc-small"
+            name="answer[<?= $q['id'] ?>]"
+            autocomplete="off"
+            inputmode="decimal"
+        >
+
+        <span>
+            <?= htmlspecialchars($data['answer_unit']) ?>
+        </span>
+
+    </div>
+
+</div>
+
+<?php endif; ?>
+<?php if($mode=="metric_section_a"): ?>
+
+<style>
+.msa-outer{margin:22px 0 10px;}
+.msa-wrap{display:flex;flex-wrap:nowrap;justify-content:center;align-items:stretch;gap:16px;}
+.msa-blob{
+    flex:1 1 0;min-width:0;max-width:430px;min-height:280px;
+    background-repeat:no-repeat;background-position:center;background-size:100% 100%;
+    filter:drop-shadow(0 4px 10px rgba(0,0,0,.12));
+    display:flex;flex-direction:column;justify-content:flex-start;
+    padding:40px 24px;
+}
+.msa-blob-title{text-align:center;font-size:20px;font-weight:800;letter-spacing:1px;color:#1c1c1c;margin-bottom:14px;}
+.msa-line{display:flex;flex-wrap:nowrap;white-space:nowrap;align-items:center;justify-content:center;gap:6px;font-size:16px;font-weight:600;color:#1c1c1c;margin:9px 0;}
+.msa-input{width:56px;border:none;border-bottom:2px solid #1c1c1c;background:transparent;outline:none;text-align:center;font-size:15px;font-weight:700;color:#1c1c1c;padding:2px 4px;}
+@media(max-width:768px){
+    .msa-wrap{flex-wrap:wrap;}
+    .msa-blob{flex:1 1 100%;max-width:340px;min-height:240px;}
+}
+</style>
+
+<?php
+$msaPath = 'M100,10 C135,10 160,25 168,55 C174,78 172,92 178,115 C185,148 162,180 122,185 C100,187 92,182 68,184 C32,187 14,160 18,122 C20,100 26,90 20,66 C13,34 45,12 82,12 C88,11 94,11 100,10 Z';
+?>
+
+<div class="msa-outer">
+    <div class="msa-wrap">
+        <?php foreach(($data['groups'] ?? []) as $gi => $group): ?>
+            <?php
+                $fill = $group['color'] ?? '#cfe3d0';
+                $svg  = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" preserveAspectRatio="none"><path d="'.$msaPath.'" fill="'.$fill.'"/></svg>';
+                $bg   = 'data:image/svg+xml;charset=UTF-8,'.rawurlencode($svg);
+            ?>
+            <div class="msa-blob" style="background-image:url('<?= $bg ?>');">
+                <div class="msa-blob-title"><?= htmlspecialchars($group['label'] ?? '') ?></div>
+                <?php foreach(($group['lines'] ?? []) as $line): ?>
+                    <?php $before = trim((string)($line['before'] ?? '')); $after = trim((string)($line['after'] ?? '')); ?>
+                    <div class="msa-line">
+                        <?php if($before !== ''): ?><span><?= htmlspecialchars($before) ?></span><?php endif; ?>
+                        <input type="text" class="msa-input" name="answer[<?= $q['id'] ?>][<?= $gi ?>][]" autocomplete="off">
+                        <?php if($after !== ''): ?><span><?= htmlspecialchars($after) ?></span><?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<?php endif; ?>
+<?php if($mode=="metric_section_b"): ?>
+
+<style>
+.msb-wrap{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;margin:22px 0;}
+.msb-panel{flex:1 1 250px;max-width:320px;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.08);}
+.msb-title{text-align:center;font-size:18px;font-weight:800;letter-spacing:1px;padding:12px;color:#1c1c1c;}
+.msb-body{padding:16px 18px 22px;}
+.msb-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:18px;font-weight:700;color:#1c1c1c;margin:14px 0;}
+.msb-val{flex:1;text-align:center;white-space:nowrap;}
+.msb-sym{width:52px;text-align:center;font-size:20px;font-weight:800;}
+.msb-select{width:60px;height:38px;text-align:center;text-align-last:center;font-size:18px;font-weight:800;border:2px solid #1c1c1c;border-radius:8px;background:#fff;cursor:pointer;outline:none;}
+.msb-length .msb-title{background:#bcd9bf;}  .msb-length .msb-body{background:#dcecdd;}
+.msb-capacity .msb-title{background:#e9b9b9;}  .msb-capacity .msb-body{background:#f4d9d9;}
+.msb-mass .msb-title{background:#e0cdaa;}  .msb-mass .msb-body{background:#ece1cb;}
+@media(max-width:768px){.msb-panel{flex:1 1 100%;max-width:360px;}}
+</style>
+
+<div class="msb-wrap">
+    <?php foreach(($data['groups'] ?? []) as $gi => $group): ?>
+        <?php $type = strtolower((string)($group['type'] ?? '')); ?>
+        <div class="msb-panel msb-<?= htmlspecialchars($type) ?>">
+            <div class="msb-title"><?= htmlspecialchars(strtoupper($type)) ?></div>
+            <div class="msb-body">
+                <div class="msb-row">
+                    <span class="msb-val"><?= htmlspecialchars($group['done_left']   ?? '') ?></span>
+                    <span class="msb-sym"><?= htmlspecialchars($group['done_symbol'] ?? '') ?></span>
+                    <span class="msb-val"><?= htmlspecialchars($group['done_right']  ?? '') ?></span>
+                </div>
+                <?php foreach(($group['questions'] ?? []) as $row): ?>
+                    <div class="msb-row">
+                        <span class="msb-val"><?= htmlspecialchars($row['left'] ?? '') ?></span>
+                        <select class="msb-select" name="answer[<?= $q['id'] ?>][<?= $gi ?>][]">
+                            <option value=""></option>
+                            <option value="&gt;">&gt;</option>
+                            <option value="&lt;">&lt;</option>
+                            <option value="=">=</option>
+                        </select>
+                        <span class="msb-val"><?= htmlspecialchars($row['right'] ?? '') ?></span>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<?php endif; ?>
+<?php if($mode=="metric_fill_sum"): ?>
+
+<style>
+.mfs-card{background:#fff;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:22px 28px;margin:16px 0;}
+.mfs-item{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:18px;font-weight:600;color:#1c1c1c;}
+.mfs-num{font-weight:700;margin-right:2px;}
+.mfs-input{width:90px;border:none;border-bottom:2px solid #1c1c1c;background:transparent;outline:none;text-align:center;font-size:17px;font-weight:700;color:#1c1c1c;padding:2px 4px;}
+@media(max-width:768px){.mfs-card{padding:16px 18px;}.mfs-item{font-size:16px;}}
+</style>
+
+<div class="mfs-card">
+    <div class="mfs-item">
+        <span class="mfs-num"><?= ($index + 1) ?>)</span>
+        <?php foreach((array)($data['parts'] ?? []) as $part): ?>
+            <?php if(is_array($part) && !empty($part['blank'])): ?>
+                <input type="text" class="mfs-input" name="answer[<?= $q['id'] ?>][]" autocomplete="off">
+            <?php else: ?>
+                <span><?= htmlspecialchars(is_array($part) ? '' : (string)$part) ?></span>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<?php endif; ?>
+<?php if($mode=="largest_amount"): ?>
+
+<style>
+
+/* =====================================================
+   LARGEST AMOUNT - EXACT WORKSHEET STYLE
+===================================================== */
+
+.largest-amount-card{
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    padding:25px 30px;
+    margin-bottom:48px;
+    width:100%;
+    margin-top: 30px;
+}
+
+.largest-amount-heading{
+    font-size:19px;
+    line-height:1.5;
+    font-weight:700;
+    color:#8f4f3f;
+    margin-bottom:22px;
+}
+
+/* 4 BOXES */
+
+.largest-amount-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:12px;
+    width:100%;
+}
+
+/* INDIVIDUAL COLORED BOX */
+
+.largest-amount-box{
+    min-height:155px;
+    border-radius:28px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    padding:15px 10px;
+}
+
+/* ALTERNATING COLORS */
+
+.largest-amount-box:nth-child(odd){
+    background:#f4bcb2;
+}
+
+.largest-amount-box:nth-child(even){
+    background:#bfc9f7;
+}
+
+/* OPTION */
+
+.largest-amount-choice{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:100%;
+    margin:0;
+    cursor:pointer;
+}
+
+/* HIDE RADIO */
+
+.largest-amount-choice input{
+    position:absolute;
+    opacity:0;
+    width:0;
+    height:0;
+    pointer-events:none;
+}
+
+/* TEXT */
+
+.largest-amount-text{
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    min-height:38px;
+    padding:3px 14px;
+
+    font-family:Georgia, "Times New Roman", serif;
+    font-size:17px;
+    font-weight:700;
+    color:#111;
+
+    white-space:nowrap;
+}
+
+/* CIRCLE AROUND SELECTED ANSWER */
+
+.largest-amount-choice input:checked + .largest-amount-text::after{
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    width:92px;
+    height:42px;
+
+    transform:translate(-50%,-50%);
+
+    border:3px solid #fff;
+    border-radius:50%;
+
+    pointer-events:none;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:900px){
+
+    .largest-amount-grid{
+        grid-template-columns:repeat(2, 1fr);
+        gap:15px;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .largest-amount-card{
+        padding:18px;
+    }
+
+    .largest-amount-heading{
+        font-size:17px;
+    }
+
+    .largest-amount-grid{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .largest-amount-box{
+        min-height:145px;
+        border-radius:24px;
+    }
+
+    .largest-amount-text{
+        font-size:15px;
+    }
+
+    .largest-amount-choice input:checked + .largest-amount-text::after{
+        width:82px;
+        height:38px;
+    }
+
+}
+
+@media(max-width:420px){
+
+    .largest-amount-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+
+<div class="largest-amount-card">
+
+    <!-- HEADING -->
+
+    <div class="largest-amount-heading">
+
+        <?= htmlspecialchars(
+            $data['question']
+            ?? ''
+        ) ?>
+
+    </div>
+
+
+    <!-- 4 BOXES -->
+
+    <div class="largest-amount-grid">
+
+        <?php foreach(($data['boxes'] ?? []) as $boxIndex => $box): ?>
+
+            <div class="largest-amount-box">
+
+                <?php foreach(($box['options'] ?? []) as $optionIndex => $option): ?>
+
+                    <label class="largest-amount-choice">
+
+                        <input
+                            type="radio"
+                            name="answer[<?= $q['id'] ?>][<?= $boxIndex ?>]"
+                            value="<?= htmlspecialchars($option, ENT_QUOTES, 'UTF-8') ?>"
+                            autocomplete="off"
+                        >
+
+                        <span class="largest-amount-text">
+                            <?= htmlspecialchars($option, ENT_QUOTES, 'UTF-8') ?>
+                        </span>
+
+                    </label>
+
+                <?php endforeach; ?>
+
+            </div>
+
+        <?php endforeach; ?>
+
+    </div>
+
+</div>
+
 
 <?php endif; ?>
 <script>

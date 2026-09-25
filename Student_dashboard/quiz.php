@@ -51,7 +51,7 @@ if ($topic_id) {
  /* ======================
     PAGINATION LOGIC 
   ====================== */
-  $QUESTIONS_PER_PAGE = 4; 
+  $QUESTIONS_PER_PAGE = 400; 
 
   $all_questions = [];
   $inst_counter = 0;           
@@ -711,6 +711,11 @@ if (
             case 'ratio_three_ways':
             include 'templates/AreaPerimeter/ratio_three_ways_template.php';
             break;
+            case 'proportion_chain':
+            include 'templates/Numbers/proportion_chain.php';
+            break;
+            case 'visual_math_worksheet':
+            include 'templates/diagram/visual_math_worksheet.php';
      }
     ?>
     <?php endforeach; ?>
