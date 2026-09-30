@@ -2764,7 +2764,7 @@ name="answer[<?= $q['id']?>]">
 .fig-list:not(.fig-cols-2) .fig-q{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;}
 .fig-list:not(.fig-cols-2) .fig-q-line{flex:1;min-width:200px;}
 .fig-list:not(.fig-cols-2) .fig-input{min-width:0;width:100%;}
-.fig-list.fig-cols-2 .fig-input{flex:0 0 190px;min-width:0;}
+.fig-list.fig-cols-2 .fig-input{flex:0 0 190px;min-width:0;text-align: center;}
 .fig-q-text{font-weight:400;font-size:20px;}
 .fig-card{font-family:"Times New Roman",Times,serif;}
 .fig-list.fig-cols-2 .fig-q-text{font-weight:400;}
@@ -2807,14 +2807,14 @@ name="answer[<?= $q['id']?>]">
                 <div class="fig-q-line">
 
                     <?php if(!empty($fqOpts)): ?>
-                        <select class="fig-select" name="answer[<?= $q['id'] ?>][]">
+                        <select class="fig-select" name="answer[<?= $q['id'] ?>][<?= chr(97 + $k) ?>]">
                             <option value=""></option>
                             <?php foreach($fqOpts as $o): ?>
                                 <option value="<?= htmlspecialchars($o) ?>"><?= htmlspecialchars($o) ?></option>
                             <?php endforeach; ?>
                         </select>
                     <?php else: ?>
-                        <input type="text" class="fig-input" name="answer[<?= $q['id'] ?>][]" autocomplete="off">
+                        <input type="text" class="fig-input" name="answer[<?= $q['id'] ?>][<?= chr(97 + $k) ?>]" autocomplete="off">
                     <?php endif; ?>
 
                     <?php if($fqSuffix !== ''): ?>

@@ -112,6 +112,15 @@ function isExponentExpression($v)
         || preg_match('/\d+\^\d+/u', $v);
 }
 
+/* figure_questions: answer ko letters me todo, order / "line" / "and" ignore */
+function figureTokens($v) {
+    $v = mb_strtolower((string)$v);
+    $v = preg_replace('/\b(lines?|rays?|segments?|points?|and|the)\b/u', ' ', $v);
+    preg_match_all('/[a-z]+/u', $v, $m);
+    $t = array_values(array_unique($m[0]));
+    sort($t);
+    return $t;
+}
 // Check login
 if (!isset($_SESSION['student_id'])) {
     header("Location: student_dashboard.php");
@@ -616,6 +625,24 @@ if (
                         $ok = strcasecmp(trim((string)$cv), trim((string)$sv)) === 0;
                     }
                     if ($ok) $correct_count++;
+                }
+                $is_correct = ($correct_count === $total_count) ? 1 : 0;
+            }
+        }
+
+                // ---- PARTIAL SCORING: figure_questions (har sub-question alag, 1 mark each) ----
+        if ($question_type === 'prime_composite_worksheet' && $mode === 'figure_questions') {
+            $exp = json_decode($correct_answer, true);
+            $sub = json_decode($student_answer, true);
+            if (is_array($exp) && $exp && array_keys($exp) !== range(0, count($exp) - 1)) {
+                $total_count   = count($exp);
+                $correct_count = 0;
+                foreach ($exp as $k => $cv) {
+                    $sv = (is_array($sub) && isset($sub[$k])) ? $sub[$k] : '';
+                    if (!is_array($sv) && trim((string)$sv) !== ''
+                        && figureTokens($cv) === figureTokens($sv)) {
+                        $correct_count++;
+                    }
                 }
                 $is_correct = ($correct_count === $total_count) ? 1 : 0;
             }
