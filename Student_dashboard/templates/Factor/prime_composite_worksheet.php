@@ -2741,6 +2741,98 @@ name="answer[<?= $q['id']?>]">
 })();
 </script>
 <?php endif; ?>
+<?php if($mode=="figure_questions"): ?>
+
+<?php
+    // image path -> URL (works on localhost sub-folder and live)
+    $figImg  = (string)($data['image'] ?? '');
+    $figRoot = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
+    if ($figImg !== '' && !preg_match('~^https?://~i', $figImg)) {
+        $figImg = $figRoot . '/' . ltrim($figImg, '/');
+    }
+    $figCols = (int)($data['columns'] ?? 1);
+?>
+
+<style>
+.fig-card{background:#fff;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:25px 30px;margin:30px 0 25px;width:100%;}
+.fig-title{font-size:19px;font-weight:700;font-style:italic;color:#000;line-height:1.5;margin-bottom:18px;}
+.fig-image{text-align:center;margin:0 auto 26px;}
+.fig-image img{max-width:100%;width:520px;height:auto;}
+.fig-list{display:grid;gap:14px 50px;}
+.fig-list.fig-cols-2{row-gap:30px;}
+.fig-q{font-size:18px;color:#000;line-height:1.6;}
+.fig-list:not(.fig-cols-2) .fig-q{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;}
+.fig-list:not(.fig-cols-2) .fig-q-line{flex:1;min-width:200px;}
+.fig-list:not(.fig-cols-2) .fig-input{min-width:0;width:100%;}
+.fig-list.fig-cols-2 .fig-input{flex:0 0 190px;min-width:0;}
+.fig-q-text{font-weight:400;font-size:20px;}
+.fig-card{font-family:"Times New Roman",Times,serif;}
+.fig-list.fig-cols-2 .fig-q-text{font-weight:400;}
+.fig-q-line{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+.fig-input,.fig-select{border:none;border-bottom:2px solid #000;background:transparent;outline:none;font-size:17px;color:#000;padding:2px 4px;}
+.fig-input{flex:1;min-width:220px;}
+.fig-select{min-width:200px;cursor:pointer;}
+@media(max-width:768px){
+  .fig-card{padding:18px;}
+  .fig-list{grid-template-columns:1fr !important;}
+  .fig-q{font-size:16px;}
+  .fig-input,.fig-select{min-width:0;width:100%;}
+}
+</style>
+
+<div class="fig-card">
+
+    <?php if(!empty($data['show_title'])): ?>
+        <div class="fig-title"><?= htmlspecialchars($data['title'] ?? '') ?></div>
+    <?php endif; ?>
+
+    <?php if($figImg !== ''): ?>
+        <div class="fig-image">
+            <img src="<?= htmlspecialchars($figImg) ?>" alt="Figure">
+        </div>
+    <?php endif; ?>
+
+    <div class="fig-list<?= $figCols > 1 ? ' fig-cols-2' : '' ?>" style="grid-template-columns:repeat(<?= max(1, $figCols) ?>, minmax(0,1fr));<?php if($figCols > 1): ?>grid-auto-flow:column;grid-template-rows:repeat(<?= (int)ceil(count($data['questions'] ?? []) / $figCols) ?>, auto);<?php endif; ?>">
+
+        <?php foreach(($data['questions'] ?? []) as $k => $fq):
+            $fqText   = is_array($fq) ? ($fq['text'] ?? '')   : (string)$fq;
+            $fqSuffix = is_array($fq) ? ($fq['suffix'] ?? '') : '';
+            $fqOpts   = (is_array($fq) && !empty($fq['options'])) ? $fq['options'] : ($data['options'] ?? []);
+        ?>
+
+            <div class="fig-q">
+
+                <div class="fig-q-text"><?= ($k + 1) ?>) <?= htmlspecialchars($fqText) ?></div>
+
+                <div class="fig-q-line">
+
+                    <?php if(!empty($fqOpts)): ?>
+                        <select class="fig-select" name="answer[<?= $q['id'] ?>][]">
+                            <option value=""></option>
+                            <?php foreach($fqOpts as $o): ?>
+                                <option value="<?= htmlspecialchars($o) ?>"><?= htmlspecialchars($o) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    <?php else: ?>
+                        <input type="text" class="fig-input" name="answer[<?= $q['id'] ?>][]" autocomplete="off">
+                    <?php endif; ?>
+
+                    <?php if($fqSuffix !== ''): ?>
+                        <span><?= htmlspecialchars($fqSuffix) ?></span>
+                    <?php endif; ?>
+
+                </div>
+
+            </div>
+
+        <?php endforeach; ?>
+
+    </div>
+
+</div>
+
+<?php endif; ?>
+
 <?php if($mode=="compare_fractions"): ?>
 <style>
 .cmp-card{background:#fff;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:25px 30px;margin:20px 0;}

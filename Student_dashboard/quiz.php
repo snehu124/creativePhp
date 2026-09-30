@@ -107,6 +107,7 @@ if ($topic_id) {
       min-height: 100vh;
       font-family: 'Segoe UI', sans-serif;
       background-color: #f5f5f5;
+      overflow-x: hidden;
     }
     .main {
       margin-left: 0px;
